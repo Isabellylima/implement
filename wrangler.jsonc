@@ -17,16 +17,14 @@
   },
 
   // Base de dados dos pedidos do formulário «Start a Project».
-  // Criar com: npx wrangler d1 create implement-pedidos  → copiar o database_id para aqui.
-  // Desativado até a base de dados existir (um database_id inválido faria o deploy falhar).
-  // Depois de «npx wrangler d1 create implement-pedidos», tire os comentários e cole o id.
-  // "d1_databases": [
-  //   {
-  //     "binding": "DB",
-  //     "database_name": "implement-pedidos",
-  //     "database_id": "SUBSTITUIR_PELO_ID_DA_BASE_DE_DADOS"
-  //   }
-  // ],
+  // A tabela «pedidos» é criada automaticamente pelo Worker no primeiro pedido (ver schema.sql).
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "implement-pedidos",
+      "database_id": "a7da3f3e-ad90-4f94-9184-18bf6da8cdb9"
+    }
+  ],
 
   // Notificação por e-mail (Cloudflare Email Service).
   // Só funciona depois de heyimplement.com estar no Cloudflare e o domínio estar «onboarded» no Email Service.

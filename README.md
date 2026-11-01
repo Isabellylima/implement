@@ -47,8 +47,7 @@ npm install
 npx wrangler login
 
 # 1. Base de dados dos pedidos (uma só vez)
-npx wrangler d1 create implement-pedidos      # tire os comentários do bloco d1_databases em wrangler.jsonc e cole o database_id
-npm run db:criar                              # cria a tabela
+# (feito) base de dados implement-pedidos ligada em wrangler.jsonc; a tabela é criada sozinha no primeiro pedido
 
 # 2. Publicar
 npm run deploy

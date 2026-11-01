@@ -112,7 +112,25 @@ function novaReferencia() {
   return "IMP-" + [...bytes].map((b) => letras[b % letras.length]).join("");
 }
 
+// Igual a schema.sql, uma instrução por linha (formato do db.exec da D1)
+const ESQUEMA = [
+  "CREATE TABLE IF NOT EXISTS pedidos (id TEXT PRIMARY KEY, criado_em TEXT NOT NULL, idioma TEXT NOT NULL, nome TEXT NOT NULL, email TEXT NOT NULL, telefone TEXT, empresa TEXT NOT NULL, setor TEXT, localizacao TEXT, servicos TEXT NOT NULL, objetivo TEXT, tipo_trabalho TEXT, orcamento_mensal TEXT, orcamento_projeto TEXT, prazo TEXT, respostas TEXT NOT NULL, pais TEXT, email_enviado INTEGER NOT NULL DEFAULT 0, estado TEXT NOT NULL DEFAULT 'novo');",
+  "CREATE INDEX IF NOT EXISTS pedidos_criado_em ON pedidos (criado_em DESC);",
+  "CREATE INDEX IF NOT EXISTS pedidos_estado ON pedidos (estado);",
+].join("\n");
+
 async function guardarPedido(db, p) {
+  try {
+    await inserirPedido(db, p);
+  } catch (e) {
+    if (!/no such table/i.test(String(e && e.message))) throw e;
+    // Primeira utilização: cria a tabela e tenta outra vez
+    await db.exec(ESQUEMA);
+    await inserirPedido(db, p);
+  }
+}
+
+async function inserirPedido(db, p) {
   const r = p.respostas;
   await db.prepare(`INSERT INTO pedidos
       (id, criado_em, idioma, nome, email, telefone, empresa, setor, localizacao, servicos, objetivo,

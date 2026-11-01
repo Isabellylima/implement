@@ -44,6 +44,23 @@ test("pedido válido é guardado e notificado", async () => {
   assert.match(registos.emails[0].subject, /Café Aurora — Redes sociais, Perfil Google Business/);
 });
 
+test("cria a tabela na primeira utilização", async () => {
+  const { env, ctx, registos, esperas } = ambiente({ email: false });
+  let criada = false;
+  env.DB = {
+    exec: async (sql) => { assert.match(sql, /CREATE TABLE IF NOT EXISTS pedidos/); criada = true; },
+    prepare: (sql) => ({ bind: (...v) => ({ run: async () => {
+      if (!criada) throw new Error("D1_ERROR: no such table: pedidos: SQLITE_ERROR");
+      registos.sql.push({ sql, v }); return { success: true };
+    } }) }),
+  };
+  const r = await worker.fetch(pedir({ respostas: BASE, inicio: 1 }), env, ctx);
+  await Promise.all(esperas);
+  assert.equal(r.status, 200);
+  assert.ok(criada);
+  assert.equal(registos.sql.length, 1);
+});
+
 test("campos obrigatórios em falta devolvem erros por campo", async () => {
   const { env, ctx } = ambiente();
   const { email, redes_quais, ...semEmail } = BASE;
