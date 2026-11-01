@@ -85,6 +85,38 @@
   }
   if (reduzir) document.querySelectorAll("svg.voo").forEach((s) => s.pauseAnimations && s.pauseAnimations());
 
+  /* ---------- WhatsApp: botão flutuante e mensagem pré-preenchida ---------- */
+  const SPRITE = new URL("../img/sprite.svg", (document.currentScript && document.currentScript.src) || location.href).href;
+  const WHATSAPP = "351962951161";
+  const MENSAGEM = { pt: "Olá! Gostaria de falar sobre o meu negócio.", en: "Hi! I’d like to talk about my business." };
+  const ROTULO = { pt: "Falar connosco pelo WhatsApp", en: "Chat with us on WhatsApp" };
+  const flutuante = document.createElement("a");
+  flutuante.className = "whatsapp-flutuante";
+  flutuante.rel = "noopener";
+  flutuante.target = "_blank";
+  flutuante.setAttribute("data-whatsapp", "");
+  flutuante.innerHTML = `<svg aria-hidden="true"><use href="${SPRITE}#r-whatsapp"/></svg><span class="whatsapp-flutuante__texto"></span>`;
+  document.body.appendChild(flutuante);
+  // Só altera o que está diferente, para não provocar novas mutações (e um ciclo infinito com o observador)
+  function atualizarWhatsapp(idioma) {
+    const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(MENSAGEM[idioma] || MENSAGEM.en)}`;
+    const rotulo = ROTULO[idioma] || ROTULO.en;
+    document.querySelectorAll("a[data-whatsapp]").forEach((a) => {
+      if (a.getAttribute("href") !== url) a.setAttribute("href", url);
+      if (a.target !== "_blank") a.target = "_blank";
+    });
+    if (flutuante.getAttribute("aria-label") !== rotulo) flutuante.setAttribute("aria-label", rotulo);
+    const texto = flutuante.querySelector(".whatsapp-flutuante__texto");
+    if (texto.textContent !== rotulo) texto.textContent = rotulo;
+  }
+  document.addEventListener("implement:idioma", (e) => atualizarWhatsapp(e.detail));
+  // Links de WhatsApp criados depois (ex.: mensagem de sucesso do formulário)
+  new MutationObserver((mudancas) => {
+    if (mudancas.some((m) => [...m.addedNodes].some((n) => n.nodeType === 1 && (n.matches("a[data-whatsapp]") || n.querySelector("a[data-whatsapp]"))))) {
+      atualizarWhatsapp(window.IMPLEMENT_IDIOMA || "en");
+    }
+  }).observe(document.body, { childList: true, subtree: true });
+
   /* ---------- Ano no rodapé ---------- */
   document.querySelectorAll("[data-ano]").forEach((el) => { el.textContent = new Date().getFullYear(); });
 

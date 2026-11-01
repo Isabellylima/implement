@@ -593,3 +593,31 @@ select.entrada { appearance: none; background-image: url("data:image/svg+xml,%3C
 .pagina-404 { min-height: 70vh; display: grid; place-items: center; text-align: center; padding: 80px var(--margem); }
 .pagina-404 .abelha { width: 160px; height: 88px; margin: 0 auto 28px; animation: pairar 1.8s ease-in-out infinite; }
 .pagina-404 p { margin: 18px auto 32px; max-width: 30rem; color: #3b3448; font-size: 1.0625rem; }
+
+/* ---------- Contacto ---------- */
+.canais { list-style: none; padding: 0; margin: 32px 0 0; display: grid; gap: 14px; }
+.canais li { display: grid; grid-template-columns: 48px 1fr; gap: 14px; align-items: center; }
+.canais__icone { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--branco); color: var(--roxo); box-shadow: var(--sombra); }
+.canais__icone svg { width: 22px; height: 22px; }
+.canais strong { display: block; font-size: .8125rem; letter-spacing: .08em; text-transform: uppercase; color: var(--cinza); }
+.canais a { font-weight: 700; color: var(--roxo-profundo); text-decoration: none; overflow-wrap: anywhere; }
+.canais a:hover { text-decoration: underline; }
+@media (max-width: 960px) { .pagina-projeto .contacto-direto { display: block; } }
+
+/* ---------- Botão flutuante do WhatsApp ---------- */
+.whatsapp-flutuante {
+  position: fixed; z-index: 60;
+  right: calc(20px + env(safe-area-inset-right, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  display: inline-flex; align-items: center; gap: 10px; height: 56px; padding: 0 18px 0 16px;
+  border-radius: 999px; background: #1F9D55; color: #fff; text-decoration: none; font-weight: 700; font-size: .9375rem;
+  box-shadow: 0 10px 28px -10px rgba(16, 80, 44, .6);
+  transition: transform .35s var(--mola), box-shadow .3s;
+}
+.whatsapp-flutuante svg { width: 26px; height: 26px; flex: none; }
+.whatsapp-flutuante:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 16px 34px -12px rgba(16, 80, 44, .7); }
+.whatsapp-flutuante:focus-visible { outline: 3px solid var(--noite); outline-offset: 3px; }
+@media (max-width: 640px) {
+  .whatsapp-flutuante { width: 56px; padding: 0; justify-content: center; }
+  .whatsapp-flutuante__texto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+@media print { .whatsapp-flutuante { display: none; } }

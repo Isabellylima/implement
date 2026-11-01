@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Page on its way — Implement</title>
-<meta name="titulo-pt" content="Página a caminho — Implement">
-<meta name="robots" content="noindex">
+<title>Contact — Implement</title>
+<meta name="titulo-pt" content="Contacto — Implement">
+<meta name="description" content="Talk to Implement: email info@heyimplement.com, WhatsApp, or send us a message.">
+<link rel="canonical" href="https://heyimplement.com/contact">
 <meta name="description" content="Tell us about your business in a few minutes. We’ll prepare an initial analysis and a proposal made for you.">
 <meta name="theme-color" content="#1C0F3A">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -15,8 +16,9 @@
 <link rel="stylesheet" href="assets/css/site.css">
 <script src="assets/js/i18n.js" defer></script>
 <script src="assets/js/site.js" defer></script>
+<script src="assets/js/contacto.js" type="module"></script>
 </head>
-<body>
+<body class="pagina-projeto">
 <a class="saltar" href="#conteudo" data-i18n="c.saltar">Skip to content</a>
 
 <div class="faixa" aria-hidden="true">
@@ -46,7 +48,7 @@
         <li><a href="work.html" data-i18n="c.nav.trabalho">Our work</a></li>
         <li><a href="index.html#processo" data-i18n="c.nav.processo">Our process</a></li>
         <li><a href="insights.html" data-i18n="c.nav.insights">Insights</a></li>
-        <li><a href="contact.html" data-i18n="c.nav.contacto">Contact</a></li>
+        <li><a href="contact.html" aria-current="page" data-i18n="c.nav.contacto">Contact</a></li>
       </ul>
       <div class="idiomas" role="group" aria-label="Language">
         <button type="button" data-idioma="en" aria-pressed="true">EN</button>
@@ -57,14 +59,47 @@
   </div>
 </header>
 
-<main id="conteudo" class="pagina-404">
-  <div>
-    <svg class="abelha" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
-    <h1 data-i18n="e.titulo">This page is on its way.</h1>
-    <p data-i18n="e.p">We are building the new Implement website. In the meantime, you can go back to the homepage or talk to us.</p>
-    <div class="heroi__acoes" style="justify-content:center">
-      <a class="botao" href="index.html"><span data-i18n="e.inicio">Back to the homepage</span></a>
-      <a class="botao botao--secundario" href="start-a-project.html"><span data-i18n="c.comecar">Start a project</span></a>
+<main id="conteudo" class="projeto">
+  <div class="contentor projeto__grelha">
+    <aside class="projeto__lado">
+      <p class="legenda" data-i18n="ct.legenda">Contact</p>
+      <h1 data-i18n-html="ct.titulo">Let’s talk about your <span class="destaque">business.</span></h1>
+      <p data-i18n="ct.intro">Send us a message and we’ll reply by email. If you prefer, talk to us directly on WhatsApp.</p>
+      <ul class="canais">
+        <li>
+          <span class="canais__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-whatsapp"/></svg></span>
+          <span><strong>WhatsApp</strong><a href="https://wa.me/351962951161" rel="noopener" data-whatsapp>+351 962 951 161</a></span>
+        </li>
+        <li>
+          <span class="canais__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#i-email"/></svg></span>
+          <span><strong data-i18n="ct.email">Email</strong><a href="mailto:info@heyimplement.com">info@heyimplement.com</a></span>
+        </li>
+        <li>
+          <span class="canais__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-instagram"/></svg></span>
+          <span><strong>Instagram</strong><a href="https://www.instagram.com/heyimplement" rel="noopener">@heyimplement</a></span>
+        </li>
+      </ul>
+      <p class="contacto-direto"><span data-i18n="ct.projeto">Planning a new project?</span> <a href="start-a-project.html" data-i18n="c.comecar">Start a project</a></p>
+    </aside>
+
+    <div class="cartao-form" id="cartao">
+      <form id="contacto" novalidate>
+        <div class="form-corpo">
+          <h2 class="etapa__titulo" data-i18n="ct.form">Send a message</h2>
+          <p class="etapa__intro" data-i18n="ct.form.intro">We usually reply within one working day.</p>
+          <div class="campos" id="contacto-campos"></div>
+          <p class="aviso-erro" id="contacto-aviso" aria-live="polite"></p>
+        </div>
+        <div class="mel-pote" aria-hidden="true">
+          <label>Company website <input type="text" name="site_empresa" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <div class="form-pe">
+          <span class="form-pe__guardado" data-i18n="ct.destino">Goes straight to info@heyimplement.com</span>
+          <div class="form-pe__botoes">
+            <button type="submit" class="botao" id="contacto-enviar"><span id="contacto-enviar-texto" data-i18n="ct.enviar">Send message</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </main>
@@ -109,7 +144,7 @@
         <ul>
           <li><a href="mailto:info@heyimplement.com">info@heyimplement.com</a></li>
           <li><a href="tel:+351933690514">(+351) 933 690 514</a></li>
-          <li><a href="https://wa.me/351933690514" rel="noopener">WhatsApp</a></li>
+          <li><a href="https://wa.me/351962951161" rel="noopener" data-whatsapp>WhatsApp · +351 962 951 161</a></li>
           <li><a href="start-a-project.html" data-i18n="c.comecar">Start a project</a></li>
         </ul>
       </div>

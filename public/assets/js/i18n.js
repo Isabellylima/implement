@@ -121,6 +121,17 @@ window.IMPLEMENT_PT = {
   "h.cta.p": "Conte-nos onde está e onde quer chegar. Respondemos com uma análise inicial e uma proposta feita para si.",
   "h.cta.call": "Marcar uma chamada",
 
+  /* Contacto */
+  "ct.legenda": "Contacto",
+  "ct.titulo": 'Vamos conversar sobre o seu <span class="destaque">negócio.</span>',
+  "ct.intro": "Envie-nos uma mensagem e respondemos por e-mail. Se preferir, fale connosco diretamente pelo WhatsApp.",
+  "ct.email": "E-mail",
+  "ct.projeto": "Tem um projeto novo em mente?",
+  "ct.form": "Enviar mensagem",
+  "ct.form.intro": "Normalmente respondemos no prazo de um dia útil.",
+  "ct.destino": "Vai diretamente para info@heyimplement.com",
+  "ct.enviar": "Enviar mensagem",
+
   /* 404 */
   "e.titulo": "Esta página ainda está a caminho.",
   "e.p": "Estamos a construir o novo website da Implement. Enquanto isso, pode voltar ao início ou falar connosco.",

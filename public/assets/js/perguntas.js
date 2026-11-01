@@ -245,3 +245,29 @@ export function textoResposta(campo, valor, idioma = "en") {
   if (Array.isArray(valor)) return valor.map(nome).join(", ");
   return opcoes.length ? nome(valor) : String(valor);
 }
+
+/* ---------- Formulário da página Contacto ---------- */
+export const CONTACTO = [
+  { id: "nome", tipo: "texto", obrigatorio: true, max: 80, autocomplete: "name", en: "Your name", pt: "O seu nome" },
+  { id: "email", tipo: "email", obrigatorio: true, max: 254, autocomplete: "email", en: "Email", pt: "E-mail" },
+  { id: "telefone", tipo: "tel", max: 30, autocomplete: "tel", en: "Phone / WhatsApp", pt: "Telefone / WhatsApp" },
+  { id: "empresa", tipo: "texto", max: 120, autocomplete: "organization", en: "Business", pt: "Empresa" },
+  { id: "assunto", tipo: "lista", obrigatorio: true, en: "Subject", pt: "Assunto", opcoes: [
+    o("projeto", "A new project", "Um novo projeto"), o("duvida", "A question", "Uma dúvida"),
+    o("parceria", "Partnership", "Parceria"), o("outro", "Something else", "Outro assunto") ] },
+  { id: "mensagem", tipo: "area", obrigatorio: true, largo: true, max: 3000, en: "Message", pt: "Mensagem" },
+  { id: "consentimento", tipo: "consentimento", obrigatorio: true, largo: true,
+    en: "I agree that Implement may use these details to reply to my message.",
+    pt: "Aceito que a Implement use estes dados para responder à minha mensagem." },
+];
+
+export function validarContacto(respostas) {
+  const limpas = {};
+  const erros = {};
+  for (const campo of CONTACTO) {
+    const r = validarCampo(campo, respostas[campo.id]);
+    if (r.erro) erros[campo.id] = r.erro;
+    else if (r.valor !== undefined) limpas[campo.id] = r.valor;
+  }
+  return { limpas, erros, valido: Object.keys(erros).length === 0 };
+}

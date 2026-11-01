@@ -3,7 +3,7 @@
      POST /api/start-a-project  → valida as respostas, guarda na D1 (DB) e avisa a equipa por e-mail (EMAIL, se configurado)
      GET  /api/saude            → estado da configuração (para confirmar a publicação)
    As perguntas e as regras de validação são as mesmas do formulário: public/assets/js/perguntas.js */
-import { ETAPAS, validarTudo, textoResposta, visivel } from "../public/assets/js/perguntas.js";
+import { ETAPAS, CONTACTO, validarTudo, validarContacto, textoResposta, visivel } from "../public/assets/js/perguntas.js";
 
 const LIMITE_BYTES = 64 * 1024;
 const TEMPO_MINIMO_MS = 20 * 1000; // ninguém responde a seis passos em menos de 20 s
@@ -26,6 +26,15 @@ export default {
         return await receberPedido(request, env, ctx, url);
       } catch (e) {
         console.error(JSON.stringify({ evento: "pedido_falhou", erro: String(e && e.message).slice(0, 300) }));
+        return json({ ok: false, erro: "Erro interno" }, 500);
+      }
+    }
+    if (url.pathname === "/api/contacto") {
+      if (request.method !== "POST") return new Response(null, { status: 405, headers: { ...SEGURANCA, Allow: "POST" } });
+      try {
+        return await receberMensagem(request, env, ctx, url);
+      } catch (e) {
+        console.error(JSON.stringify({ evento: "mensagem_falhou", erro: String(e && e.message).slice(0, 300) }));
         return json({ ok: false, erro: "Erro interno" }, 500);
       }
     }
@@ -180,6 +189,104 @@ async function enviarNotificacao(env, pedido) {
     to: env.EMAIL_DESTINO || "info@heyimplement.com",
     replyTo: { email: pedido.respostas.email, name: pedido.respostas.nome },
     subject: assunto,
+    text: texto,
+    html,
+  });
+}
+
+/* ---------- Página Contacto: mensagens para info@heyimplement.com ---------- */
+const ESQUEMA_MENSAGENS = [
+  "CREATE TABLE IF NOT EXISTS mensagens (id TEXT PRIMARY KEY, criado_em TEXT NOT NULL, idioma TEXT NOT NULL, nome TEXT NOT NULL, email TEXT NOT NULL, telefone TEXT, empresa TEXT, assunto TEXT, mensagem TEXT NOT NULL, pais TEXT, email_enviado INTEGER NOT NULL DEFAULT 0, estado TEXT NOT NULL DEFAULT 'nova');",
+  "CREATE INDEX IF NOT EXISTS mensagens_criado_em ON mensagens (criado_em DESC);",
+].join("\n");
+
+async function lerCorpo(request, url) {
+  const origem = request.headers.get("Origin");
+  if (origem && new URL(origem).host !== url.host) return { resposta: json({ ok: false, erro: "Origem recusada" }, 403) };
+  if (!(request.headers.get("Content-Type") || "").includes("application/json")) return { resposta: json({ ok: false, erro: "Formato inválido" }, 415) };
+  if (Number(request.headers.get("Content-Length") || 0) > LIMITE_BYTES) return { resposta: json({ ok: false, erro: "Pedido demasiado grande" }, 413) };
+  const texto = await request.text();
+  if (texto.length > LIMITE_BYTES) return { resposta: json({ ok: false, erro: "Pedido demasiado grande" }, 413) };
+  let corpo;
+  try { corpo = JSON.parse(texto); } catch { return { resposta: json({ ok: false, erro: "JSON inválido" }, 400) }; }
+  if (!corpo || typeof corpo !== "object" || !corpo.respostas || typeof corpo.respostas !== "object" || Array.isArray(corpo.respostas)) {
+    return { resposta: json({ ok: false, erro: "Respostas em falta" }, 400) };
+  }
+  return { corpo };
+}
+
+async function receberMensagem(request, env, ctx, url) {
+  const { corpo, resposta } = await lerCorpo(request, url);
+  if (resposta) return resposta;
+  const referencia = "MSG-" + novaReferencia().slice(4);
+
+  // Anti-spam silencioso: campo-armadilha ou envio em menos de 5 segundos
+  const inicio = Number(corpo.inicio);
+  const rapido = Number.isFinite(inicio) && inicio > 0 && Date.now() - inicio < 5000;
+  if (String(corpo.site_empresa || "").trim() || rapido) return json({ ok: true, referencia });
+
+  const { limpas, erros, valido } = validarContacto(corpo.respostas);
+  if (!valido) return json({ ok: false, erros }, 400);
+  if (!env.DB && !env.EMAIL) return json({ ok: false, erro: "Formulário ainda não configurado" }, 503);
+
+  const m = { id: referencia, criado_em: new Date().toISOString(), idioma: corpo.idioma === "pt" ? "pt" : "en", r: limpas, pais: (request.cf && request.cf.country) || null };
+
+  let guardado = false;
+  if (env.DB) {
+    const inserir = () => env.DB.prepare(`INSERT INTO mensagens (id, criado_em, idioma, nome, email, telefone, empresa, assunto, mensagem, pais)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+      .bind(m.id, m.criado_em, m.idioma, limpas.nome, limpas.email, limpas.telefone || null, limpas.empresa || null, limpas.assunto || null, limpas.mensagem, m.pais).run();
+    try {
+      try { await inserir(); } catch (e) {
+        if (!/no such table/i.test(String(e && e.message))) throw e;
+        await env.DB.exec(ESQUEMA_MENSAGENS);
+        await inserir();
+      }
+      guardado = true;
+    } catch (e) {
+      console.error(JSON.stringify({ evento: "d1_mensagem_falhou", referencia, erro: String(e && e.message).slice(0, 300) }));
+    }
+  }
+
+  if (env.EMAIL) {
+    const envio = enviarMensagem(env, m)
+      .then(async () => { if (guardado) await env.DB.prepare("UPDATE mensagens SET email_enviado = 1 WHERE id = ?").bind(referencia).run(); })
+      .catch((e) => console.error(JSON.stringify({ evento: "email_mensagem_falhou", referencia, erro: String(e && e.message).slice(0, 300) })));
+    if (guardado) ctx.waitUntil(envio);
+    else {
+      try { await enviarMensagem(env, m); } catch {
+        return json({ ok: false, erro: "Não foi possível enviar a mensagem" }, 502);
+      }
+    }
+  } else if (!guardado) {
+    return json({ ok: false, erro: "Não foi possível enviar a mensagem" }, 502);
+  }
+  console.log(JSON.stringify({ evento: "mensagem_recebida", referencia }));
+  return json({ ok: true, referencia });
+}
+
+export function montarEmailMensagem(m) {
+  const r = m.r;
+  const assunto = textoResposta(CONTACTO.find((c) => c.id === "assunto"), r.assunto, "pt");
+  const titulo = `Mensagem do site: ${r.nome}${r.empresa ? ` (${r.empresa})` : ""} — ${assunto}`.slice(0, 200);
+  const linhas = [["Nome", r.nome], ["E-mail", r.email], ["Telefone", r.telefone], ["Empresa", r.empresa], ["Assunto", assunto]].filter(([, v]) => v);
+  const texto = `${linhas.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\n${r.mensagem}\n\n— ${m.id} · ${m.criado_em}\nResponder a este e-mail responde diretamente a ${r.email}.`;
+  const html = `<div style="max-width:600px;margin:0 auto;padding:24px;font:15px/1.6 Arial,sans-serif;color:#17131F">
+    <p style="font:700 11px/1 Arial,sans-serif;letter-spacing:.28em;text-transform:uppercase;color:#5B2BB5;margin:0 0 12px">Implement · Contacto</p>
+    <h1 style="font:700 24px/1.2 Georgia,serif;margin:0 0 16px">${escHtml(r.nome)}</h1>
+    <table style="border-collapse:collapse;font-size:14px;margin-bottom:20px">${linhas.map(([k, v]) => `<tr><td style="padding:3px 16px 3px 0;color:#6B6578">${escHtml(k)}</td><td style="padding:3px 0">${escHtml(v)}</td></tr>`).join("")}</table>
+    <div style="white-space:pre-wrap;padding:16px;background:#F5F0FE;border-radius:10px">${escHtml(r.mensagem)}</div>
+    <p style="font-size:12px;color:#6B6578;margin-top:20px">${escHtml(m.id)} · ${escHtml(m.criado_em)}. Responder a este e-mail responde diretamente a quem escreveu.</p></div>`;
+  return { titulo, texto, html };
+}
+
+async function enviarMensagem(env, m) {
+  const { titulo, texto, html } = montarEmailMensagem(m);
+  await env.EMAIL.send({
+    from: { email: env.EMAIL_REMETENTE || "site@heyimplement.com", name: "Website Implement" },
+    to: env.EMAIL_DESTINO || "info@heyimplement.com",
+    replyTo: { email: m.r.email, name: m.r.nome },
+    subject: titulo,
     text: texto,
     html,
   });

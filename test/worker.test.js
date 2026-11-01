@@ -1,7 +1,7 @@
 // Testes do Worker sem wrangler: node --test test/
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import worker, { montarEmail } from "../src/worker.js";
+import worker, { montarEmail, montarEmailMensagem } from "../src/worker.js";
 
 const BASE = {
   nome: "Ana Costa", empresa: "Café Aurora", setor: "restauracao", localizacao: "Porto, Portugal",
@@ -123,4 +123,45 @@ test("outras rotas /api devolvem 404 e páginas vão para os assets", async () =
   const { env, ctx } = ambiente();
   assert.equal((await worker.fetch(new Request("https://heyimplement.com/api/x"), env, ctx)).status, 404);
   assert.equal(await (await worker.fetch(new Request("https://heyimplement.com/"), env, ctx)).text(), "asset");
+});
+
+const MSG = { nome: "Rui Matos", email: "rui@exemplo.pt", assunto: "projeto", mensagem: "Gostava de um orçamento para o site.", consentimento: true };
+const enviarMsg = (corpo, extra = {}) => new Request("https://heyimplement.com/api/contacto", {
+  method: "POST", headers: { "Content-Type": "application/json", Origin: "https://heyimplement.com", ...extra }, body: JSON.stringify(corpo) });
+
+test("contacto: mensagem guardada e enviada para info@", async () => {
+  const { env, ctx, registos, esperas } = ambiente();
+  const r = await worker.fetch(enviarMsg({ respostas: MSG, idioma: "pt", inicio: Date.now() - 60000 }), env, ctx);
+  const d = await r.json();
+  await Promise.all(esperas);
+  assert.equal(r.status, 200);
+  assert.match(d.referencia, /^MSG-[2-9A-Z]{6}$/);
+  assert.match(registos.sql[0].sql, /INSERT INTO mensagens/);
+  assert.equal(registos.emails[0].to, "info@heyimplement.com");
+  assert.equal(registos.emails[0].replyTo.email, "rui@exemplo.pt");
+  assert.match(registos.emails[0].subject, /Rui Matos — Um novo projeto/);
+});
+
+test("contacto: mensagem e consentimento obrigatórios", async () => {
+  const { env, ctx } = ambiente();
+  const { mensagem, consentimento, ...falta } = MSG;
+  const r = await worker.fetch(enviarMsg({ respostas: falta, inicio: 1 }), env, ctx);
+  const d = await r.json();
+  assert.equal(r.status, 400);
+  assert.ok(d.erros.mensagem && d.erros.consentimento);
+});
+
+test("contacto: cria a tabela na primeira mensagem", async () => {
+  const { env, ctx, registos } = ambiente({ email: false });
+  let criada = false;
+  env.DB = { exec: async (sql) => { assert.match(sql, /CREATE TABLE IF NOT EXISTS mensagens/); criada = true; },
+    prepare: (sql) => ({ bind: (...v) => ({ run: async () => { if (!criada) throw new Error("no such table: mensagens"); registos.sql.push({ sql, v }); } }) }) };
+  const r = await worker.fetch(enviarMsg({ respostas: MSG, inicio: 1 }), env, ctx);
+  assert.equal(r.status, 200);
+  assert.ok(criada);
+});
+
+test("contacto: e-mail escapa HTML", () => {
+  const { html } = montarEmailMensagem({ id: "MSG-AAAAAA", criado_em: "x", r: { ...MSG, mensagem: "<img src=x onerror=alert(1)>" } });
+  assert.ok(!html.includes("<img src=x"));
 });
