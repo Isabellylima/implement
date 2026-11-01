@@ -26,10 +26,9 @@
     }
   ],
 
-  // Notificação por e-mail (Cloudflare Email Service).
-  // Só funciona depois de heyimplement.com estar no Cloudflare e o domínio estar «onboarded» no Email Service.
-  // Até lá, deixe comentado: os pedidos ficam guardados na base de dados na mesma.
-  // "send_email": [{ "name": "EMAIL" }],
+  // Notificação por e-mail (Cloudflare Email Service, plano Workers Paid).
+  // heyimplement.com está ativo no Email Sending; os avisos vão de site@heyimplement.com para info@heyimplement.com.
+  "send_email": [{ "name": "EMAIL" }],
 
   "vars": {
     "EMAIL_DESTINO": "info@heyimplement.com",
