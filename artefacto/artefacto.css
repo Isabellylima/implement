@@ -1,0 +1,28 @@
+/* Só para a versão artefacto: vistas e painel de pedidos */
+[data-vista="start-a-project"] { padding: clamp(32px, 5vw, 64px) 0 clamp(72px, 9vw, 112px); }
+.pagina-projeto [data-vista="start-a-project"] { background: var(--nevoa); }
+
+.painel-pedidos { padding: clamp(40px, 6vw, 72px) 0 96px; background: var(--nevoa); min-height: 60vh; }
+.painel-pedidos .legenda { display: block; margin-bottom: 14px; }
+.painel-pedidos__cabeca { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.painel-pedidos h1 { font-size: clamp(2rem, 4vw, 3rem); text-wrap: balance; }
+.painel-pedidos__nota { margin-top: 14px; max-width: 44rem; color: var(--cinza); }
+.painel-pedidos__estado { margin-top: 28px; font-weight: 500; }
+.painel-pedidos__lista { display: grid; gap: 12px; margin-top: 16px; }
+
+.pedido { background: var(--branco); border-radius: var(--raio-pequeno); box-shadow: var(--sombra); }
+.pedido summary { list-style: none; cursor: pointer; display: grid; gap: 6px; padding: 18px 22px; }
+.pedido summary::-webkit-details-marker { display: none; }
+.pedido[open] summary { border-bottom: 1px solid var(--linha); }
+.pedido__topo { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.pedido__topo strong { font: 700 1.25rem/1.2 var(--serifa); }
+.pedido__ref { font: 700 .75rem/1 var(--sans); letter-spacing: .08em; color: var(--roxo-profundo); font-variant-numeric: tabular-nums; }
+.pedido__meta { font-size: .875rem; color: var(--cinza); overflow-wrap: anywhere; }
+.pedido__linha { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.pedido__orcamento { font-size: .8125rem; font-weight: 700; color: var(--tinta); }
+.pedido__corpo { padding: 6px 22px 22px; }
+.pedido__corpo h3 { font-size: 1rem; margin: 18px 0 8px; color: var(--roxo-profundo); }
+.pedido__corpo dl { margin: 0; display: grid; grid-template-columns: minmax(140px, 34%) 1fr; gap: 6px 16px; font-size: .875rem; }
+.pedido__corpo dt { color: var(--cinza); }
+.pedido__corpo dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; }
+@media (max-width: 560px) { .pedido__corpo dl { grid-template-columns: 1fr; } .pedido__corpo dd { margin-bottom: 8px; } }

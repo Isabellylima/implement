@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Start a project — Implement</title>
+<meta name="titulo-pt" content="Iniciar um projeto — Implement">
+<meta name="description" content="Tell us about your business in a few minutes. We’ll prepare an initial analysis and a proposal made for you.">
+<meta name="theme-color" content="#1C0F3A">
+<link rel="canonical" href="https://heyimplement.com/start-a-project">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/i18n.js" defer></script>
+<script src="assets/js/i18n-formulario.js" defer></script>
+<script src="assets/js/site.js" defer></script>
+<script src="assets/js/formulario.js" type="module"></script>
+</head>
+<body class="pagina-projeto">
+<a class="saltar" href="#conteudo" data-i18n="c.saltar">Skip to content</a>
+
+<div class="faixa" aria-hidden="true">
+  <div class="faixa__pista">
+    <span data-i18n="c.faixa1">Based in Portugal. Working worldwide.</span>
+    <span data-i18n="c.faixa2">Strategy · Creativity · Results</span>
+    <span data-i18n="c.faixa3">Social media · Websites · Branding · Content · Google</span>
+    <span data-i18n="c.faixa4">Clear agreements. No miracle promises.</span>
+    <span data-i18n="c.faixa1">Based in Portugal. Working worldwide.</span>
+    <span data-i18n="c.faixa2">Strategy · Creativity · Results</span>
+    <span data-i18n="c.faixa3">Social media · Websites · Branding · Content · Google</span>
+    <span data-i18n="c.faixa4">Clear agreements. No miracle promises.</span>
+  </div>
+</div>
+
+<header class="topo">
+  <div class="contentor topo__interior">
+    <a class="marca" href="index.html" aria-label="Implement Digital Marketing — home">
+      <svg class="abelha" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
+      <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Digital Marketing</span></span>
+    </a>
+    <button class="hamburguer" type="button" aria-expanded="false" aria-controls="menu" data-i18n-aria="c.menu" aria-label="Menu"><span></span><span></span><span></span></button>
+    <nav class="menu" id="menu" aria-label="Main">
+      <ul class="menu__lista">
+        <li><a href="about.html" data-i18n="c.nav.sobre">About us</a></li>
+        <li><a href="index.html#servicos" data-i18n="c.nav.servicos">Services</a></li>
+        <li><a href="work.html" data-i18n="c.nav.trabalho">Our work</a></li>
+        <li><a href="index.html#processo" data-i18n="c.nav.processo">Our process</a></li>
+        <li><a href="insights.html" data-i18n="c.nav.insights">Insights</a></li>
+        <li><a href="contact.html" data-i18n="c.nav.contacto">Contact</a></li>
+      </ul>
+      <div class="idiomas" role="group" aria-label="Language">
+        <button type="button" data-idioma="en" aria-pressed="true">EN</button>
+        <button type="button" data-idioma="pt" aria-pressed="false">PT</button>
+      </div>
+      <a class="botao botao--pequeno" href="start-a-project.html"><span data-i18n="c.comecar">Start a project</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo" class="projeto">
+  <div class="contentor projeto__grelha">
+    <aside class="projeto__lado">
+      <p class="legenda" data-i18n="f.legenda">Start a project</p>
+      <h1 data-i18n-html="f.titulo">Tell us about your <span class="destaque">business.</span></h1>
+      <p data-i18n="f.intro">About 8 minutes, in six short steps. Your answers help us prepare an initial analysis and a proposal made for you — before we even meet.</p>
+      <ol class="depois">
+        <li><span><strong data-i18n="f.d1.t">We read every answer</strong><span data-i18n="f.d1.p">A person on our team reviews your business, not a robot.</span></span></li>
+        <li><span><strong data-i18n="f.d2.t">Initial analysis</strong><span data-i18n="f.d2.p">We look at your current presence and where the opportunities are.</span></span></li>
+        <li><span><strong data-i18n="f.d3.t">Conversation &amp; proposal</strong><span data-i18n="f.d3.p">A short call, then a clear proposal with what is included.</span></span></li>
+      </ol>
+      <p class="contacto-direto"><span data-i18n="f.direto">Prefer to talk first?</span> <a href="https://wa.me/351933690514" rel="noopener">WhatsApp</a> · <a href="mailto:info@heyimplement.com">info@heyimplement.com</a></p>
+    </aside>
+
+    <div class="cartao-form" id="cartao">
+      <div class="progresso" aria-hidden="true">
+        <div class="progresso__topo"><strong id="progresso-nome">Your business</strong><span id="progresso-passo">Step 1 of 6</span></div>
+        <div class="progresso__barra">
+          <div class="progresso__enchido" id="progresso-enchido"></div>
+          <div class="progresso__abelha" id="progresso-abelha"><svg><use href="assets/img/sprite.svg#abelha"/></svg></div>
+        </div>
+        <ol class="etapas-lista" id="etapas-lista"></ol>
+      </div>
+
+      <form id="formulario" novalidate>
+        <div class="form-corpo" id="form-corpo">
+          <noscript><p data-i18n="f.semjs">This form needs JavaScript. You can also write to us at info@heyimplement.com.</p></noscript>
+        </div>
+        <div class="mel-pote" aria-hidden="true">
+          <label>Company website <input type="text" name="site_empresa" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <div class="form-pe">
+          <span class="form-pe__guardado" id="guardado" data-i18n="f.guardado">Your answers are saved on this device</span>
+          <div class="form-pe__botoes">
+            <button type="button" class="botao-voltar" id="voltar" hidden data-i18n="f.voltar">Back</button>
+            <button type="submit" class="botao" id="seguinte"><span id="seguinte-texto">Continue</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer class="rodape">
+  <div class="contentor">
+    <div class="rodape__grelha">
+      <div>
+        <a class="marca" href="index.html" aria-label="Implement — home">
+          <svg class="abelha abelha--lilas" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
+          <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Digital Marketing</span></span>
+        </a>
+        <p class="rodape__lema" data-i18n="c.lema">Strategy · Creativity · Results</p>
+        <ul class="redes" aria-label="Social media">
+          <li><a href="https://www.instagram.com/heyimplement" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-instagram"/></svg></a></li>
+          <li><a href="https://www.facebook.com/heyimplement" rel="noopener" aria-label="Facebook"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-facebook"/></svg></a></li>
+          <li><a href="https://www.tiktok.com/@heyimplement" rel="noopener" aria-label="TikTok"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-tiktok"/></svg></a></li>
+          <li><a href="https://www.youtube.com/@heyimplement" rel="noopener" aria-label="YouTube"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-youtube"/></svg></a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 data-i18n="c.r.agencia">Agency</h2>
+        <ul>
+          <li><a href="about.html" data-i18n="c.nav.sobre">About us</a></li>
+          <li><a href="work.html" data-i18n="c.nav.trabalho">Our work</a></li>
+          <li><a href="index.html#processo" data-i18n="c.nav.processo">Our process</a></li>
+          <li><a href="insights.html" data-i18n="c.nav.insights">Insights</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 data-i18n="c.nav.servicos">Services</h2>
+        <ul>
+          <li><a href="index.html#servicos" data-i18n="c.r.s1">Strategy</a></li>
+          <li><a href="index.html#servicos" data-i18n="c.r.s2">Social media</a></li>
+          <li><a href="index.html#servicos" data-i18n="c.r.s3">Websites</a></li>
+          <li><a href="index.html#servicos" data-i18n="c.r.s4">Content &amp; photo</a></li>
+          <li><a href="index.html#servicos" data-i18n="c.r.s5">Branding &amp; design</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 data-i18n="c.nav.contacto">Contact</h2>
+        <ul>
+          <li><a href="mailto:info@heyimplement.com">info@heyimplement.com</a></li>
+          <li><a href="tel:+351933690514">(+351) 933 690 514</a></li>
+          <li><a href="https://wa.me/351933690514" rel="noopener">WhatsApp</a></li>
+          <li><a href="start-a-project.html" data-i18n="c.comecar">Start a project</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="rodape__base">
+      <span>© <span data-ano>2026</span> Implement Digital Marketing · <span data-i18n="c.portugal">Portugal</span></span>
+      <a href="privacy.html" data-i18n="c.privacidade">Privacy policy</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Website da Implement — Cloudflare Worker com ficheiros estáticos (public/) e API do formulário (src/worker.js)
+  "name": "implement",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-31",
+  "upload_source_maps": true,
+  "observability": { "enabled": true },
+
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    // Só a API passa pelo Worker; as páginas são servidas diretamente (mais rápido e sem custo de pedidos)
+    "run_worker_first": ["/api/*"]
+  },
+
+  // Base de dados dos pedidos do formulário «Start a Project».
+  // Criar com: npx wrangler d1 create implement-pedidos  → copiar o database_id para aqui.
+  // Desativado até a base de dados existir (um database_id inválido faria o deploy falhar).
+  // Depois de «npx wrangler d1 create implement-pedidos», tire os comentários e cole o id.
+  // "d1_databases": [
+  //   {
+  //     "binding": "DB",
+  //     "database_name": "implement-pedidos",
+  //     "database_id": "SUBSTITUIR_PELO_ID_DA_BASE_DE_DADOS"
+  //   }
+  // ],
+
+  // Notificação por e-mail (Cloudflare Email Service).
+  // Só funciona depois de heyimplement.com estar no Cloudflare e o domínio estar «onboarded» no Email Service.
+  // Até lá, deixe comentado: os pedidos ficam guardados na base de dados na mesma.
+  // "send_email": [{ "name": "EMAIL" }],
+
+  "vars": {
+    "EMAIL_DESTINO": "info@heyimplement.com",
+    "EMAIL_REMETENTE": "site@heyimplement.com"
+  }
+}

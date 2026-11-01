@@ -1,0 +1,17 @@
+{
+  "name": "implement-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:criar": "wrangler d1 execute implement-pedidos --remote --file=./schema.sql",
+    "db:criar:local": "wrangler d1 execute implement-pedidos --local --file=./schema.sql",
+    "pedidos": "wrangler d1 execute implement-pedidos --remote --command \"SELECT id, criado_em, nome, empresa, email, servicos, orcamento_mensal, prazo, estado FROM pedidos ORDER BY criado_em DESC LIMIT 50\"",
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.0"
+  }
+}
