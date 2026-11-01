@@ -55,6 +55,9 @@
   if (hamburguer) {
     const fechar = () => { document.body.classList.remove("menu-aberto"); hamburguer.setAttribute("aria-expanded", "false"); };
     hamburguer.addEventListener("click", () => {
+      // O menu começa logo abaixo do cabeçalho, esteja a página no topo ou já percorrida
+      const topo = document.querySelector(".topo");
+      if (topo) doc.style.setProperty("--menu-topo", `${Math.round(topo.getBoundingClientRect().bottom)}px`);
       const aberto = document.body.classList.toggle("menu-aberto");
       hamburguer.setAttribute("aria-expanded", String(aberto));
     });

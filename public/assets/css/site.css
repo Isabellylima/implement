@@ -202,10 +202,14 @@ p { margin: 0; }
 
 @media (max-width: 980px) {
   .hamburguer { display: block; }
+  /* O desfoque do cabeçalho prende elementos «fixed» dentro dele: desliga-se com o menu aberto */
+  .menu-aberto .topo { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--branco); border-bottom-color: var(--linha); }
+  .menu-aberto .whatsapp-flutuante { display: none; }
   .menu {
-    position: fixed; inset: 76px 0 0 0; z-index: 49;
+    position: fixed; top: var(--menu-topo, 111px); right: 0; bottom: 0; left: 0; z-index: 49;
+    padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
     flex-direction: column; align-items: stretch; gap: 0;
-    padding: 24px var(--margem) 32px; background: var(--branco);
+    padding-top: 16px; padding-left: var(--margem); padding-right: var(--margem); background: var(--branco);
     transform: translateY(-12px); opacity: 0; visibility: hidden;
     transition: opacity .3s var(--suave), transform .35s var(--suave), visibility 0s .35s;
     overflow-y: auto;
