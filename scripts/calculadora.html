@@ -1,0 +1,111 @@
+<section class="orcamento" id="orcamento" aria-labelledby="t-orcamento" lang="pt">
+  <div class="contentor">
+    <header class="orcamento__cabeca">
+      <p class="legenda">Ferramenta da equipa</p>
+      <h2 id="t-orcamento">Gerador de orçamentos</h2>
+      <p>Cole o e-mail de um pedido do formulário para preencher tudo de uma vez, ou monte o orçamento à mão. Ajuste quantidades, preços e descontos e carregue em <strong>Gerar orçamento</strong>. O rascunho fica guardado neste browser.</p>
+    </header>
+
+    <div class="calc" id="calc">
+      <div class="calc__principal">
+
+        <section class="calc__cartao" aria-labelledby="calc-t1">
+          <h3 id="calc-t1"><span class="calc__num">1</span> Pedido do cliente</h3>
+          <label class="campo__rotulo" for="calc-email">E-mail do pedido «Start a Project» <span class="opcional">(opcional)</span></label>
+          <textarea class="entrada calc__colar" id="calc-email" rows="6" placeholder="Abra o e-mail «Novo pedido IMP-…» em info@heyimplement.com, selecione tudo (Ctrl/Cmd + A), copie e cole aqui."></textarea>
+          <div class="calc__acoes">
+            <button type="button" class="botao botao--pequeno" id="calc-ler"><span>Ler pedido e sugerir serviços</span></button>
+            <button type="button" class="botao botao--pequeno botao--secundario" id="calc-limpar-email"><span>Limpar</span></button>
+          </div>
+          <p class="calc__estado" id="calc-leitura" role="status" aria-live="polite"></p>
+          <div class="calc__pedido" id="calc-pedido" hidden></div>
+        </section>
+
+        <section class="calc__cartao" aria-labelledby="calc-t2">
+          <h3 id="calc-t2"><span class="calc__num">2</span> Cliente</h3>
+          <div class="campos">
+            <div class="campo"><label class="campo__rotulo" for="calc-nome">Nome</label><input class="entrada" id="calc-nome" data-cliente="nome" autocomplete="off"></div>
+            <div class="campo"><label class="campo__rotulo" for="calc-empresa">Negócio</label><input class="entrada" id="calc-empresa" data-cliente="empresa" autocomplete="off"></div>
+            <div class="campo"><label class="campo__rotulo" for="calc-mail">E-mail</label><input class="entrada" id="calc-mail" type="email" data-cliente="email" autocomplete="off"></div>
+            <div class="campo"><label class="campo__rotulo" for="calc-tel">Telefone / WhatsApp</label><input class="entrada" id="calc-tel" data-cliente="telefone" autocomplete="off"></div>
+            <div class="campo"><label class="campo__rotulo" for="calc-ref">Referência do pedido</label><input class="entrada" id="calc-ref" data-cliente="referencia" placeholder="IMP-…" autocomplete="off"></div>
+            <div class="campo"><label class="campo__rotulo" for="calc-idioma">Idioma do orçamento</label>
+              <select class="entrada" id="calc-idioma" data-cliente="idioma"><option value="pt">Português</option><option value="en">Inglês</option></select></div>
+          </div>
+        </section>
+
+        <section class="calc__cartao" aria-labelledby="calc-t3">
+          <h3 id="calc-t3"><span class="calc__num">3</span> Serviços</h3>
+          <div class="calc__adicionar">
+            <label class="sr-only" for="calc-catalogo">Serviço do preçário</label>
+            <select class="entrada" id="calc-catalogo"></select>
+            <button type="button" class="botao botao--pequeno" id="calc-adicionar"><span>Adicionar</span></button>
+            <button type="button" class="botao botao--pequeno botao--secundario" id="calc-livre"><span>Linha livre</span></button>
+          </div>
+          <p class="calc__dica">Pacotes rápidos:</p>
+          <div class="calc__pacotes" id="calc-pacotes"></div>
+          <p class="calc__sugestao" id="calc-sugestao" role="status" aria-live="polite" hidden></p>
+          <div class="calc__linhas" id="calc-linhas"></div>
+          <p class="calc__vazio" id="calc-vazio">Ainda não há serviços. Escolha um acima, carregue num pacote ou cole o e-mail de um pedido.</p>
+        </section>
+
+        <section class="calc__cartao" aria-labelledby="calc-t4">
+          <h3 id="calc-t4"><span class="calc__num">4</span> Descontos e condições</h3>
+          <div class="campos">
+            <div class="campo"><label class="campo__rotulo" for="calc-desc-tipo">Desconto geral</label>
+              <div class="calc__par">
+                <input class="entrada" id="calc-desc-valor" type="number" min="0" step="1" inputmode="decimal" value="0" aria-label="Valor do desconto">
+                <select class="entrada" id="calc-desc-tipo" aria-label="Tipo de desconto"><option value="pct">%</option><option value="eur">€</option></select>
+              </div>
+              <div class="calc__rapidos" id="calc-desc-rapidos">
+                <button type="button" data-pct="0">0%</button><button type="button" data-pct="5">5%</button><button type="button" data-pct="10">10%</button><button type="button" data-pct="15">15%</button><button type="button" data-pct="20">20%</button>
+              </div>
+              <p class="calc__dica">Em %, aplica-se ao projeto e à mensalidade. Em €, só ao projeto.</p>
+            </div>
+            <div class="campo"><label class="campo__rotulo" for="calc-desc-nome">Nome do desconto</label>
+              <input class="entrada" id="calc-desc-nome" list="calc-desc-nomes" value="Desconto de pacote">
+              <datalist id="calc-desc-nomes"><option value="Desconto de pacote"><option value="Desconto de lançamento"><option value="Cliente habitual"><option value="Desconto de parceria"></datalist>
+            </div>
+            <div class="campo"><label class="campo__rotulo" for="calc-meses">Meses de compromisso (planos mensais)</label><input class="entrada" id="calc-meses" type="number" min="1" step="1" value="3"></div>
+            <div class="campo"><label class="campo__rotulo" for="calc-validade">Validade da proposta (dias)</label><input class="entrada" id="calc-validade" type="number" min="1" step="1" value="30"></div>
+            <div class="campo"><label class="campo__rotulo" for="calc-sinal">Sinal para iniciar (%)</label><input class="entrada" id="calc-sinal" type="number" min="0" max="100" step="5" value="50"></div>
+            <div class="campo"><label class="campo__rotulo" for="calc-iva-taxa">IVA (%)</label>
+              <div class="calc__par">
+                <input class="entrada" id="calc-iva-taxa" type="number" min="0" max="30" step="1" value="23">
+                <label class="calc__marcar"><input type="checkbox" id="calc-iva"> Somar IVA</label>
+              </div>
+            </div>
+            <div class="campo campo--largo"><label class="calc__marcar"><input type="checkbox" id="calc-urgencia"> Urgência: +25% no projeto (sujeito a disponibilidade)</label></div>
+            <div class="campo campo--largo"><label class="campo__rotulo" for="calc-notas">Notas para o cliente <span class="opcional">(aparecem no orçamento)</span></label>
+              <textarea class="entrada" id="calc-notas" rows="3" placeholder="Ex.: Inclui 1 sessão de alinhamento. Datas de captação a combinar."></textarea></div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="calc__resumo" aria-labelledby="calc-t5">
+        <div class="calc__resumo-caixa">
+          <h3 id="calc-t5">Resumo</h3>
+          <dl class="calc__totais" id="calc-totais"></dl>
+          <p class="calc__orc-cliente" id="calc-orc-cliente" hidden></p>
+          <p class="calc__aviso" id="calc-aviso" role="alert"></p>
+          <button type="button" class="botao calc__gerar" id="calc-gerar"><span>Gerar orçamento</span></button>
+          <button type="button" class="calc__novo" id="calc-novo">Começar um orçamento novo</button>
+          <details class="calc__guardados" id="calc-guardados-caixa">
+            <summary>Orçamentos gerados neste browser</summary>
+            <ul id="calc-guardados"></ul>
+          </details>
+        </div>
+      </aside>
+    </div>
+
+    <div class="calc__resultado" id="calc-resultado" hidden>
+      <div class="calc__barra">
+        <button type="button" class="botao botao--pequeno" id="calc-imprimir"><span>Imprimir / guardar PDF</span></button>
+        <button type="button" class="botao botao--pequeno botao--secundario" id="calc-copiar"><span>Copiar texto (e-mail ou WhatsApp)</span></button>
+        <a class="botao botao--pequeno botao--secundario" id="calc-mailto" href="#"><span>Abrir e-mail para o cliente</span></a>
+        <span class="calc__estado" id="calc-copiado" role="status" aria-live="polite"></span>
+      </div>
+      <article class="folha" id="calc-folha" tabindex="-1"></article>
+    </div>
+  </div>
+</section>

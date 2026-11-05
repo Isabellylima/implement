@@ -24,11 +24,12 @@ def preco(valor, desde=False, por=None):
     return {
         "pt": f"{'desde ' if desde else ''}{valor} €{sufixo_pt}",
         "en": f"{'from ' if desde else ''}€{valor}{sufixo_en}",
+        "valor": valor, "desde": desde, "por": por,
     }
 
 
-SOB_ORCAMENTO = {"pt": "Sob orçamento", "en": "Quoted per project"}
-SOB_CONSULTA = {"pt": "Sob consulta", "en": "On request"}
+SOB_ORCAMENTO = {"pt": "Sob orçamento", "en": "Quoted per project", "valor": None}
+SOB_CONSULTA = {"pt": "Sob consulta", "en": "On request", "valor": None}
 
 
 def t(en, pt):
@@ -99,10 +100,10 @@ CATALOGO = [
             {"titulo": t("Photography", "Fotografia"), "duas": True, "itens": [
                 {"id": "foto-neutro", "nome": t("Product · neutral background", "Produto · fundo neutro"),
                  "desc": t("Basic editing; minimum of 10 photos.", "Edição básica; mínimo de 10 fotografias."),
-                 "nota": t("You send or drop off the products", "Cliente envia ou entrega os produtos"), "preco": preco(10, por="foto")},
+                 "nota": t("You send or drop off the products", "Cliente envia ou entrega os produtos"), "preco": preco(10, por="foto"), "min": 10},
                 {"id": "foto-estilo", "nome": t("Product · simple styling", "Produto · estilo simples"),
                  "desc": t("Simple composition with your props; minimum of 8.", "Composição simples com adereços do cliente; mínimo 8."),
-                 "nota": t("Special props not included", "Adereços especiais não incluídos"), "preco": preco(18, por="foto")},
+                 "nota": t("Special props not included", "Adereços especiais não incluídos"), "preco": preco(18, por="foto"), "min": 8},
                 {"id": "foto-espaco", "nome": t("Venue or business · 2 h", "Espaço ou negócio · 2 h"),
                  "desc": t("On-site session and up to 15 edited photos.", "Sessão no local e até 15 fotografias editadas."),
                  "nota": t("Travel may be charged", "Deslocação pode acrescer"), "preco": preco(190)},
@@ -167,6 +168,11 @@ CATALOGO = [
             t("Does not include ad spend, replies to private messages, influencers or customer service.", "Não inclui investimento em anúncios, resposta a mensagens privadas, influenciadores ou atendimento ao cliente."),
             t("Planning starts once we receive the materials and the calendar is approved. Results are not guaranteed.", "O planeamento começa após recebermos os materiais e a aprovação do calendário. Os resultados não são garantidos."),
         ]),
+        "caixa": {
+            "precos": (t("Local reference", "Referência local"),
+                       t("A provider in the Algarve publishes monthly management from €395 + VAT and a €545 + VAT plan with 2 h of filming. Our launch prices sit below these public references; the scope is not directly equivalent.",
+                         "Um prestador no Algarve publica gestão mensal desde 395 € + IVA e um plano de 545 € + IVA com 2 h de captação. Os nossos valores de lançamento ficam abaixo dessas referências públicas; o âmbito não é diretamente equivalente.")),
+        },
     },
     {
         "id": "digital", "icone": "s-web",
@@ -209,13 +215,13 @@ CATALOGO = [
             {"itens": [
                 {"id": "pack-local", "nome": t("Local business", "Negócio local"),
                  "desc": t("Essential logo + single-sided flyer.", "Logótipo essencial + flyer de 1 face."),
-                 "nota_preco": t("Separately: €340", "Preço individual: 340 €"), "preco": preco(325, desde=True)},
+                 "nota_preco": t("Separately: €340", "Preço individual: 340 €"), "preco": preco(325, desde=True), "componentes": [("logo", 1), ("flyer-1", 1)]},
                 {"id": "pack-restaurante", "nome": t("Restaurant or café", "Restaurante ou café"),
                  "desc": t("Menu up to 2 pages + 8 styled photos + 2 short video edits.", "Menu até 2 páginas + 8 fotografias estilizadas + 2 edições de vídeo curto."),
-                 "nota_preco": t("Separately: €374", "Preço individual: 374 €"), "preco": preco(335, desde=True)},
+                 "nota_preco": t("Separately: €374", "Preço individual: 374 €"), "preco": preco(335, desde=True), "componentes": [("menu-2", 1), ("foto-estilo", 8), ("video-30", 2)]},
                 {"id": "pack-loja", "nome": t("Shop or retail", "Loja ou comércio"),
                  "desc": t("Core visual identity + double-sided flyer + 10 neutral product photos.", "Identidade base + flyer frente e verso + 10 fotos de produto neutras."),
-                 "nota_preco": t("Separately: €685", "Preço individual: 685 €"), "preco": preco(590, desde=True)},
+                 "nota_preco": t("Separately: €685", "Preço individual: 685 €"), "preco": preco(590, desde=True), "componentes": [("id-base", 1), ("flyer-2", 1), ("foto-neutro", 10)]},
             ]},
         ],
     },
@@ -237,6 +243,13 @@ COMO = t(
     "These are launch prices set by Implement, not official averages. We compared public local offers and adjusted the scope for a team starting out. Prices vary with deliverables, experience, travel and complexity.",
     "São preços de lançamento definidos pela Implement, não médias oficiais. Comparámos ofertas públicas locais e ajustámos o âmbito para uma equipa em início de atividade. Os preços variam conforme entregáveis, experiência, deslocação e complexidade.",
 )
+
+REFERENCIAS = (t("Public references checked on 1 Nov 2026", "Referências públicas consultadas em 1 nov. 2026"), [
+    t("VORX Digital · social media management in the Algarve · from €395/month", "VORX Digital · gestão de redes no Algarve · desde 395 €/mês"),
+    t("DEMARCA · graphic design in Faro · logo from €300", "DEMARCA · design gráfico em Faro · logótipo desde 300 €"),
+    t("Garrett Walsh · video content in the Algarve · half day €300", "Garrett Walsh · conteúdo de vídeo no Algarve · meio dia 300 €"),
+    t("Catch Algarve · photo and video · package from €450", "Catch Algarve · fotografia e vídeo · pacote desde 450 €"),
+])
 
 # Textos de página: (chave, en, pt)
 PAGINA_SERVICOS = {
@@ -262,6 +275,36 @@ PAGINA_PRECOS = {
     "pr.condicoes": t("Terms", "Condições comerciais"),
     "pr.como": t("How we set these prices", "Como definimos estes valores"),
 }
+
+
+# ---------- Gerador de orçamentos (só no preçário; ferramenta interna, em português) ----------
+CALCULADORA = (RAIZ / "scripts/calculadora.html").read_text(encoding="utf-8")
+
+
+def dados_js():
+    """Módulo com os preços em números, para a calculadora. Só é importado pelo preçário."""
+    import json
+    itens = []
+    for cat in CATALOGO:
+        for grupo in cat["grupos"]:
+            for it in grupo["itens"]:
+                pr = it["preco"]
+                itens.append({
+                    "id": it["id"], "cat": cat["id"], "categoria": cat["titulo"],
+                    "nome": {"pt": it["nome"]["pt"], "en": it["nome"]["en"]},
+                    "desc": {"pt": it["desc"]["pt"], "en": it["desc"]["en"]},
+                    "valor": pr.get("valor"), "desde": bool(pr.get("desde")), "por": pr.get("por"),
+                    "min": it.get("min", 1),
+                    "rotuloPreco": {"pt": pr["pt"], "en": pr["en"]},
+                    "componentes": [{"id": i, "qtd": q} for i, q in it.get("componentes", [])],
+                })
+    adicionais = []
+    for j, (n, pr) in enumerate(ADICIONAIS):
+        adicionais.append({"id": f"ad{j}", "nome": n, "valor": pr.get("valor"), "rotuloPreco": {"pt": pr["pt"], "en": pr["en"]}})
+    dados = {"itens": itens, "adicionais": adicionais, "condicoes": CONDICOES,
+             "notasRedes": [l for l in next(c for c in CATALOGO if c["id"] == "redes")["lista"][1]]}
+    return ("/* Preços em números para o gerador de orçamentos do preçário.\n   Gerado por scripts/servicos.py: altere lá e volte a gerar. */\n"
+            f"export const DADOS = {json.dumps(dados, ensure_ascii=False, indent=1)};\n")
 
 
 # ---------- Montagem ----------
@@ -336,6 +379,7 @@ def gerar(modo):
 <div class="catalogo__corpo"><table class="tabela-precos">{linhas}</table>
 <div class="caixa-nota">{txt("pr.condicoes", PAGINA_PRECOS["pr.condicoes"], "h3", destino=pt_precos)}{txt("pr.condicoes.p", CONDICOES, "p", destino=pt_precos)}</div>
 <div class="caixa-nota caixa-nota--simples">{txt("pr.como", PAGINA_PRECOS["pr.como"], "h3", destino=pt_precos)}{txt("pr.como.p", COMO, "p", destino=pt_precos)}</div>
+<div class="caixa-nota caixa-nota--simples">{txt("pr.ref", REFERENCIAS[0], "h3", destino=pt_precos)}<ul class="lista-referencias">{"".join(txt(f"pr.ref{j}", r, "li", destino=pt_precos) for j, r in enumerate(REFERENCIAS[1]))}</ul></div>
 </div></div></section>''')
 
     chips = "".join(f'<li><a href="#{cat["id"]}">{txt(f"sv.{cat["id"]}.t", cat["titulo"], "span")}</a></li>' for cat in CATALOGO)
@@ -361,7 +405,7 @@ def pagina(modo, base):
     {txt("pr.titulo", "h1", "", html=True)}
     {txt("pr.intro", "p", ' class="heroi-servicos__intro"')}
     <p class="selo-iva">{txt("pr.iva", "span")}</p>
-    <nav class="chips" aria-label="Sections"><ul>{chips}</ul></nav>
+    <nav class="chips" aria-label="Sections"><ul>{chips}<li><a class="chip--calc" href="#orcamento">Gerador de orçamentos</a></li></ul></nav>
   </div>
 </section>'''
     else:
@@ -390,6 +434,8 @@ def pagina(modo, base):
     </div>
   </section>'''
 
+    if com_precos:
+        seccoes += "\n" + CALCULADORA
     main = f'<main id="conteudo">\n{heroi}\n{seccoes}\n{chamada}\n</main>'
 
     # Cabeçalho e rodapé: os mesmos da página Contacto
@@ -401,7 +447,7 @@ def pagina(modo, base):
 <meta name="titulo-pt" content="Preçário — Implement">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Implement launch price list.">'''
-        scripts = '<script src="assets/js/i18n-servicos.js" defer></script>\n<script src="assets/js/i18n-precos.js" defer></script>'
+        scripts = '<script src="assets/js/i18n-servicos.js" defer></script>\n<script src="assets/js/i18n-precos.js" defer></script>\n<script src="assets/js/orcamento.js" type="module"></script>'
     else:
         meta = '''<title>Services — Implement</title>
 <meta name="titulo-pt" content="Serviços — Implement">
@@ -449,4 +495,6 @@ if __name__ == "__main__":
     (PUBLICO / "precario.html").write_text(prec, encoding="utf-8")
     (PUBLICO / "assets/js/i18n-servicos.js").write_text(js("", "Textos em português da página Serviços e das descrições do Preçário (sem preços).", pt_servicos), encoding="utf-8")
     (PUBLICO / "assets/js/i18n-precos.js").write_text(js("", "Textos em português com preços. Só é carregado em precario.html.", pt_p), encoding="utf-8")
+    (PUBLICO / "assets/js/precos-dados.js").write_text(dados_js(), encoding="utf-8")
+    print("precos-dados.js gerado.")
     print("services.html, precario.html, i18n-servicos.js e i18n-precos.js gerados.")

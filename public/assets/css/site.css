@@ -679,3 +679,174 @@ select.entrada { appearance: none; background-image: url("data:image/svg+xml,%3C
 .tabela-precos tr:last-child > * { border-bottom: 0; }
 .tabela-precos th { text-align: left; font-weight: 500; }
 .tabela-precos td { text-align: right; font: 700 1.125rem/1 var(--serifa); color: var(--roxo); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* ---------- Preçário: referências ---------- */
+.lista-referencias { margin: 8px 0 0; padding-left: 1.1em; display: grid; gap: 6px; color: var(--cinza); font-size: .9375rem; }
+.chips .chip--calc { background: var(--noite); color: var(--branco); border-color: var(--noite); }
+.chips .chip--calc:hover { color: var(--branco); background: var(--roxo-profundo); }
+
+/* ---------- Gerador de orçamentos ---------- */
+.orcamento { padding: clamp(64px, 9vw, 112px) 0; background: var(--nevoa); border-top: 1px solid var(--linha); }
+.orcamento__cabeca { max-width: 720px; margin-bottom: 36px; }
+.orcamento__cabeca h2 { font: 700 clamp(2rem, 4vw, 2.75rem)/1.1 var(--serifa); margin: 6px 0 14px; }
+.orcamento__cabeca p:last-child { color: var(--cinza); font-size: 1.0625rem; line-height: 1.6; }
+.calc { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+.calc__principal { display: grid; gap: 20px; min-width: 0; }
+.calc__cartao { background: var(--branco); border: 1px solid var(--linha); border-radius: var(--raio); padding: clamp(18px, 3vw, 28px); min-width: 0; }
+.calc__cartao h3 { display: flex; align-items: center; gap: 12px; font: 700 1.25rem/1.2 var(--serifa); margin: 0 0 18px; }
+.calc__num { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--roxo); color: var(--branco); font: 700 .875rem/1 var(--sans); flex: none; }
+.calc__colar { margin-top: 8px; min-height: 120px; font-size: .9375rem; }
+.calc__acoes, .calc__adicionar, .calc__barra { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+.calc__adicionar { margin-top: 0; }
+.calc__adicionar select { flex: 1 1 280px; min-width: 0; }
+.calc__estado { margin: 12px 0 0; color: var(--roxo-profundo); font-size: .9375rem; }
+.calc__estado:empty { display: none; }
+.calc__barra .calc__estado { margin: 0; }
+.calc__pedido { margin-top: 16px; padding: 16px 18px; border-radius: var(--raio-pequeno); background: var(--nevoa); }
+.calc__pedido h4 { margin: 0 0 10px; font: 700 .75rem/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--roxo-profundo); }
+.calc__pedido dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; }
+.calc__pedido dt { font-size: .8125rem; color: var(--cinza); }
+.calc__pedido dd { margin: 2px 0 0; font-size: .9375rem; font-weight: 500; overflow-wrap: anywhere; }
+.calc__dica { margin: 18px 0 8px; font-size: .875rem; color: var(--cinza); }
+.campo .calc__dica { margin: 4px 0 0; }
+.calc__pacotes { display: flex; flex-wrap: wrap; gap: 8px; }
+.calc__pacote { display: grid; gap: 2px; text-align: left; padding: 10px 14px; border-radius: var(--raio-pequeno); border: 1.5px solid var(--linha); background: var(--branco); font: inherit; cursor: pointer; transition: border-color .2s, background .2s; }
+.calc__pacote strong { font-size: .9375rem; }
+.calc__pacote span { font-size: .8125rem; color: var(--roxo-profundo); }
+.calc__pacote:hover, .calc__pacote:focus-visible { border-color: var(--roxo); background: var(--nevoa); }
+.calc__sugestao { margin: 16px 0 0; padding: 12px 16px; border-radius: var(--raio-pequeno); background: #FFF6E0; border: 1px solid #F5D58F; font-size: .9375rem; }
+.calc__sugestao button, .calc__novo, .calc__rapidos button, .calc__guardados button, .calc__linha-acoes button { font: inherit; cursor: pointer; }
+.calc__sugestao button { margin-left: 6px; border: 0; background: var(--tinta); color: var(--branco); border-radius: 999px; padding: 6px 14px; font-weight: 700; font-size: .875rem; }
+.calc__linhas { display: grid; gap: 10px; margin-top: 18px; }
+.calc__vazio { margin: 18px 0 0; padding: 22px; border: 1.5px dashed var(--linha); border-radius: var(--raio-pequeno); color: var(--cinza); text-align: center; }
+.calc__linha { display: grid; grid-template-columns: minmax(0, 1fr) 76px 104px 80px 112px 36px; gap: 10px; align-items: start; padding: 14px; border: 1px solid var(--linha); border-radius: var(--raio-pequeno); background: var(--branco); }
+.calc__linha--definir { border-color: var(--mel); background: #FFFBF1; }
+.calc__linha .entrada { min-height: 44px; padding: 8px 12px; font-size: .9375rem; }
+.calc__linha-nome { display: grid; gap: 6px; min-width: 0; }
+.calc__linha-info { margin: 0; font-size: .8125rem; color: var(--cinza); line-height: 1.45; }
+.calc__linha-desc { font-size: .875rem; }
+.calc__mini { display: grid; gap: 4px; min-width: 0; }
+.calc__mini span, .calc__linha-total span { font-size: .75rem; color: var(--cinza); white-space: nowrap; }
+.calc__mini .entrada { padding: 8px; text-align: right; }
+.calc__linha-total { margin: 0; display: grid; gap: 4px; text-align: right; }
+.calc__linha-total output { font-weight: 700; padding-top: 11px; white-space: nowrap; }
+.calc__linha-total small { font-weight: 400; color: var(--cinza); }
+.calc__linha-acoes { display: grid; gap: 4px; padding-top: 18px; }
+.calc__linha-acoes button { width: 36px; height: 32px; border-radius: 8px; border: 1px solid var(--linha); background: var(--branco); color: var(--tinta); font-size: 1rem; line-height: 1; }
+.calc__linha-acoes button:hover:not([disabled]) { border-color: var(--roxo); color: var(--roxo-profundo); }
+.calc__linha-acoes button[disabled] { opacity: .35; cursor: default; }
+.calc__par { display: flex; gap: 8px; align-items: center; }
+.calc__par .entrada:first-child { flex: 1; min-width: 0; }
+.calc__par select.entrada { flex: 0 0 92px; }
+.calc__marcar { display: inline-flex; gap: 8px; align-items: center; font-size: .9375rem; cursor: pointer; }
+.calc__par .calc__marcar { white-space: nowrap; }
+.calc__marcar input { flex: none; }
+.calc__marcar input { width: 18px; height: 18px; accent-color: var(--roxo); }
+.calc__marcar--pequeno { font-size: .8125rem; color: var(--cinza); }
+.calc__rapidos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.calc__rapidos button { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--linha); background: var(--branco); font-size: .8125rem; font-weight: 700; }
+.calc__rapidos button:hover { border-color: var(--roxo); }
+.calc__resumo { position: sticky; top: 100px; }
+.calc__resumo-caixa { background: var(--noite); color: var(--branco); border-radius: var(--raio); padding: 24px; display: grid; gap: 14px; }
+.calc__resumo-caixa h3 { margin: 0; font: 700 1.375rem/1.2 var(--serifa); }
+.calc__totais { margin: 0; display: grid; gap: 8px; }
+.calc__totais div { display: flex; justify-content: space-between; gap: 12px; font-size: .9375rem; }
+.calc__totais dt { color: var(--lilas); }
+.calc__totais dd { margin: 0; font-weight: 500; white-space: nowrap; }
+.calc__totais .t-desconto dd { color: var(--mel); }
+.calc__totais .t-forte { padding-top: 8px; border-top: 1px solid rgba(205, 184, 247, .25); }
+.calc__totais .t-forte dt, .calc__totais .t-forte dd { color: var(--branco); font-weight: 700; font-size: 1.0625rem; }
+.calc__totais .t-separar { margin-top: 10px; }
+.calc__totais .t-geral { padding: 10px 0 0; border-top: 1px solid rgba(205, 184, 247, .5); }
+.calc__totais .t-geral dt, .calc__totais .t-geral dd { color: var(--mel); font-weight: 700; font-size: 1.125rem; }
+.calc__totais .t-poupanca dt, .calc__totais .t-poupanca dd { color: #A8E6C1; font-size: .875rem; }
+.calc__orc-cliente { margin: 0; padding: 12px 14px; border-radius: var(--raio-pequeno); background: rgba(205, 184, 247, .12); font-size: .875rem; line-height: 1.5; color: var(--lilas); }
+.calc__orc-cliente strong { color: var(--branco); }
+.calc__aviso { margin: 0; color: #FFB4B4; font-size: .875rem; }
+.calc__aviso:empty { display: none; }
+.calc__gerar { width: 100%; justify-content: center; }
+.calc__novo { border: 0; background: none; color: var(--lilas); text-decoration: underline; text-underline-offset: 3px; font-size: .875rem; padding: 4px; }
+.calc__guardados { border-top: 1px solid rgba(205, 184, 247, .25); padding-top: 12px; font-size: .875rem; }
+.calc__guardados summary { cursor: pointer; color: var(--lilas); }
+.calc__guardados ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; max-height: 260px; overflow: auto; }
+.calc__guardados button { width: 100%; text-align: left; display: grid; gap: 2px; padding: 8px 10px; border-radius: 8px; border: 1px solid rgba(205, 184, 247, .25); background: transparent; color: var(--branco); font-size: .8125rem; }
+.calc__guardados button span { color: var(--lilas); }
+.calc__guardados button:hover { background: rgba(205, 184, 247, .12); }
+.calc__resultado { margin-top: 40px; }
+.calc__barra { margin: 0 0 18px; }
+
+/* Folha do orçamento (o que o cliente recebe) */
+.folha { background: var(--branco); color: var(--tinta); border-radius: var(--raio); box-shadow: var(--sombra-forte); padding: clamp(24px, 5vw, 56px); max-width: 860px; outline: none; font-size: .9375rem; }
+.folha__topo { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; padding-bottom: 24px; border-bottom: 2px solid var(--roxo); }
+.folha__marca { display: flex; align-items: center; gap: 10px; }
+.folha__marca svg { width: 46px; height: 30px; }
+.folha__marca span { font: 800 1.75rem/1 var(--serifa); color: var(--roxo); letter-spacing: -.01em; }
+.folha__num { text-align: right; }
+.folha__num p { margin: 0 0 3px; color: var(--cinza); font-size: .875rem; }
+.folha__num strong { color: var(--tinta); font-size: 1rem; }
+.folha__tipo { font: 700 .75rem/1 var(--sans) !important; letter-spacing: .24em; text-transform: uppercase; color: var(--roxo-profundo) !important; margin-bottom: 8px !important; }
+.folha__cliente { padding: 22px 0; }
+.folha__cliente p { margin: 0 0 3px; }
+.folha__rotulo, .folha__sub, .folha__texto h3, .folha__bloco h3 { font: 700 .6875rem/1.2 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--roxo-profundo); margin: 0 0 8px; }
+.folha__ref { color: var(--cinza); font-size: .8125rem; }
+.folha__sub { margin-top: 18px; }
+.folha__tabela { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+.folha__tabela th { text-align: left; font-size: .75rem; color: var(--cinza); font-weight: 500; padding: 8px 8px 8px 0; border-bottom: 1px solid var(--linha); }
+.folha__tabela td { padding: 12px 8px 12px 0; border-bottom: 1px solid var(--linha); vertical-align: top; }
+.folha__tabela td small { display: block; color: var(--cinza); font-size: .8125rem; margin-top: 3px; line-height: 1.45; }
+.folha__tabela .n { text-align: right; white-space: nowrap; padding-right: 0; padding-left: 8px; }
+.folha__totais { display: grid; gap: 14px; margin: 20px 0 0 auto; max-width: 380px; }
+.folha__bloco { padding: 14px 16px; border-radius: var(--raio-pequeno); background: var(--nevoa); }
+.folha__bloco dl { margin: 0; display: grid; gap: 6px; }
+.folha__bloco div { display: flex; justify-content: space-between; gap: 16px; }
+.folha__bloco dt { color: var(--cinza); }
+.folha__bloco dd { margin: 0; white-space: nowrap; }
+.folha__bloco .desc dd { color: var(--roxo-profundo); font-weight: 700; }
+.folha__bloco .forte { padding-top: 6px; border-top: 1px solid var(--linha); }
+.folha__bloco .forte dt, .folha__bloco .forte dd { color: var(--tinta); font-weight: 700; font-size: 1.0625rem; }
+.folha__geral { margin: 0; display: flex; justify-content: space-between; gap: 16px; padding: 14px 16px; border-radius: var(--raio-pequeno); background: var(--noite); color: var(--branco); }
+.folha__geral strong { color: var(--mel); font-size: 1.125rem; }
+.folha__poupa, .folha__iva { margin: 0; text-align: right; font-size: .8125rem; color: var(--cinza); }
+.folha__poupa { color: var(--roxo-profundo); font-weight: 700; }
+.folha__texto { margin-top: 26px; }
+.folha__texto p, .folha__texto li { margin: 0; color: var(--cinza); font-size: .875rem; line-height: 1.6; white-space: pre-line; }
+.folha__texto ul { margin: 0; padding-left: 1.1em; }
+.folha__rodape { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--linha); font-size: .8125rem; color: var(--roxo-profundo); text-align: center; }
+
+@media (max-width: 1080px) {
+  .calc { grid-template-columns: 1fr; }
+  .calc__resumo { position: static; }
+}
+@media (max-width: 720px) {
+  .calc__linha { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .calc__linha-nome { grid-column: 1 / -1; }
+  .calc__linha-total { grid-column: 1 / 3; text-align: left; }
+  .calc__linha-total output { padding-top: 0; }
+  .calc__linha-acoes { grid-column: 3; grid-row: 3; display: flex; justify-content: flex-end; padding-top: 0; }
+  .calc__pedido dl { grid-template-columns: 1fr; }
+  .folha__topo { flex-direction: column; }
+  .folha__num { text-align: left; }
+  .folha__tabela thead { display: none; }
+  .folha__tabela tr { display: grid; grid-template-columns: 1fr auto; border-bottom: 1px solid var(--linha); padding: 10px 0; }
+  .folha__tabela td { border: 0; padding: 2px 0; }
+  .folha__tabela td:first-child { grid-column: 1 / -1; }
+  .folha__tabela td:nth-child(2), .folha__tabela td:nth-child(4) { display: none; }
+  .folha__tabela td.n { text-align: left; padding-left: 0; }
+  .folha__tabela td[data-qtd]::before { content: attr(data-qtd); }
+  .folha__tabela td:last-child { text-align: right; }
+}
+
+/* Imprimir só a folha do orçamento */
+@media print {
+  .a-imprimir body > *:not(main), .a-imprimir main > *:not(#orcamento),
+  .a-imprimir .orcamento__cabeca, .a-imprimir #calc, .a-imprimir .calc__barra { display: none !important; }
+  .a-imprimir body { background: #fff; }
+  .a-imprimir .orcamento, .a-imprimir .calc__resultado, .a-imprimir .contentor { padding: 0; margin: 0; background: none; border: 0; max-width: none; }
+  .a-imprimir .folha { box-shadow: none; border-radius: 0; padding: 0; max-width: none; }
+  .a-imprimir .folha__bloco, .a-imprimir .folha__geral { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .a-imprimir .folha__tabela tr, .a-imprimir .folha__bloco { break-inside: avoid; }
+  @page { margin: 16mm; }
+}
+.calc .campo { min-width: 0; }
+.calc__par .entrada { width: 100%; min-width: 0; }
+@media (max-width: 720px) { .calc .campos { grid-template-columns: minmax(0, 1fr); } }
