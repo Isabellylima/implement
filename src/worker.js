@@ -1,8 +1,10 @@
 /* Implement — Worker do website.
-   As páginas (public/) são servidas diretamente pelo Cloudflare. Este Worker só trata de /api/*:
+   As páginas (public/) são servidas diretamente pelo Cloudflare. Este Worker trata de /api/* e do blog
+   (/insights, /media, /admin — ver src/blog.js):
      POST /api/start-a-project  → valida as respostas, guarda na D1 (DB) e avisa a equipa por e-mail (EMAIL, se configurado)
      GET  /api/saude            → estado da configuração (para confirmar a publicação)
    As perguntas e as regras de validação são as mesmas do formulário: public/assets/js/perguntas.js */
+import { tratarBlog } from "./blog.js";
 import { ETAPAS, CONTACTO, validarTudo, validarContacto, textoResposta, visivel } from "../public/assets/js/perguntas.js";
 
 const LIMITE_BYTES = 64 * 1024;
@@ -20,6 +22,8 @@ const json = (dados, estado = 200) => new Response(JSON.stringify(dados), { stat
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    const blog = await tratarBlog(request, env, ctx, url);
+    if (blog) return blog;
     if (url.pathname === "/api/start-a-project") {
       if (request.method !== "POST") return new Response(null, { status: 405, headers: { ...SEGURANCA, Allow: "POST" } });
       try {

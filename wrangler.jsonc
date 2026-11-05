@@ -12,8 +12,8 @@
     "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page",
-    // Só a API passa pelo Worker; as páginas são servidas diretamente (mais rápido e sem custo de pedidos)
-    "run_worker_first": ["/api/*"]
+    // Só a API, o blog e a área da equipa passam pelo Worker; as outras páginas são servidas diretamente
+    "run_worker_first": ["/api/*", "/insights", "/insights/*", "/insights.html", "/media/*", "/admin", "/admin/*"]
   },
 
   // Base de dados dos pedidos do formulário «Start a Project».

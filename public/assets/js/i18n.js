@@ -136,5 +136,15 @@ window.IMPLEMENT_PT = {
   /* 404 */
   "e.titulo": "Esta página ainda está a caminho.",
   "e.p": "Estamos a construir o novo website da Implement. Enquanto isso, pode voltar ao início ou falar connosco.",
-  "e.inicio": "Voltar ao início"
+  "e.inicio": "Voltar ao início",
+
+  /* Artigos (/insights) */
+  "ar.legenda": "Artigos",
+  "ar.titulo": "Ideias para negócios que querem <span class=\"destaque\">crescer.</span>",
+  "ar.intro": "Notas práticas sobre redes sociais, marca, websites e conteúdo, escritas pela equipa da Implement.",
+  "ar.vazio": "Os primeiros artigos estão a caminho.",
+  "ar.vazio.p": "Enquanto isso, fale-nos do seu negócio. Teremos todo o gosto em ajudar.",
+  "ar.cta.titulo": "Não sabe bem do que precisa?",
+  "ar.cta.p": "Fale-nos do seu negócio em poucos minutos. Sugerimos a combinação certa e enviamos uma proposta feita para si.",
+  "ar.cta.wa": "Falar pelo WhatsApp"
 };

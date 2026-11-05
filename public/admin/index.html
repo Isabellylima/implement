@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1C0F3A">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/admin.css">
+<title>Editor de artigos · Implement</title>
+<script src="/assets/js/admin.js" type="module"></script>
+</head>
+<body class="admin">
+<header class="admin-topo">
+  <a class="marca marca--clara" href="/admin/" aria-label="Editor de artigos">
+    <svg class="abelha abelha--lilas" aria-hidden="true"><use href="/assets/img/sprite.svg#abelha"/></svg>
+    <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Área da equipa</span></span>
+  </a>
+  <nav class="admin-topo__nav" aria-label="Área da equipa">
+    <a href="#/" data-rota="lista">Artigos</a>
+    <a href="#/autoras" data-rota="autoras">Autoras</a>
+    <a href="/insights" target="_blank" rel="noopener">Ver blog ↗</a>
+  </nav>
+  <div class="admin-topo__conta"><span id="conta"></span><button type="button" id="sair">Sair</button></div>
+</header>
+<main id="app" class="admin-app" tabindex="-1"><p class="admin-carregar">A carregar…</p></main>
+<div class="admin-aviso" id="aviso" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

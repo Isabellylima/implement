@@ -106,3 +106,13 @@ node scripts/construir-artefacto.mjs   # gera dist-artefacto/ (não entra no Git
 ```
 
 No Cloudflare nada disto é usado: o formulário deteta que não está no claude.ai e envia para `/api/start-a-project`.
+
+## Blog e área da equipa
+
+- **Escrever:** `heyimplement.com/admin` → entrar com um e-mail `@heyimplement.com` (chega um link por e-mail, válido 15 min, uma vez). Sessão de 30 dias.
+- **Artigos:** título, resumo, imagem de capa, parágrafos, títulos, listas, citações, imagens, vídeos (YouTube, Vimeo, Loom) e separadores. Rascunho, publicar ou agendar (data futura).
+- **Autoras:** Isabelly Silva e Jessica Martins; foto, função e descrição editáveis em «Autoras».
+- **Público:** `/insights` (lista) e `/insights/<endereço>` (artigo), gerados pelo Worker a partir da D1.
+- **Imagens:** reduzidas no browser e guardadas na D1 (até 1,4 MB cada). Para usar o R2: ativar o R2 no painel, criar o bucket e acrescentar `"r2_buckets": [{ "binding": "MEDIA", "bucket_name": "implement-media" }]` em `wrangler.jsonc`.
+- **Menu e rodapé dos artigos:** vêm de `src/modelo.js`; depois de mudar o menu, correr `python3 scripts/modelo.py`.
+- **Testar localmente:** `node test/servidor-local.mjs` (D1 em SQLite; os e-mails de entrada ficam em `/tmp/implement-emails.jsonl`).
