@@ -119,7 +119,7 @@ async function rota() {
   }
   sujo = false; editorAtual = null; app.onclick = null;
   const h = location.hash.replace(/^#/, "") || "/";
-  $$(".admin-topo__nav [data-rota]").forEach((a) => a.toggleAttribute("aria-current", (a.dataset.rota === "autoras") === h.startsWith("/autoras")));
+  $$(".admin-topo__nav [data-rota]").forEach((a) => a.toggleAttribute("aria-current", a.dataset.rota === (h.startsWith("/autoras") ? "autoras" : "lista")));
   try {
     if (!autoras.length) autoras = (await api("autoras")).autoras;
     if (h.startsWith("/autoras")) await vistaAutoras();

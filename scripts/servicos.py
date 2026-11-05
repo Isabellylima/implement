@@ -307,6 +307,18 @@ def dados_js():
             f"export const DADOS = {json.dumps(dados, ensure_ascii=False, indent=1)};\n")
 
 
+def pagina_orcamento():
+    """Gerador de orçamentos na área da equipa (/admin/orcamento, só com sessão). Usa o topo de public/admin/index.html."""
+    base = (PUBLICO / "admin/index.html").read_text(encoding="utf-8")
+    topo = base[:base.index('<main id="app"')]
+    topo = topo.replace("<title>Editor de artigos · Implement</title>", "<title>Orçamentos · Implement</title>")
+    topo = topo.replace('<script src="/assets/js/admin.js" type="module"></script>', '<script src="/assets/js/admin-conta.js" type="module"></script>\n<script src="/assets/js/orcamento.js" type="module"></script>')
+    topo = topo.replace('<body class="admin">', '<body class="admin admin--orcamento">')
+    topo = topo.replace('data-rota="orcamento"', 'data-rota="orcamento" aria-current="page"')
+    assert "orcamento.js" in topo and 'aria-current="page"' in topo
+    return topo + '<main id="conteudo" class="admin-orcamento">\n' + CALCULADORA + "</main>\n</body>\n</html>\n"
+
+
 # ---------- Montagem ----------
 def campos_pt(prefixo, d, saida):
     saida[prefixo] = d["pt"]
@@ -405,7 +417,7 @@ def pagina(modo, base):
     {txt("pr.titulo", "h1", "", html=True)}
     {txt("pr.intro", "p", ' class="heroi-servicos__intro"')}
     <p class="selo-iva">{txt("pr.iva", "span")}</p>
-    <nav class="chips" aria-label="Sections"><ul>{chips}<li><a class="chip--calc" href="#orcamento">Gerador de orçamentos</a></li></ul></nav>
+    <nav class="chips" aria-label="Sections"><ul>{chips}</ul></nav>
   </div>
 </section>'''
     else:
@@ -434,8 +446,6 @@ def pagina(modo, base):
     </div>
   </section>'''
 
-    if com_precos:
-        seccoes += "\n" + CALCULADORA
     main = f'<main id="conteudo">\n{heroi}\n{seccoes}\n{chamada}\n</main>'
 
     # Cabeçalho e rodapé: os mesmos da página Contacto
@@ -447,7 +457,7 @@ def pagina(modo, base):
 <meta name="titulo-pt" content="Preçário — Implement">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Implement launch price list.">'''
-        scripts = '<script src="assets/js/i18n-servicos.js" defer></script>\n<script src="assets/js/i18n-precos.js" defer></script>\n<script src="assets/js/orcamento.js" type="module"></script>'
+        scripts = '<script src="assets/js/i18n-servicos.js" defer></script>\n<script src="assets/js/i18n-precos.js" defer></script>'
     else:
         meta = '''<title>Services — Implement</title>
 <meta name="titulo-pt" content="Serviços — Implement">
@@ -496,5 +506,6 @@ if __name__ == "__main__":
     (PUBLICO / "assets/js/i18n-servicos.js").write_text(js("", "Textos em português da página Serviços e das descrições do Preçário (sem preços).", pt_servicos), encoding="utf-8")
     (PUBLICO / "assets/js/i18n-precos.js").write_text(js("", "Textos em português com preços. Só é carregado em precario.html.", pt_p), encoding="utf-8")
     (PUBLICO / "assets/js/precos-dados.js").write_text(dados_js(), encoding="utf-8")
+    (PUBLICO / "admin/orcamento.html").write_text(pagina_orcamento(), encoding="utf-8")
     print("precos-dados.js gerado.")
     print("services.html, precario.html, i18n-servicos.js e i18n-precos.js gerados.")

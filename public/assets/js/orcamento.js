@@ -505,7 +505,7 @@ function iniciar() {
     const cliente = E.cliente;
     $("calc-folha").innerHTML = `
       <header class="folha__topo">
-        <div class="folha__marca"><svg aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg><span>implement</span></div>
+        <div class="folha__marca"><svg aria-hidden="true"><use href="/assets/img/sprite.svg#abelha"/></svg><span>implement</span></div>
         <div class="folha__num"><p class="folha__tipo">${q.titulo}</p><p><strong>${esc(E.numero)}</strong></p><p>${q.data}: ${dataTxt(hoje)}</p><p>${q.validade}: ${dataTxt(ate)}</p></div>
       </header>
       <section class="folha__cliente"><p class="folha__rotulo">${q.para}</p>

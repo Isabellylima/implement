@@ -172,3 +172,8 @@
 .admin-aviso { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 80; max-width: min(92vw, 560px); padding: 14px 20px; border-radius: var(--raio-pequeno); background: var(--tinta); color: var(--branco); font-size: .9375rem; box-shadow: var(--sombra-forte); }
 .admin-aviso[data-tipo="erro"] { background: #9E1F35; }
 .whatsapp-flutuante { display: none !important; }
+
+/* Gerador de orçamentos dentro da área da equipa */
+.admin-orcamento .orcamento { background: transparent; padding-top: clamp(28px, 4vw, 56px); }
+.admin-orcamento .calc__cartao { border: 0; }
+@media print { .a-imprimir .admin-topo, .a-imprimir .admin-aviso { display: none !important; } }
