@@ -349,7 +349,7 @@ def gerar(modo):
                 if notas:
                     linhas.append(f'<p class="oferta__nota">{" · ".join(notas)}</p>')
                 itens.append(f'<li class="oferta" id="{c}-{it["id"]}">' + "".join(linhas) + "</li>")
-            classe = "ofertas ofertas--duas" if grupo.get("duas") else "ofertas"
+            classe = "ofertas ofertas--duas" if len(grupo["itens"]) in (2, 4) else "ofertas"
             corpo.append(f'<ul class="{classe}">' + "".join(itens) + "</ul>")
         if cat.get("lista"):
             titulo, linhas = cat["lista"]
@@ -362,20 +362,20 @@ def gerar(modo):
             corpo.append(f'<div class="caixa-nota">{txt(f"{pref}.{c}.ct", caixa[0], "h3", destino=dest)}{txt(f"{pref}.{c}.cp", caixa[1], "p", destino=dest)}</div>')
         corpo.append(f'<p class="catalogo__acao"><a class="ligacao-seta" href="start-a-project.html">{txt("sv.proposta", PAGINA_SERVICOS["sv.proposta"])}<svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a></p>')
 
-        cabeca = (f'<header class="catalogo__cabeca">'
+        cabeca = (f'<header class="cabeca-seccao catalogo__cabeca">'
                   f'<span class="catalogo__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#{cat["icone"]}"/></svg></span>'
                   f'{txt(f"sv.{c}.leg", cat["legenda"], "p", " class=\"legenda\"")}'
                   f'{txt(f"sv.{c}.t", cat["titulo"], "h2", f" id=\"t-{c}\"")}'
                   f'{txt(f"sv.{c}.i", cat["intro"], "p", " class=\"catalogo__intro\"")}'
                   f'</header>')
-        fundo = " catalogo--nevoa" if i % 2 else ""
-        partes.append(f'<section class="catalogo{fundo}" id="{c}" aria-labelledby="t-{c}"><div class="contentor catalogo__grelha">{cabeca}<div class="catalogo__corpo">{"".join(corpo)}</div></div></section>')
+        fundo = "" if i % 2 else " catalogo--nevoa"
+        partes.append(f'<section class="seccao catalogo{fundo}" id="{c}" aria-labelledby="t-{c}"><div class="contentor">{cabeca}<div class="catalogo__corpo">{"".join(corpo)}</div></div></section>')
 
     if com_precos:
         linhas = "".join(f'<tr><th scope="row">{txt(f"pr.ad{j}.n", n, "span", destino=pt_precos)}</th><td>{txt(f"pr.ad{j}.p", p, "span", destino=pt_precos)}</td></tr>'
                          for j, (n, p) in enumerate(ADICIONAIS))
-        partes.append(f'''<section class="catalogo" id="condicoes" aria-labelledby="t-adicionais"><div class="contentor catalogo__grelha">
-<header class="catalogo__cabeca">{txt("pr.adicionais", PAGINA_PRECOS["pr.adicionais"], "h2", ' id="t-adicionais"', destino=pt_precos)}</header>
+        partes.append(f'''<section class="seccao catalogo catalogo--nevoa" id="condicoes" aria-labelledby="t-adicionais"><div class="contentor">
+<header class="cabeca-seccao catalogo__cabeca">{txt("pr.adicionais", PAGINA_PRECOS["pr.adicionais"], "h2", ' id="t-adicionais"', destino=pt_precos)}</header>
 <div class="catalogo__corpo"><table class="tabela-precos">{linhas}</table>
 <div class="caixa-nota">{txt("pr.condicoes", PAGINA_PRECOS["pr.condicoes"], "h3", destino=pt_precos)}{txt("pr.condicoes.p", CONDICOES, "p", destino=pt_precos)}</div>
 <div class="caixa-nota caixa-nota--simples">{txt("pr.como", PAGINA_PRECOS["pr.como"], "h3", destino=pt_precos)}{txt("pr.como.p", COMO, "p", destino=pt_precos)}</div>
@@ -399,7 +399,7 @@ def pagina(modo, base):
         return f"<{tag}{attrs}{a}>{d['en'] if html else escape(d['en'])}</{tag}>"
 
     if com_precos:
-        heroi = f'''<section class="heroi-servicos heroi-servicos--precos">
+        heroi = f'''<section class="heroi heroi-servicos heroi-servicos--precos">
   <div class="contentor">
     {txt("pr.legenda", "p", ' class="legenda"')}
     {txt("pr.titulo", "h1", "", html=True)}
@@ -409,7 +409,7 @@ def pagina(modo, base):
   </div>
 </section>'''
     else:
-        heroi = f'''<section class="heroi-servicos">
+        heroi = f'''<section class="heroi heroi-servicos">
   <div class="contentor">
     {txt("sv.legenda", "p", ' class="legenda"')}
     {txt("sv.titulo", "h1", "", html=True)}

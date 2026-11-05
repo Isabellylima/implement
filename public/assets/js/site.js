@@ -109,6 +109,7 @@
       if (a.target !== "_blank") a.target = "_blank";
     });
     if (flutuante.getAttribute("aria-label") !== rotulo) flutuante.setAttribute("aria-label", rotulo);
+    if (flutuante.title !== rotulo) flutuante.title = rotulo;
     const texto = flutuante.querySelector(".whatsapp-flutuante__texto");
     if (texto.textContent !== rotulo) texto.textContent = rotulo;
   }
