@@ -55,6 +55,7 @@ window.IMPLEMENT_PT = {
   "h.r3.p": "O que medimos, mostramos-lhe em linguagem simples: o que resultou, o que aprendemos e o que vamos mudar a seguir.",
 
   "h.serv.leg": "O que fazemos",
+  "h.serv.todos": "Ver todos os serviços",
   "h.serv.titulo": "Tudo o que o seu negócio precisa para ser encontrado, compreendido e escolhido online.",
   "h.s1.t": "Estratégia e análise digital",
   "h.s1.p": "Começamos por perceber onde está hoje: a sua presença, o seu público e a concorrência. Depois definimos um plano que se pode medir.",

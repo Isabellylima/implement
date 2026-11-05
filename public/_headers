@@ -8,3 +8,9 @@
 
 /assets/*
   Cache-Control: public, max-age=3600
+
+/precario
+  X-Robots-Tag: noindex, nofollow
+
+/precario.html
+  X-Robots-Tag: noindex, nofollow

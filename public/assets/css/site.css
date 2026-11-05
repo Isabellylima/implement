@@ -625,3 +625,57 @@ select.entrada { appearance: none; background-image: url("data:image/svg+xml,%3C
   .whatsapp-flutuante__texto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 @media print { .whatsapp-flutuante { display: none; } }
+
+/* ---------- Serviços e Preçário ---------- */
+.servicos__mais { margin-top: 28px; }
+.heroi-servicos { padding-block: clamp(48px, 8vw, 104px) clamp(32px, 5vw, 56px); background: var(--nevoa); }
+.heroi-servicos .legenda { margin-bottom: 20px; }
+.heroi-servicos h1 { max-width: 16ch; text-wrap: balance; }
+.heroi-servicos__intro { margin-top: 22px; max-width: 40rem; font-size: clamp(1.0625rem, 1.4vw, 1.1875rem); color: #3b3448; }
+.selo-iva { display: inline-block; margin-top: 18px; padding: 6px 14px; border-radius: 999px; background: var(--branco); font-size: .8125rem; font-weight: 700; color: var(--roxo-profundo); box-shadow: var(--sombra); }
+.chips { margin-top: 32px; }
+.chips ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 999px; background: var(--branco); border: 1.5px solid #DCD3EC; color: var(--tinta); font-weight: 500; font-size: .9375rem; text-decoration: none; transition: border-color .2s, color .2s, transform .3s var(--mola); }
+.chips a:hover { border-color: var(--roxo); color: var(--roxo-profundo); transform: translateY(-2px); }
+
+.catalogo { padding-block: clamp(56px, 8vw, 96px); background: var(--branco); scroll-margin-top: 80px; }
+.catalogo--nevoa { background: var(--nevoa); }
+.catalogo__grelha { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+.catalogo__cabeca { position: sticky; top: 108px; display: grid; gap: 14px; justify-items: start; }
+.catalogo__icone { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--nevoa); color: var(--roxo); }
+.catalogo--nevoa .catalogo__icone { background: var(--branco); }
+.catalogo__icone svg { width: 28px; height: 28px; }
+.catalogo__cabeca h2 { font-size: clamp(2rem, 3.6vw, 2.75rem); text-wrap: balance; }
+.catalogo__intro { color: #3b3448; max-width: 30rem; }
+.catalogo__corpo { display: grid; gap: 20px; min-width: 0; }
+.catalogo__sub { margin-top: 16px; font: 700 .75rem/1.2 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--roxo-profundo); }
+.catalogo__acao { margin-top: 4px; }
+@media (max-width: 860px) {
+  .catalogo__grelha { grid-template-columns: 1fr; }
+  .catalogo__cabeca { position: static; }
+}
+
+.ofertas { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.ofertas--duas { grid-template-columns: 1fr 1fr; }
+@media (max-width: 620px) { .ofertas--duas { grid-template-columns: 1fr; } }
+.oferta { display: grid; gap: 8px; align-content: start; padding: 22px 24px; border-radius: var(--raio); background: var(--branco); border: 1px solid var(--linha); transition: border-color .3s, transform .4s var(--mola); }
+.catalogo:not(.catalogo--nevoa) .oferta { background: #FCFAFF; }
+.oferta:hover { border-color: #CDB8F7; transform: translateY(-2px); }
+.oferta__topo { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
+.oferta__nome { margin: 0; font: 700 1.0625rem/1.3 var(--sans); }
+.oferta__preco { font: 700 1.375rem/1.1 var(--serifa); color: var(--roxo); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.oferta__desc { color: #4a4357; font-size: .9375rem; }
+.oferta__nota { font-size: .8125rem; color: var(--cinza); }
+
+.caixa-nota { padding: 22px 24px; border-radius: var(--raio); background: #EFE6FE; }
+.catalogo--nevoa .caixa-nota { background: var(--branco); }
+.caixa-nota h3 { font: 700 1rem/1.3 var(--sans); color: var(--roxo-profundo); margin-bottom: 8px; }
+.caixa-nota p, .caixa-nota li { font-size: .9375rem; color: #3b3448; }
+.caixa-nota ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+.caixa-nota--simples { background: transparent !important; border: 1px solid var(--linha); }
+
+.tabela-precos { width: 100%; border-collapse: collapse; background: #FCFAFF; border: 1px solid var(--linha); border-radius: var(--raio); overflow: hidden; }
+.tabela-precos th, .tabela-precos td { padding: 14px 20px; border-bottom: 1px solid var(--linha); font-size: .9375rem; }
+.tabela-precos tr:last-child > * { border-bottom: 0; }
+.tabela-precos th { text-align: left; font-weight: 500; }
+.tabela-precos td { text-align: right; font: 700 1.125rem/1 var(--serifa); color: var(--roxo); white-space: nowrap; font-variant-numeric: tabular-nums; }
