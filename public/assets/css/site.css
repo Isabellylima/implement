@@ -1000,3 +1000,27 @@ select.entrada { appearance: none; background-image: url("data:image/svg+xml,%3C
 .artigo__video-caixa--ficheiro video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
 .artigo__video--instagram .artigo__video-caixa { aspect-ratio: 9 / 15.5; max-width: 400px; margin-inline: auto; background: var(--branco); }
 .artigo__video--tiktok .artigo__video-caixa { aspect-ratio: 9 / 17.5; max-width: 340px; margin-inline: auto; background: #000; }
+
+/* Classes que substituem estilos em linha (bloqueados pela CSP) */
+.heroi__acoes--centro { justify-content: center; }
+.seccao--sem-topo { padding-top: 0; }
+.seccao--nevoa { background: var(--nevoa); }
+.abelha-declaracao { --asa: #CDB8F7; --corpo: #CDB8F7; --antena: #CDB8F7; --risca: #1C0F3A; }
+
+/* ==========================================================================
+   Marcas que trabalham connosco (Home)
+   Os logótipos são usados como máscara: aparecem num só tom da marca, como marca de água.
+   ========================================================================== */
+.marcas { padding: clamp(48px, 7vw, 88px) 0 clamp(40px, 6vw, 72px); background: var(--branco); }
+.marcas__titulo { text-align: center; margin: 0 0 clamp(28px, 4vw, 44px); }
+.marcas__lista { list-style: none; margin: 0 auto; padding: 0; max-width: 1080px; display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(20px, 4vw, 48px) clamp(28px, 5vw, 64px); }
+.marca-logo { position: relative; display: grid; justify-items: center; padding-bottom: 26px; outline: none; }
+.marca-logo__img { display: block; width: clamp(104px, 13vw, 150px); height: clamp(44px, 5vw, 60px); background: var(--roxo-profundo); opacity: .38;
+  -webkit-mask: var(--logo) center / contain no-repeat; mask: var(--logo) center / contain no-repeat;
+  transition: transform .45s var(--mola), opacity .3s, background-color .3s; }
+.marca-logo__nome { position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 4px); white-space: nowrap; font-size: .8125rem; font-weight: 500; color: var(--roxo-profundo); opacity: 0; transition: opacity .25s, transform .3s var(--mola); pointer-events: none; }
+.marca-logo:hover .marca-logo__img, .marca-logo:focus-visible .marca-logo__img { transform: scale(1.14); opacity: 1; background: var(--roxo); }
+.marca-logo:hover .marca-logo__nome, .marca-logo:focus-visible .marca-logo__nome { opacity: 1; transform: translate(-50%, 0); }
+.marca-logo:focus-visible .marca-logo__img { outline: 2px solid var(--roxo); outline-offset: 8px; border-radius: 4px; }
+@media (hover: none) { .marca-logo__img { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .marca-logo:hover .marca-logo__img, .marca-logo:focus-visible .marca-logo__img { transform: none; } }

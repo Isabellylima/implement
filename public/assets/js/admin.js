@@ -153,13 +153,14 @@ async function rota() {
   if (editorAtual && sujo && location.hash !== editorAtual.hash) {
     if (!confirm("Há alterações por guardar. Sair mesmo assim?")) { history.replaceState(null, "", editorAtual.hash); return; }
   }
-  sujo = false; editorAtual = null; app.onclick = null;
+  sujo = false; editorAtual = null; app.onclick = null; app.onchange = null;
   const h = location.hash.replace(/^#/, "") || "/";
-  const seccao = h.startsWith("/autoras") ? "autoras" : h.startsWith("/trabalhos") ? "trabalhos" : "lista";
+  const seccao = h.startsWith("/autoras") ? "autoras" : h.startsWith("/trabalhos") ? "trabalhos" : h.startsWith("/marcas") ? "marcas" : "lista";
   $$(".admin-topo__nav [data-rota]").forEach((a) => a.toggleAttribute("aria-current", a.dataset.rota === seccao));
   try {
     if (!autoras.length) autoras = (await api("autoras")).autoras;
     if (h.startsWith("/autoras")) await vistaAutoras();
+    else if (h.startsWith("/marcas")) await vistaMarcas();
     else if (h === "/trabalhos") await vistaTrabalhos();
     else if (h === "/trabalhos/novo") vistaNovoTrabalho();
     else if (h.startsWith("/trabalhos/novo/")) await editor(CFG_TRABALHO, null, h.slice(16));
@@ -284,6 +285,161 @@ function vistaNovoTrabalho() {
     <p class="ed__voltar"><a href="#/trabalhos">← Trabalhos</a></p>
     <div class="admin-cabeca"><div><p class="legenda">Novo trabalho</p><h1>Que tipo de trabalho é?</h1><p class="admin-cabeca__nota">Preparamos a página com os blocos certos. Pode juntar mais tipos e mudar tudo depois.</p></div></div>
     <ul class="admin-tipos">${TIPOS_TRABALHO.map((t) => `<li><a href="#/trabalhos/novo/${t.id}"><strong>${esc(t.nome)}</strong><span>${esc(t.dica)}</span></a></li>`).join("")}</ul>`;
+}
+
+/* ---------- Marcas (logótipos na Home) ---------- */
+/* Prepara o logótipo: tira o fundo liso (a cor dos cantos), corta as margens e reduz. No site, o logótipo é usado
+   como máscara, por isso só a forma conta: as cores originais desaparecem e fica no tom da Implement. */
+async function prepararLogo(ficheiro, tirarFundo = true) {
+  const bmp = await createImageBitmap(ficheiro);
+  const escala = Math.min(1, 900 / Math.max(bmp.width, bmp.height));
+  const w = Math.max(1, Math.round(bmp.width * escala)), h = Math.max(1, Math.round(bmp.height * escala));
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const ctx = c.getContext("2d", { willReadFrequently: true });
+  ctx.drawImage(bmp, 0, 0, w, h);
+  const im = ctx.getImageData(0, 0, w, h), d = im.data;
+  let transparentes = 0;
+  for (let i = 3; i < d.length; i += 4) if (d[i] < 200) transparentes++;
+  const jaTemTransparencia = transparentes > w * h * 0.02;
+  if (tirarFundo && !jaTemTransparencia) {
+    // cor de fundo = média dos quatro cantos
+    const canto = (x, y) => { const i = (y * w + x) * 4; return [d[i], d[i + 1], d[i + 2]]; };
+    const cs = [canto(0, 0), canto(w - 1, 0), canto(0, h - 1), canto(w - 1, h - 1)];
+    const fundo = [0, 1, 2].map((k) => cs.reduce((t, x) => t + x[k], 0) / 4);
+    // Tira a cor de fundo em toda a imagem (também dentro das letras, como no «o» ou no «a»),
+    // com transição suave nas bordas para não ficar serrilhado.
+    for (let i = 0; i < d.length; i += 4) {
+      const dist = Math.abs(d[i] - fundo[0]) + Math.abs(d[i + 1] - fundo[1]) + Math.abs(d[i + 2] - fundo[2]);
+      const alfa = Math.max(0, Math.min(1, (dist - 40) / 90));
+      d[i + 3] = Math.round(d[i + 3] * alfa);
+    }
+    ctx.putImageData(im, 0, 0);
+  }
+  // corta as margens transparentes
+  const a = ctx.getImageData(0, 0, w, h).data;
+  let x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (a[(y * w + x) * 4 + 3] > 24) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+  if (x1 < 0) throw new Error("Não encontrei o logótipo nesta imagem. Experimente sem «tirar o fundo».");
+  const m = 4, cw = x1 - x0 + 1 + m * 2, ch = y1 - y0 + 1 + m * 2;
+  const out = document.createElement("canvas"); out.width = cw; out.height = ch;
+  out.getContext("2d").drawImage(c, x0, y0, x1 - x0 + 1, y1 - y0 + 1, m, m, x1 - x0 + 1, y1 - y0 + 1);
+  let blob = await new Promise((r) => out.toBlob(r, "image/webp", 0.92));
+  if (!blob || blob.type !== "image/webp") blob = await new Promise((r) => out.toBlob(r, "image/png"));
+  return blob;
+}
+
+async function vistaMarcas() {
+  let { marcas } = await api("marcas");
+  app.innerHTML = `
+    <div class="admin-cabeca">
+      <div><p class="legenda">Página principal</p><h1>Marcas</h1><p class="admin-cabeca__nota">Os logótipos aparecem na Home num só tom da Implement, como marca de água. Ao passar o rato, crescem e mostram o nome. Não têm links.</p></div>
+    </div>
+    <form class="admin-marca-nova" id="nova">
+      <div class="admin-marca-nova__logo" id="nova-previa"><button type="button" class="ed__capa-vazia" id="nova-logo"><span>+ Logótipo</span><small>PNG com fundo transparente é o ideal; JPG também serve</small></button></div>
+      <div class="campos">
+        <div class="campo"><label class="campo__rotulo" for="nova-nome">Nome da marca</label><input class="entrada" id="nova-nome" maxlength="80" required placeholder="ex.: Tasca do Mar"></div>
+        <label class="bl__opcao"><input type="checkbox" id="nova-fundo" checked> Tirar o fundo da imagem automaticamente</label>
+        <div><button class="botao botao--pequeno" type="submit"><span>Acrescentar marca</span></button></div>
+      </div>
+    </form>
+    <div class="admin-marcas-previa">
+      <p class="legenda">Como fica na Home</p>
+      <ul class="marcas__lista" id="previa"></ul>
+    </div>
+    <ul class="admin-marcas" id="lista"></ul>`;
+  let novoFicheiro = null, novoBlob = null;
+  const mostrarNova = async () => {
+    if (!novoFicheiro) return;
+    try {
+      novoBlob = await prepararLogo(novoFicheiro, $("#nova-fundo").checked);
+      const url = URL.createObjectURL(novoBlob);
+      $("#nova-previa").innerHTML = `<div class="admin-marca__duas"><img src="${url}" alt=""><span class="marca-logo__img marca-logo__img--previa"></span></div><button type="button" class="bl__trocar" id="nova-logo">Trocar logótipo</button>`;
+      $("#nova-previa .marca-logo__img").style.setProperty("--logo", `url("${url}")`);
+    } catch (e) { aviso(e.message, "erro", 6000); }
+  };
+  const desenhar = () => {
+    $("#previa").innerHTML = "";
+    marcas.filter((m) => m.visivel).forEach((m) => {
+      const li = document.createElement("li"); li.className = "marca-logo"; li.tabIndex = 0;
+      li.innerHTML = `<span class="marca-logo__img"></span><span class="marca-logo__nome">${esc(m.nome)}</span>`;
+      li.firstChild.style.setProperty("--logo", `url("${m.logo}")`);
+      $("#previa").append(li);
+    });
+    if (!$("#previa").children.length) $("#previa").innerHTML = '<li class="admin-marcas-previa__vazio">Ainda não há marcas visíveis: a secção fica escondida na Home.</li>';
+    $("#lista").innerHTML = marcas.map((m, i) => `<li class="admin-marca${m.visivel ? "" : " admin-marca--escondida"}" data-id="${m.id}">
+      <div class="admin-marca__logo"><img src="${esc(m.logo)}" alt=""></div>
+      <label class="sr-only" for="m-${m.id}">Nome</label><input class="entrada" id="m-${m.id}" data-nome value="${esc(m.nome)}" maxlength="80">
+      <label class="bl__opcao"><input type="checkbox" data-visivel${m.visivel ? " checked" : ""}> Visível</label>
+      <div class="admin-marca__acoes">
+        <button type="button" data-mover="-1" aria-label="Subir"${i === 0 ? " disabled" : ""}>↑</button><button type="button" data-mover="1" aria-label="Descer"${i === marcas.length - 1 ? " disabled" : ""}>↓</button>
+        <button type="button" data-logo>Trocar logótipo</button><button type="button" data-apagar>Apagar</button>
+      </div></li>`).join("");
+  };
+  const guardarMarca = async (m) => {
+    try { await api(`marcas/${m.id}`, { method: "PUT", body: JSON.stringify(m) }); aviso("Guardado."); }
+    catch (e) { aviso(e.message, "erro", 6000); }
+  };
+  app.onclick = async (ev) => {
+    if (ev.target.closest("#nova-logo")) {
+      const [f] = await escolherFicheiros({ aceitar: "image/png,image/webp,image/jpeg" });
+      if (f) { novoFicheiro = f; await mostrarNova(); }
+      return;
+    }
+    const li = ev.target.closest(".admin-marca");
+    if (!li) return;
+    const m = marcas.find((x) => x.id === li.dataset.id);
+    const mv = ev.target.closest("[data-mover]");
+    if (mv) {
+      const i = marcas.indexOf(m), j = i + Number(mv.dataset.mover);
+      [marcas[i], marcas[j]] = [marcas[j], marcas[i]];
+      desenhar();
+      try { await api("marcas/ordem", { method: "POST", body: JSON.stringify({ ids: marcas.map((x) => x.id) }) }); } catch (e) { aviso(e.message, "erro"); }
+      return;
+    }
+    if (ev.target.closest("[data-logo]")) {
+      const [f] = await escolherFicheiros({ aceitar: "image/png,image/webp,image/jpeg" });
+      if (!f) return;
+      try {
+        aviso("A carregar…", "ok", 20000);
+        const d = await api("imagens", { method: "POST", body: await prepararLogo(f, true) });
+        m.logo = d.url; desenhar(); await guardarMarca(m);
+      } catch (e) { aviso(e.message, "erro", 6000); }
+      return;
+    }
+    if (ev.target.closest("[data-apagar]")) {
+      if (!confirm(`Tirar «${m.nome}» da Home?`)) return;
+      await api(`marcas/${m.id}`, { method: "DELETE" });
+      marcas = marcas.filter((x) => x !== m); desenhar(); aviso("Marca apagada.");
+    }
+  };
+  app.onchange = async (ev) => {
+    if (ev.target.id === "nova-fundo") { await mostrarNova(); return; }
+    const li = ev.target.closest(".admin-marca");
+    if (!li) return;
+    const m = marcas.find((x) => x.id === li.dataset.id);
+    if (ev.target.matches("[data-visivel]")) m.visivel = ev.target.checked;
+    if (ev.target.matches("[data-nome]")) m.nome = ev.target.value.trim() || m.nome;
+    desenhar();
+    await guardarMarca(m);
+  };
+  $("#nova").addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const nome = $("#nova-nome").value.trim();
+    if (!novoBlob) { aviso("Escolha primeiro o logótipo.", "erro"); return; }
+    if (!nome) { $("#nova-nome").focus(); return; }
+    try {
+      aviso("A carregar…", "ok", 20000);
+      const d = await api("imagens", { method: "POST", body: novoBlob });
+      const r = await api("marcas", { method: "POST", body: JSON.stringify({ nome, logo: d.url }) });
+      marcas.push({ id: r.id, nome, logo: d.url, visivel: true });
+      novoFicheiro = novoBlob = null;
+      $("#nova").reset();
+      $("#nova-previa").innerHTML = '<button type="button" class="ed__capa-vazia" id="nova-logo"><span>+ Logótipo</span><small>PNG com fundo transparente é o ideal; JPG também serve</small></button>';
+      desenhar();
+      aviso(`${nome} acrescentada à Home.`);
+    } catch (e) { aviso(e.message, "erro", 6000); }
+  });
+  desenhar();
 }
 
 /* ---------- Autoras ---------- */

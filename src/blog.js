@@ -30,6 +30,7 @@ const ESQUEMA = [
   "CREATE INDEX IF NOT EXISTS artigos_publicados ON artigos (estado, publicado_em DESC);",
   "CREATE TABLE IF NOT EXISTS trabalhos (id TEXT PRIMARY KEY, slug TEXT NOT NULL UNIQUE, titulo TEXT NOT NULL, resumo TEXT NOT NULL DEFAULT '', cliente TEXT NOT NULL DEFAULT '', ano TEXT NOT NULL DEFAULT '', local TEXT NOT NULL DEFAULT '', link TEXT NOT NULL DEFAULT '', categorias TEXT NOT NULL DEFAULT '[]', capa TEXT NOT NULL DEFAULT '', capa_alt TEXT NOT NULL DEFAULT '', formato TEXT NOT NULL DEFAULT 'horizontal', destaque INTEGER NOT NULL DEFAULT 0, idioma TEXT NOT NULL DEFAULT 'pt', conteudo TEXT NOT NULL DEFAULT '[]', estado TEXT NOT NULL DEFAULT 'rascunho', publicado_em TEXT, criado_em TEXT NOT NULL, atualizado_em TEXT NOT NULL, atualizado_por TEXT NOT NULL DEFAULT '');",
   "CREATE INDEX IF NOT EXISTS trabalhos_publicados ON trabalhos (estado, destaque DESC, publicado_em DESC);",
+  "CREATE TABLE IF NOT EXISTS marcas (id TEXT PRIMARY KEY, nome TEXT NOT NULL, logo TEXT NOT NULL, ordem INTEGER NOT NULL DEFAULT 0, visivel INTEGER NOT NULL DEFAULT 1, criado_em TEXT NOT NULL);",
   "CREATE TABLE IF NOT EXISTS imagens (id TEXT PRIMARY KEY, tipo TEXT NOT NULL, tamanho INTEGER NOT NULL, dados TEXT, criado_em TEXT NOT NULL, criado_por TEXT NOT NULL DEFAULT '');",
   "CREATE TABLE IF NOT EXISTS acessos (hash TEXT PRIMARY KEY, email TEXT NOT NULL, expira INTEGER NOT NULL, usado INTEGER NOT NULL DEFAULT 0);",
   "CREATE TABLE IF NOT EXISTS sessoes (hash TEXT PRIMARY KEY, email TEXT NOT NULL, criada INTEGER NOT NULL, expira INTEGER NOT NULL);",
@@ -296,6 +297,7 @@ export async function tratarBlog(request, env, ctx, url) {
     if (p === "/insights") return await paginaLista(request, env, url);
     if (p.startsWith("/insights/")) return await paginaArtigo(request, env, url, decodeURIComponent(p.slice(10)).replace(/\/$/, ""));
     if (p.startsWith("/media/")) return await servirImagem(request, env, ctx, p.slice(7));
+    if (p === "/api/marcas" && request.method === "GET") return await marcasPublicas(env);
     if (p.startsWith("/api/admin/")) return await api(request, env, ctx, url, p.slice(11));
     if (p === "/admin" || p.startsWith("/admin/")) return await paginaAdmin(request, env, url);
   } catch (e) {
@@ -395,6 +397,40 @@ async function api(request, env, ctx, url, rota) {
   if (m && metodo === "PUT") return guardarTrabalho(request, env, s, m[1]);
   if (m && metodo === "DELETE") {
     await env.DB.prepare("DELETE FROM trabalhos WHERE id = ?").bind(m[1]).run();
+    return json({ ok: true });
+  }
+
+  if (rota === "marcas" && metodo === "GET") {
+    const { results } = await env.DB.prepare("SELECT id, nome, logo, ordem, visivel FROM marcas ORDER BY ordem, criado_em").all();
+    return json({ ok: true, marcas: results.map((m) => ({ ...m, visivel: Boolean(m.visivel) })) });
+  }
+  if (rota === "marcas" && metodo === "POST") {
+    const c = await lerJson(request);
+    const nome = txt(c.nome, 80), logo = String(c.logo || "");
+    if (!nome) throw new ErroPedido(400, "Escreva o nome da marca.");
+    if (!IMAGEM_OK.test(logo)) throw new ErroPedido(400, "Carregue o logótipo.");
+    const ultimo = await env.DB.prepare("SELECT COALESCE(MAX(ordem), 0) AS m FROM marcas").first();
+    const id = idCurto(12);
+    await env.DB.prepare("INSERT INTO marcas (id, nome, logo, ordem, visivel, criado_em) VALUES (?, ?, ?, ?, 1, ?)").bind(id, nome, logo, (ultimo?.m || 0) + 1, agora()).run();
+    return json({ ok: true, id });
+  }
+  if (rota === "marcas/ordem" && metodo === "POST") {
+    const c = await lerJson(request);
+    const ids = (Array.isArray(c.ids) ? c.ids : []).map(String).slice(0, 300);
+    for (const [i, mid] of ids.entries()) await env.DB.prepare("UPDATE marcas SET ordem = ? WHERE id = ?").bind(i + 1, mid).run();
+    return json({ ok: true });
+  }
+  m = rota.match(/^marcas\/([a-z0-9]{6,32})$/);
+  if (m && metodo === "PUT") {
+    const c = await lerJson(request);
+    const nome = txt(c.nome, 80), logo = String(c.logo || "");
+    if (!nome) throw new ErroPedido(400, "Escreva o nome da marca.");
+    if (!IMAGEM_OK.test(logo)) throw new ErroPedido(400, "Logótipo inválido.");
+    await env.DB.prepare("UPDATE marcas SET nome = ?, logo = ?, visivel = ? WHERE id = ?").bind(nome, logo, c.visivel === false ? 0 : 1, m[1]).run();
+    return json({ ok: true });
+  }
+  if (m && metodo === "DELETE") {
+    await env.DB.prepare("DELETE FROM marcas WHERE id = ?").bind(m[1]).run();
     return json({ ok: true });
   }
 
@@ -753,6 +789,16 @@ ${outros.length ? `<section class="seccao catalogo catalogo--nevoa" aria-labelle
     extraHead: `<script type="application/ld+json">${ld}</script>`,
   });
   return new Response(html, { headers: { ...CABECALHOS_HTML, "Cache-Control": pre ? "no-store" : "public, max-age=60" } });
+}
+
+/* ---------- Marcas (Home) ---------- */
+async function marcasPublicas(env) {
+  let marcas = [];
+  if (env.DB) {
+    await esquema(env.DB);
+    marcas = (await env.DB.prepare("SELECT nome, logo FROM marcas WHERE visivel = 1 ORDER BY ordem, criado_em LIMIT 120").all()).results;
+  }
+  return new Response(JSON.stringify({ ok: true, marcas }), { headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=300", "X-Content-Type-Options": "nosniff" } });
 }
 
 /* ---------- Portfólio (/work) ---------- */

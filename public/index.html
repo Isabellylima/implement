@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="assets/css/site.css">
 <script src="assets/js/i18n.js" defer></script>
 <script src="assets/js/site.js" defer></script>
+<script src="assets/js/marcas.js" defer></script>
 </head>
 <body>
 <a class="saltar" href="#conteudo" data-i18n="c.saltar">Skip to content</a>
@@ -129,6 +130,14 @@
     </div>
   </div>
 
+  <!-- 2b. Marcas que trabalham connosco (preenchida por assets/js/marcas.js a partir de /api/marcas; fica escondida se não houver logótipos) -->
+  <section class="marcas" id="marcas" aria-labelledby="t-marcas" hidden>
+    <div class="contentor">
+      <p class="legenda marcas__titulo" id="t-marcas" data-i18n="h.marcas">Brands that work with us</p>
+      <ul class="marcas__lista" id="marcas-lista"></ul>
+    </div>
+  </section>
+
   <!-- 3. Porquê a Implement -->
   <section class="seccao" aria-labelledby="t-porque">
     <div class="contentor">
@@ -157,7 +166,7 @@
   </section>
 
   <!-- 4. Serviços -->
-  <section class="seccao" id="servicos" aria-labelledby="t-servicos" style="padding-top:0">
+  <section class="seccao seccao--sem-topo" id="servicos" aria-labelledby="t-servicos">
     <div class="contentor">
       <div class="cabeca-seccao revelar">
         <p class="legenda" data-i18n="h.serv.leg">What we do</p>
@@ -212,7 +221,7 @@
   </section>
 
   <!-- 5. Comparação -->
-  <section class="seccao" aria-labelledby="t-diferentes" style="background:var(--nevoa)">
+  <section class="seccao seccao--nevoa" aria-labelledby="t-diferentes">
     <div class="contentor">
       <div class="cabeca-seccao cabeca-seccao--centro revelar">
         <p class="legenda" data-i18n="h.comp.leg">The difference</p>
@@ -276,7 +285,7 @@
           <text x="40" y="250" text-anchor="start" data-i18n="h.decl.t2">CREATIVITY</text>
           <text x="420" y="250" text-anchor="end" data-i18n="h.decl.t3">RESULTS</text>
         </g>
-        <use href="assets/img/sprite.svg#abelha" x="200" y="100" width="60" height="34" style="--asa:#CDB8F7;--corpo:#CDB8F7;--antena:#CDB8F7;--risca:#1C0F3A"/>
+        <use class="abelha-declaracao" href="assets/img/sprite.svg#abelha" x="200" y="100" width="60" height="34"/>
       </svg>
     </div>
   </section>

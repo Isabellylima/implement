@@ -31,6 +31,7 @@ window.IMPLEMENT_PT = {
   "h.titulo": '<span class="linha">O negócio é consigo.</span> <span class="linha">O digital é <span class="destaque">connosco.</span></span>',
   "h.intro": "A Implement planeia, cria e gere as suas redes sociais, o seu website e a sua presença no Google — de forma organizada, consistente e clara, para que se possa concentrar nos seus clientes.",
   "h.vercomo": "Ver como trabalhamos",
+  "h.marcas": "Marcas que trabalham connosco",
   "h.prova1": "Uma só equipa para toda a presença digital",
   "h.prova2": "Português e inglês",
   "h.prova3": "Relatórios mensais em linguagem simples",

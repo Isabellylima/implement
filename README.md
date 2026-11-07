@@ -124,3 +124,9 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 - **Na grelha:** a capa define o formato do cartão (horizontal, vertical ou quadrado, detetado automaticamente). «Destacar» põe o trabalho no topo.
 - **Público:** `/work` (grelha com filtros por tipo) e `/work/<endereço>` (página do projeto).
 - **Ficheiros de vídeo (MP4):** só com R2 ativo (binding `MEDIA`); até 50 MB.
+
+## Marcas na Home
+
+- **Gerir:** área da equipa → **Marcas**: carregar o logótipo (PNG transparente ou JPG; o fundo liso sai automaticamente), escrever o nome, ordenar, esconder ou apagar.
+- **Na Home:** secção «Marcas que trabalham connosco» logo a seguir à fita roxa; os logótipos aparecem num só tom roxo, como marca de água, e ao passar o rato crescem e mostram o nome. Sem links. Se não houver marcas visíveis, a secção não aparece.
+- **Dados:** tabela `marcas` na D1; a Home lê `/api/marcas` (cache de 5 min).
