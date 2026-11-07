@@ -1,6 +1,6 @@
 /* Implement — formulário da página Contacto.
    Os campos e a validação vêm de perguntas.js (CONTACTO), os mesmos que o Worker usa em /api/contacto. */
-import { CONTACTO, validarCampo, validarContacto } from "./perguntas.js";
+import { CONTACTO, validarCampo, validarContacto } from "./perguntas.js?v=881589d3f5";
 
 const T = {
   opcional: { en: "optional", pt: "opcional" },

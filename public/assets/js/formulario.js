@@ -1,6 +1,6 @@
 /* Implement — formulário «Start a Project» por etapas.
    As perguntas e as regras de validação vêm de perguntas.js (as mesmas que o Worker usa). */
-import { ETAPAS, GRUPOS, visivel, validarCampo, validarTudo, textoResposta } from "./perguntas.js";
+import { ETAPAS, GRUPOS, visivel, validarCampo, validarTudo, textoResposta } from "./perguntas.js?v=881589d3f5";
 
 const CHAVE = "implement:projeto:v1";
 const T = {

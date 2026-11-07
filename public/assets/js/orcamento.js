@@ -2,8 +2,8 @@
    Os preços vêm de precos-dados.js, gerado por scripts/servicos.py a partir do mesmo catálogo das páginas.
    As perguntas do formulário vêm de perguntas.js, para ler o e-mail «Novo pedido IMP-…» sem regras duplicadas.
    Tudo corre no browser: nada é enviado para lado nenhum. O rascunho e os orçamentos gerados ficam no localStorage. */
-import { DADOS } from "./precos-dados.js";
-import { ETAPAS } from "./perguntas.js";
+import { DADOS } from "./precos-dados.js?v=4528677fbe";
+import { ETAPAS } from "./perguntas.js?v=881589d3f5";
 
 const $ = (id) => document.getElementById(id);
 const raiz = $("orcamento");

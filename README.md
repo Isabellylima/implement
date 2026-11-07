@@ -35,6 +35,8 @@ schema.sql                 tabela «pedidos» da base de dados D1
 test/worker.test.js        testes (npm test)
 ```
 
+**Depois de mudar CSS ou JS**, correr `sh scripts/gerar.sh` (acrescenta `?v=…` aos ficheiros para os browsers não usarem versões antigas em cache).
+
 **Para mudar uma pergunta**, altere só `public/assets/js/perguntas.js` — o formulário e a validação no servidor
 atualizam-se juntos.
 
