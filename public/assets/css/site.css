@@ -1040,13 +1040,14 @@ select.entrada { appearance: none; background-image: url("data:image/svg+xml,%3C
 @media (max-width: 900px) { .sobre__grelha { grid-template-columns: 1fr; } }
 @media (max-width: 480px) { .areas { grid-template-columns: 1fr; } }
 
-.sobre-video { position: relative; display: grid; align-items: center; min-height: min(86vh, 760px); padding: clamp(80px, 12vw, 160px) 0; overflow: hidden; color: var(--branco); text-align: center;
+.sobre-video { position: relative; display: grid; align-items: center; width: 100%; min-height: max(560px, 92vh); padding: clamp(80px, 12vw, 160px) 0; overflow: hidden; color: var(--branco); text-align: center;
   background: radial-gradient(70% 90% at 80% 10%, rgba(139, 82, 232, .55), transparent 60%), radial-gradient(60% 80% at 10% 100%, rgba(91, 43, 181, .6), transparent 60%), var(--noite); }
 .sobre-video__fundo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.sobre-video__veu { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(28, 15, 58, .55) 0%, rgba(28, 15, 58, .35) 45%, rgba(28, 15, 58, .82) 100%), rgba(91, 43, 181, .18); }
+.sobre-video__veu { position: absolute; inset: 0; background: linear-gradient(115deg, rgba(139, 82, 232, .82) 0%, rgba(110, 58, 210, .62) 38%, rgba(91, 43, 181, .5) 62%, rgba(28, 15, 58, .78) 100%); }
+.sobre-video__veu::after { content: ""; position: absolute; inset: auto 0 0; height: 30%; background: linear-gradient(180deg, transparent, rgba(28, 15, 58, .55)); }
 .sobre-video__texto { position: relative; z-index: 1; display: grid; justify-items: center; }
 .sobre-video__abelha { width: 64px; height: 36px; margin-bottom: 26px; }
-.sobre-video h2 { font-size: clamp(2.4rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.05; max-width: 16ch; text-wrap: balance; text-shadow: 0 2px 30px rgba(28, 15, 58, .45); }
+.sobre-video h2 { font-size: clamp(2.4rem, 6vw, 4.75rem); font-weight: 800; line-height: 1.05; max-width: 16ch; text-wrap: balance; text-shadow: 0 2px 30px rgba(28, 15, 58, .35); }
 .sobre-video h2 em { color: var(--mel); font-weight: 700; }
 .sobre-video p { margin-top: 22px; font-size: clamp(1.125rem, 1.8vw, 1.375rem); color: rgba(255, 255, 255, .9); }
 .sobre-video .chamada__acoes { margin-top: 36px; }
