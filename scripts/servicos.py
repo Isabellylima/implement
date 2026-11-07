@@ -311,7 +311,7 @@ def pagina_orcamento():
     """Gerador de orçamentos na área da equipa (/admin/orcamento, só com sessão). Usa o topo de public/admin/index.html."""
     base = (PUBLICO / "admin/index.html").read_text(encoding="utf-8")
     topo = base[:base.index('<main id="app"')]
-    topo = topo.replace("<title>Editor de artigos · Implement</title>", "<title>Orçamentos · Implement</title>")
+    topo = topo.replace("<title>Área da equipa · Implement</title>", "<title>Orçamentos · Implement</title>")
     topo = topo.replace('<script src="/assets/js/admin.js" type="module"></script>', '<script src="/assets/js/admin-conta.js" type="module"></script>\n<script src="/assets/js/orcamento.js" type="module"></script>')
     topo = topo.replace('<body class="admin">', '<body class="admin admin--orcamento">')
     topo = topo.replace('data-rota="orcamento"', 'data-rota="orcamento" aria-current="page"')

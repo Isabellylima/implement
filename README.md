@@ -116,3 +116,11 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 - **Imagens:** reduzidas no browser e guardadas na D1 (até 1,4 MB cada). Para usar o R2: ativar o R2 no painel, criar o bucket e acrescentar `"r2_buckets": [{ "binding": "MEDIA", "bucket_name": "implement-media" }]` em `wrangler.jsonc`.
 - **Menu e rodapé dos artigos:** vêm de `src/modelo.js`; depois de mudar o menu, correr `python3 scripts/modelo.py`.
 - **Testar localmente:** `node test/servidor-local.mjs` (D1 em SQLite; os e-mails de entrada ficam em `/tmp/implement-emails.jsonl`).
+
+## Portfólio (Trabalho)
+
+- **Acrescentar:** área da equipa → **Trabalhos** → «Novo trabalho» → escolher o tipo (websites, redes sociais, reels, vídeo, fotografia, identidade visual, impressos, fachadas, produto). A página já vem com os blocos certos.
+- **Blocos:** texto, imagem, **galeria** (várias imagens de uma vez, 2–4 colunas), **website** (capturas dentro de um ecrã de computador e de telemóvel, com link), **antes e depois**, **vídeo/reel** (YouTube, Shorts, Instagram, TikTok, Vimeo, Loom), testemunho e separador.
+- **Na grelha:** a capa define o formato do cartão (horizontal, vertical ou quadrado, detetado automaticamente). «Destacar» põe o trabalho no topo.
+- **Público:** `/work` (grelha com filtros por tipo) e `/work/<endereço>` (página do projeto).
+- **Ficheiros de vídeo (MP4):** só com R2 ativo (binding `MEDIA`); até 50 MB.

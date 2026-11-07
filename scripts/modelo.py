@@ -21,8 +21,8 @@ def absoluto(html):
 
 cabecalho = base[base.index('<a class="saltar"'):base.index("</header>") + len("</header>")]
 cabecalho = absoluto(cabecalho.replace(' aria-current="page"', ""))
-cabecalho = cabecalho.replace('<a href="/insights" data-i18n="c.nav.insights">', '<a href="/insights" aria-current="page" data-i18n="c.nav.insights">')
-assert 'aria-current="page" data-i18n="c.nav.insights"' in cabecalho
+cabecalho = cabecalho.replace('href="/work.html"', 'href="/work"')
+assert 'aria-current' not in cabecalho and 'href="/work" data-i18n="c.nav.trabalho"' in cabecalho
 
 rodape = absoluto(base[base.index('<footer class="rodape">'):base.index("</footer>") + len("</footer>")])
 

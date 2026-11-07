@@ -146,5 +146,24 @@ window.IMPLEMENT_PT = {
   "ar.vazio.p": "Enquanto isso, fale-nos do seu negócio. Teremos todo o gosto em ajudar.",
   "ar.cta.titulo": "Não sabe bem do que precisa?",
   "ar.cta.p": "Fale-nos do seu negócio em poucos minutos. Sugerimos a combinação certa e enviamos uma proposta feita para si.",
-  "ar.cta.wa": "Falar pelo WhatsApp"
+  "ar.cta.wa": "Falar pelo WhatsApp",
+
+  /* Trabalho (/work) */
+  "tb.legenda": "Trabalho",
+  "tb.titulo": "Trabalho que ajuda negócios a <span class=\"destaque\">serem notados.</span>",
+  "tb.intro": "Websites, redes sociais, reels, fotografia, identidades visuais, impressos e fachadas, feitos com e para negócios reais.",
+  "tb.todos": "Todos",
+  "tb.vazio": "O nosso portfólio está a ser montado.",
+  "tb.vazio.p": "Enquanto isso, fale-nos do seu negócio e mostramos exemplos parecidos com o que precisa.",
+  "tb.cta.titulo": "Quer algo assim para o seu negócio?",
+  "tb.cta.p": "Fale-nos do seu negócio em poucos minutos. Sugerimos a combinação certa e enviamos uma proposta feita para si.",
+  "tb.cat.websites": "Websites",
+  "tb.cat.redes": "Redes sociais",
+  "tb.cat.reels": "Reels e vídeo curto",
+  "tb.cat.video": "Vídeo e YouTube",
+  "tb.cat.fotografia": "Fotografia",
+  "tb.cat.marca": "Identidade visual",
+  "tb.cat.impressos": "Impressos: cartões, flyers e menus",
+  "tb.cat.fachadas": "Fachadas e sinalética",
+  "tb.cat.produto": "Produto e embalagem"
 };

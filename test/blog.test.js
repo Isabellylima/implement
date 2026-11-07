@@ -47,3 +47,19 @@ test("API da equipa recusa pedidos sem sessão e de outra origem", async () => {
   assert.equal(r3.status, 302);
   assert.match(r3.headers.get("Location"), /\/admin\/login$/);
 });
+
+test("portfólio: reels do Instagram/TikTok e blocos de galeria, ecrãs e antes/depois", () => {
+  assert.equal(videoEmbed("https://www.instagram.com/reel/C9abcdEFGhi/?igsh=x").src, "https://www.instagram.com/reel/C9abcdEFGhi/embed/");
+  assert.equal(videoEmbed("https://www.tiktok.com/@loja/video/7301234567890123456").src, "https://www.tiktok.com/embed/v2/7301234567890123456");
+  assert.equal(videoEmbed("https://www.youtube.com/watch?v=dQw4w9WgXcQ").miniatura, "https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg");
+  const b = limparBlocos([
+    { t: "galeria", imagens: [{ src: "/media/abcdefgh12.webp" }, { src: "https://evil.com/x.png" }], colunas: 9 },
+    { t: "ecras", desktop: "/media/abcdefgh12.webp", url: "site.pt" },
+    { t: "antesdepois", antes: "/media/abcdefgh12.webp" },
+    { t: "video", ficheiro: "/media/abcdefgh12.mp4", vertical: true },
+  ]);
+  assert.deepEqual(b.map((x) => x.t), ["galeria", "ecras", "video"]);
+  assert.equal(b[0].imagens.length, 1);
+  assert.equal(b[0].colunas, 3);
+  assert.equal(b[1].url, "https://site.pt");
+});
