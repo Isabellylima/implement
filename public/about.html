@@ -3,10 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Page on its way — Implement</title>
-<meta name="titulo-pt" content="Página a caminho — Implement">
-<meta name="robots" content="noindex">
-<meta name="description" content="Tell us about your business in a few minutes. We’ll prepare an initial analysis and a proposal made for you.">
+<title>About us — Implement</title>
+<meta name="titulo-pt" content="Sobre nós — Implement">
+<meta name="description" content="Implement Digital Marketing is a creative and technology agency based in the Algarve: digital presence, brand communication and digital transformation for businesses.">
+<link rel="canonical" href="https://heyimplement.com/about">
+<meta property="og:title" content="About us — Implement">
+<meta property="og:description" content="Creativity, technology and intelligence to transform businesses.">
+<meta property="og:url" content="https://heyimplement.com/about">
 <meta name="theme-color" content="#1C0F3A">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +44,7 @@
     <button class="hamburguer" type="button" aria-expanded="false" aria-controls="menu" data-i18n-aria="c.menu" aria-label="Menu"><span></span><span></span><span></span></button>
     <nav class="menu" id="menu" aria-label="Main">
       <ul class="menu__lista">
-        <li><a href="about.html" data-i18n="c.nav.sobre">About us</a></li>
+        <li><a href="about.html" aria-current="page" data-i18n="c.nav.sobre">About us</a></li>
         <li><a href="services.html" data-i18n="c.nav.servicos">Services</a></li>
         <li><a href="/work" data-i18n="c.nav.trabalho">Our work</a></li>
         <li><a href="index.html#processo" data-i18n="c.nav.processo">Our process</a></li>
@@ -57,16 +60,59 @@
   </div>
 </header>
 
-<main id="conteudo" class="pagina-404">
-  <div>
-    <svg class="abelha" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
-    <h1 data-i18n="e.titulo">This page is on its way.</h1>
-    <p data-i18n="e.p">We are building the new Implement website. In the meantime, you can go back to the homepage or talk to us.</p>
-    <div class="heroi__acoes heroi__acoes--centro">
-      <a class="botao" href="index.html"><span data-i18n="e.inicio">Back to the homepage</span></a>
-      <a class="botao botao--secundario" href="start-a-project.html"><span data-i18n="c.comecar">Start a project</span></a>
+<main id="conteudo">
+  <!-- 1. Abertura -->
+  <section class="heroi heroi-servicos heroi-sobre">
+    <div class="contentor">
+      <p class="legenda" data-i18n="so.legenda">About us</p>
+      <h1 data-i18n-html="so.titulo">Creativity, technology and intelligence to <span class="destaque">transform businesses.</span></h1>
+      <p class="heroi-servicos__intro" data-i18n="so.intro">Implement Digital Marketing is a creative and technology agency based in the Algarve, specialising in digital presence, brand communication and solutions for the digital transformation of businesses.</p>
+      <p class="selo-iva sobre__local"><span data-i18n="so.local">Algarve · Portugal</span></p>
     </div>
-  </div>
+  </section>
+
+  <!-- 2. O que fazemos -->
+  <section class="seccao seccao--nevoa" aria-labelledby="t-fazemos">
+    <div class="contentor sobre__grelha">
+      <div class="cabeca-seccao revelar">
+        <p class="legenda" data-i18n="so.faz.leg">What we do</p>
+        <h2 id="t-fazemos" data-i18n="so.faz.titulo">Strategy, creativity and technology, working together.</h2>
+        <p data-i18n="so.faz.p">We combine strategy, creativity and technology to help businesses grow, communicate better and streamline the way they work.</p>
+        <p data-i18n="so.faz.p2">Our work ranges from social media management, content creation, photography, design and website development to digital organisation, process automation and tool integration.</p>
+      </div>
+      <ul class="areas"><li class="area revelar"><span class="area__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#s-redes"/></svg></span><span data-i18n="so.a0">Social media management</span></li><li class="area revelar" data-atraso="1"><span class="area__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#s-conteudo"/></svg></span><span data-i18n="so.a1">Content creation</span></li><li class="area revelar" data-atraso="2"><span class="area__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#s-marca"/></svg></span><span data-i18n="so.a2">Photography & design</span></li><li class="area revelar" data-atraso="3"><span class="area__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#s-web"/></svg></span><span data-i18n="so.a3">Website development</span></li><li class="area revelar"><span class="area__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#i-plano"/></svg></span><span data-i18n="so.a4">Digital organisation</span></li><li class="area revelar" data-atraso="1"><span class="area__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#s-estrategia"/></svg></span><span data-i18n="so.a5">Process automation</span></li><li class="area revelar" data-atraso="2"><span class="area__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#i-entrar"/></svg></span><span data-i18n="so.a6">Tool integration</span></li><li class="area revelar" data-atraso="3"><span class="area__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#s-google"/></svg></span><span data-i18n="so.a7">Brand communication</span></li></ul>
+    </div>
+  </section>
+
+  <!-- 3. Em que acreditamos -->
+  <section class="seccao" aria-labelledby="t-acreditamos">
+    <div class="contentor">
+      <div class="cabeca-seccao revelar">
+        <p class="legenda" data-i18n="so.acr.leg">What we believe</p>
+        <h2 id="t-acreditamos" data-i18n-html="so.acr.titulo">Digital transformation goes <span class="mel-sublinhado">beyond</span> being online.</h2>
+        <p data-i18n="so.acr.p">We understand the challenges of businesses trying to stand out in an increasingly digital and competitive market. It’s about connecting people, processes and technology to build businesses that are more organised, efficient and ready for the future.</p>
+      </div>
+      <ul class="razoes"><li class="razao revelar"><span class="razao__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#i-entrar"/></svg></span><h3 data-i18n="so.p0.t">People</h3><p data-i18n="so.p0.p">Communication that brings your brand closer to the people who matter.</p></li><li class="razao revelar" data-atraso="1"><span class="razao__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#i-plano"/></svg></span><h3 data-i18n="so.p1.t">Processes</h3><p data-i18n="so.p1.p">Businesses that are more organised and efficient, day to day.</p></li><li class="razao revelar" data-atraso="2"><span class="razao__icone"><svg aria-hidden="true"><use href="assets/img/sprite.svg#s-web"/></svg></span><h3 data-i18n="so.p2.t">Technology</h3><p data-i18n="so.p2.p">Tools that work together and prepare you for the future.</p></li></ul>
+    </div>
+  </section>
+
+  <!-- 4. Fecho com vídeo de fundo (assets/video/sobre.mp4; sem o ficheiro, fica o fundo roxo-noite) -->
+  <section class="sobre-video" aria-labelledby="t-implementar">
+    <video class="sobre-video__fundo" data-fundo autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
+      <source src="assets/video/sobre.webm" type="video/webm">
+      <source src="assets/video/sobre.mp4" type="video/mp4">
+    </video>
+    <div class="sobre-video__veu" aria-hidden="true"></div>
+    <div class="contentor sobre-video__texto">
+      <svg class="abelha abelha--branca sobre-video__abelha" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
+      <h2 id="t-implementar" data-i18n-html="so.fim.titulo">To implement is to turn ideas into <em>real solutions.</em></h2>
+      <p data-i18n="so.fim.p">And that’s exactly what we do.</p>
+      <div class="chamada__acoes">
+        <a class="botao botao--claro" href="start-a-project.html"><span data-i18n="c.comecar">Start a project</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+        <a class="botao botao--secundario" href="https://wa.me/351962951161" rel="noopener" data-whatsapp><span data-i18n="so.fim.wa">Talk on WhatsApp</span></a>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="rodape">

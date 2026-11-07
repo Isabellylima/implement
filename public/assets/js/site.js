@@ -126,3 +126,9 @@
 
   aplicarIdioma(lerPreferencia());
 })();
+
+/* Vídeos de fundo: param para quem pediu menos movimento */
+document.addEventListener("DOMContentLoaded", () => {
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.querySelectorAll("video[data-fundo]").forEach((v) => { v.removeAttribute("autoplay"); v.pause(); });
+});
