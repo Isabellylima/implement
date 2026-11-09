@@ -11,6 +11,7 @@ Isto reescreve:
 Os preços nunca entram em services.html nem em i18n-servicos.js.
 """
 from html import escape
+import re
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -312,7 +313,7 @@ def pagina_orcamento():
     base = (PUBLICO / "admin/index.html").read_text(encoding="utf-8")
     topo = base[:base.index('<main id="app"')]
     topo = topo.replace("<title>Área da equipa · Implement</title>", "<title>Orçamentos · Implement</title>")
-    topo = topo.replace('<script src="/assets/js/admin.js" type="module"></script>', '<script src="/assets/js/admin-conta.js" type="module"></script>\n<script src="/assets/js/orcamento.js" type="module"></script>')
+    topo = re.sub(r'<script src="/assets/js/admin\.js(\?v=[0-9a-f]+)?" type="module"></script>', '<script src="/assets/js/admin-conta.js" type="module"></script>\n<script src="/assets/js/orcamento.js" type="module"></script>', topo)
     topo = topo.replace('<body class="admin">', '<body class="admin admin--orcamento">')
     topo = topo.replace('data-rota="orcamento"', 'data-rota="orcamento" aria-current="page"')
     assert "orcamento.js" in topo and 'aria-current="page"' in topo

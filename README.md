@@ -132,3 +132,11 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 - **Gerir:** área da equipa → **Marcas**: carregar o logótipo (PNG transparente ou JPG; o fundo liso sai automaticamente), escrever o nome, ordenar, esconder ou apagar.
 - **Na Home:** secção «Marcas que trabalham connosco» logo a seguir à fita roxa; os logótipos aparecem num só tom roxo, como marca de água, e ao passar o rato crescem e mostram o nome. Sem links. Se não houver marcas visíveis, a secção não aparece.
 - **Dados:** tabela `marcas` na D1; a Home lê `/api/marcas` (cache de 5 min).
+
+## Finanças (área da equipa → Finanças)
+
+- **Clientes:** nome, contacto, NIF; desativar em vez de apagar quando já têm valores.
+- **Fixos e assinaturas:** assinaturas e custos fixos (saídas) e avenças de clientes (entradas), mensais, trimestrais ou anuais, com mês de início e, opcionalmente, de fim. Contam sozinhos em cada mês.
+- **Mês a mês:** os fixos aparecem já lançados (pode ajustar o valor só daquele mês ou marcar «Não houve»); acrescentam-se os gastos variáveis e os serviços pontuais (cliente, serviço, valor). «Fechar o mês» bloqueia as alterações e guarda os totais.
+- **Painel:** resumo do mês, gráfico do ano (meses futuros = previsão: fixos + média dos últimos 3 meses de variáveis e serviços pontuais), trimestres para a declaração com exportação CSV, receita por cliente.
+- **Dados:** tabelas `fin_*` na D1, valores em cêntimos (`src/financas.js`).
