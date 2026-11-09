@@ -406,6 +406,28 @@
 .fin-nova [name="iva"] { grid-column: span 5; }
 .fin-nova [name="valor"] { grid-column: span 4; width: auto; }
 .fin-nova button { grid-column: span 3; justify-content: center; padding-inline: 10px; }
+.fin-nova[data-nova="saida"] [name="iva"], .fin-nova[data-nova="saida"] [name="valor"], .fin-nova[data-nova="saida"] [name="pago_por"] { grid-column: span 4; }
+.fin-nova[data-nova="saida"] [name="notas"] { grid-column: span 9; }
 @media (max-width: 700px) { .fin-nova [name="data"], .fin-nova [name="categoria"], .fin-nova [name="cliente_id"], .fin-nova [name="iva"], .fin-nova [name="valor"] { grid-column: span 6; } .fin-nova button { grid-column: 1 / -1; } }
 .fin-qtd { font-size: .8125rem; font-weight: 700; color: var(--roxo-profundo); }
 .fin-linha__valor .fin-qtd { font-weight: 500; color: var(--cinza); }
+
+/* Quem pagou / para quem */
+.fin-pessoa { display: inline-block; vertical-align: middle; margin-left: 4px; padding: 2px 8px; border-radius: 999px; font: 700 .6875rem/1.4 var(--sans); letter-spacing: .02em; background: #EEEAF4; color: #4A4357; }
+.fin-pessoa--isabelly { background: #EFE6FE; color: #5B2BB5; }
+.fin-pessoa--jessica { background: #FCE8F1; color: #9B2C61; }
+.fin-pessoa--ambas { background: #FFF1D6; color: #7A4E00; }
+.fin-pago { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px; }
+.fin-pago .fin-pessoa { margin-left: 0; }
+.fin-ressarcido { font: 500 .75rem/1 var(--sans); padding: 5px 10px; border-radius: 999px; border: 1.5px dashed #C2334D; background: var(--branco); color: #B4233C; cursor: pointer; }
+.fin-ressarcido.sim { border: 1.5px solid #9BD3B0; color: #17673A; background: #E9F7EF; }
+.fin-nota-linha { display: block; margin-top: 2px; font-size: .8125rem; font-style: italic; color: #6B6578; }
+.fin-ajuda { margin: -2px 0 8px; font-size: .8125rem; color: var(--cinza); line-height: 1.45; }
+.fin-ressarcir { margin: 12px 0 0; padding: 10px 14px; border-radius: var(--raio-pequeno); background: #FDECEF; color: #7D1A2C; font-size: .875rem; }
+.fin-ressarcir--painel { margin: 0 0 20px; }
+.fin-ressarcir span a { color: inherit; }
+.fin-por-pessoa { margin: 0 0 20px; font-size: .875rem; color: #4A4357; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+@media (max-width: 700px) {
+  .fin-nova[data-nova="saida"] [name="iva"], .fin-nova[data-nova="saida"] [name="valor"], .fin-nova[data-nova="saida"] [name="pago_por"] { grid-column: span 6; }
+  .fin-nova[data-nova="saida"] [name="notas"] { grid-column: 1 / -1; }
+}

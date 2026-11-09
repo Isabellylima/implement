@@ -21,11 +21,16 @@ export async function migrarFinancas(db) {
     "ALTER TABLE fin_recorrentes ADD COLUMN iva INTEGER NOT NULL DEFAULT 0",
     "ALTER TABLE fin_movimentos ADD COLUMN iva INTEGER NOT NULL DEFAULT 0",
     "ALTER TABLE fin_recorrentes ADD COLUMN qtd INTEGER NOT NULL DEFAULT 1",
+    "ALTER TABLE fin_recorrentes ADD COLUMN para_quem TEXT NOT NULL DEFAULT ''",
+    "ALTER TABLE fin_movimentos ADD COLUMN pago_por TEXT NOT NULL DEFAULT ''",
+    "ALTER TABLE fin_movimentos ADD COLUMN ressarcido INTEGER NOT NULL DEFAULT 0",
   ]) {
     try { await db.prepare(sql).run(); } catch (e) { if (!/duplicate column/i.test(String(e && e.message))) throw e; }
   }
 }
 const TAXAS = new Set([0, 6, 13, 23]);
+const PESSOAS = new Set(["", "empresa", "isabelly", "jessica", "ambas"]);
+const pessoa = (v) => (PESSOAS.has(String(v || "")) ? String(v || "") : "");
 const taxa = (v) => (TAXAS.has(Number(v)) ? Number(v) : 0);
 
 const MES = /^\d{4}-(0[1-9]|1[0-2])$/;
@@ -94,18 +99,18 @@ export async function apiFinancas(rota, metodo, request, env, s, { json, lerJson
       cliente = String(c.cliente_id || "");
       if (!(await db.prepare("SELECT id FROM fin_clientes WHERE id = ?").bind(cliente).first())) falha("Escolha o cliente.");
     }
-    return [tipo, categoria, descricao, valor, PERIODOS.has(c.periodicidade) ? c.periodicidade : "mensal", inicio, fim, cliente, txt(c.notas, 600), taxa(c.iva), Math.min(999, Math.max(1, Math.round(Number(c.qtd) || 1)))];
+    return [tipo, categoria, descricao, valor, PERIODOS.has(c.periodicidade) ? c.periodicidade : "mensal", inicio, fim, cliente, txt(c.notas, 600), taxa(c.iva), Math.min(999, Math.max(1, Math.round(Number(c.qtd) || 1))), pessoa(c.para_quem)];
   };
   if (rota === "recorrentes" && metodo === "POST") {
     const v = await lerRecorrente(await lerJson(request));
     const id = idCurto(12);
-    await db.prepare("INSERT INTO fin_recorrentes (tipo, categoria, descricao, valor_c, periodicidade, inicio, fim, cliente_id, notas, iva, qtd, id, criado_em, atualizado_em) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...v, id, agora, agora).run();
+    await db.prepare("INSERT INTO fin_recorrentes (tipo, categoria, descricao, valor_c, periodicidade, inicio, fim, cliente_id, notas, iva, qtd, para_quem, id, criado_em, atualizado_em) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...v, id, agora, agora).run();
     return json({ ok: true, id });
   }
   m = rota.match(/^recorrentes\/([a-z0-9]{6,32})$/);
   if (m && metodo === "PUT") {
     const v = await lerRecorrente(await lerJson(request));
-    await db.prepare("UPDATE fin_recorrentes SET tipo=?, categoria=?, descricao=?, valor_c=?, periodicidade=?, inicio=?, fim=?, cliente_id=?, notas=?, iva=?, qtd=?, atualizado_em=? WHERE id = ?").bind(...v, agora, m[1]).run();
+    await db.prepare("UPDATE fin_recorrentes SET tipo=?, categoria=?, descricao=?, valor_c=?, periodicidade=?, inicio=?, fim=?, cliente_id=?, notas=?, iva=?, qtd=?, para_quem=?, atualizado_em=? WHERE id = ?").bind(...v, agora, m[1]).run();
     return json({ ok: true });
   }
   if (m && metodo === "DELETE") {
@@ -129,23 +134,30 @@ export async function apiFinancas(rota, metodo, request, env, s, { json, lerJson
     let cliente = c.cliente_id ? String(c.cliente_id) : null;
     if (cliente && !(await db.prepare("SELECT id FROM fin_clientes WHERE id = ?").bind(cliente).first())) falha("Cliente não encontrado.");
     if (tipo === "entrada" && !recorrente && !cliente) falha("Escolha o cliente.");
-    return [tipo, data, descricao, txt(c.categoria, 40), valor, cliente, recorrente, txt(c.notas, 600), taxa(c.iva)];
+    return [tipo, data, descricao, txt(c.categoria, 40), valor, cliente, recorrente, txt(c.notas, 300), taxa(c.iva), tipo === "saida" ? pessoa(c.pago_por) : "", c.ressarcido ? 1 : 0];
   };
   if (rota === "movimentos" && metodo === "POST") {
     const v = await lerMovimento(await lerJson(request));
     if (v[6]) await db.prepare("DELETE FROM fin_movimentos WHERE recorrente_id = ? AND substr(data, 1, 7) = ?").bind(v[6], v[1].slice(0, 7)).run();
     const id = idCurto(12);
-    await db.prepare("INSERT INTO fin_movimentos (tipo, data, descricao, categoria, valor_c, cliente_id, recorrente_id, notas, iva, id, criado_em, criado_por) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)").bind(...v, id, agora, s.email).run();
+    await db.prepare("INSERT INTO fin_movimentos (tipo, data, descricao, categoria, valor_c, cliente_id, recorrente_id, notas, iva, pago_por, ressarcido, id, criado_em, criado_por) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...v, id, agora, s.email).run();
     return json({ ok: true, id });
   }
   m = rota.match(/^movimentos\/([a-z0-9]{6,32})$/);
   if (m && metodo === "PUT") {
     const v = await lerMovimento(await lerJson(request));
-    await db.prepare("UPDATE fin_movimentos SET tipo=?, data=?, descricao=?, categoria=?, valor_c=?, cliente_id=?, recorrente_id=?, notas=?, iva=? WHERE id = ?").bind(...v, m[1]).run();
+    await db.prepare("UPDATE fin_movimentos SET tipo=?, data=?, descricao=?, categoria=?, valor_c=?, cliente_id=?, recorrente_id=?, notas=?, iva=?, pago_por=?, ressarcido=? WHERE id = ?").bind(...v, m[1]).run();
     return json({ ok: true });
   }
   if (m && metodo === "DELETE") {
     await db.prepare("DELETE FROM fin_movimentos WHERE id = ?").bind(m[1]).run();
+    return json({ ok: true });
+  }
+
+  m = rota.match(/^movimentos\/([a-z0-9]{6,32})\/ressarcido$/);
+  if (m && metodo === "POST") {
+    const c = await lerJson(request);
+    await db.prepare("UPDATE fin_movimentos SET ressarcido = ? WHERE id = ?").bind(c.ressarcido ? 1 : 0, m[1]).run();
     return json({ ok: true });
   }
 

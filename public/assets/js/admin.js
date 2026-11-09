@@ -2,7 +2,7 @@
    Rotas: #/ (artigos), #/novo, #/editar/<id>, #/autoras, #/trabalhos, #/trabalhos/novo, #/trabalhos/<id>.
    O conteúdo é guardado como blocos; o servidor volta a limpar tudo antes de guardar e de publicar. */
 
-import { vistaFinancas } from "./admin-financas.js?v=9ca1668dd5";
+import { vistaFinancas } from "./admin-financas.js?v=97760e6b26";
 
 const app = document.getElementById("app");
 const avisoEl = document.getElementById("aviso");

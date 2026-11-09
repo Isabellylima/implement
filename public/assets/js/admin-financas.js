@@ -10,6 +10,15 @@ const CAT_REC = { assinatura: "Assinatura", fixo: "Custo fixo", avenca: "Avença
 const PERIODO = { mensal: "por mês", trimestral: "por trimestre", anual: "por ano" };
 const COR = { entrada: "#7A45D8", saida: "#E0A126" };
 const TAXAS_IVA = [0, 23, 13, 6];
+const PESSOA = { empresa: "Empresa", isabelly: "Isabelly", jessica: "Jessica", ambas: "Ambas" };
+const chipPessoa = (p, prefixo = "") => (p && PESSOA[p] ? `<span class="fin-pessoa fin-pessoa--${p}">${prefixo}${PESSOA[p]}</span>` : "");
+/* Gastos pagos do bolso de alguém e ainda não ressarcidos */
+const porRessarcir = (movs) => {
+  const r = {};
+  movs.filter((m) => m.tipo === "saida" && !m.recorrente_id && (m.pago_por === "isabelly" || m.pago_por === "jessica") && !m.ressarcido)
+    .forEach((m) => (r[m.pago_por] = (r[m.pago_por] || 0) + m.valor_c));
+  return r;
+};
 const opIva = (sel, tipo) => TAXAS_IVA.map((t) => `<option value="${t}"${Number(sel || 0) === t ? " selected" : ""}>${t ? (tipo === "saida" ? `Fatura com IVA ${t}%` : `Com IVA ${t}%`) : "Sem IVA"}</option>`).join("");
 const trimestreDe = (mes) => Math.floor((Number(mes.slice(5)) - 1) / 3);
 const mesesTrimestre = (mes) => { const q = trimestreDe(mes); return [0, 1, 2].map((i) => `${mes.slice(0, 4)}-${String(q * 3 + i + 1).padStart(2, "0")}`); };
@@ -198,6 +207,9 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
         <p class="fin-total-ano">Total de ${ano}${ts.some((t) => t.previsao) ? " (com previsão)" : ""}: entradas <strong>${euros(soma(ts, "entradas"))}</strong> · saídas <strong>${euros(soma(ts, "saidas"))}</strong> · resultado <strong>${euros(soma(ts, "resultado"))}</strong>${real.length && real.length < 12 ? ` · até agora: resultado <strong>${euros(soma(real, "resultado"))}</strong>` : ""}</p>
       </section>
 
+      ${(() => { const r = porRessarcir(dados.movimentos.filter((m) => m.data.startsWith(String(ano)))); const k = Object.keys(r); if (!k.length) return "";
+        const meses_ = [...new Set(dados.movimentos.filter((m) => m.data.startsWith(String(ano)) && m.tipo === "saida" && !m.ressarcido && (m.pago_por === "isabelly" || m.pago_por === "jessica")).map((m) => m.data.slice(0, 7)))].sort();
+        return `<p class="fin-ressarcir fin-ressarcir--painel">Por ressarcir em ${ano}: ${k.map((p) => `<strong>${PESSOA[p]} ${euros(r[p])}</strong>`).join(" · ")} <span>(${meses_.map((m) => `<a href="#/financas/mes/${m}">${MESES[Number(m.slice(5)) - 1].toLowerCase()}</a>`).join(", ")})</span></p>`; })()}
       ${topo.length ? `<section class="fin-cartao" aria-labelledby="fin-t-cli"><div class="fin-cartao__cabeca"><h2 id="fin-t-cli">Receita por cliente em ${ano}</h2><a class="ligacao-seta" href="#/financas/clientes">Clientes</a></div>
         <ul class="fin-barras">${topo.map(([id, v]) => `<li><span>${esc(cliente(id)?.nome || "—")}</span><span class="fin-barras__barra"><i data-largura="${Math.max(2, Math.round((v / maxCli) * 100))}"></i></span><strong>${euros(v)}</strong></li>`).join("")}</ul></section>` : ""}`;
     $$(".fin-barras i").forEach((i) => (i.style.width = i.dataset.largura + "%"));
@@ -267,6 +279,7 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   }
 
+  function lerPagador() { try { return localStorage.getItem("implement-fin-pagador") || "empresa"; } catch { return "empresa"; } }
   function lerIva(tipo) { try { return Number(localStorage.getItem(`implement-fin-iva-${tipo}`) || 0); } catch { return 0; } }
 
   /* ===== Mês ===== */
@@ -282,12 +295,14 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
       const clientesAtivos = dados.clientes.filter((c) => c.ativo);
       const opClientes = (sel) => `<option value="">Cliente…</option>${clientesAtivos.map((c) => `<option value="${c.id}"${c.id === sel ? " selected" : ""}>${esc(c.nome)}</option>`).join("")}<option value="__novo">+ Novo cliente…</option>`;
       const linhaFixa = (x) => `<li class="fin-linha${x.valor === 0 ? " fin-linha--saltado" : ""}" data-rec="${x.r.id}">
-          <div class="fin-linha__desc"><strong>${esc(x.r.descricao)}${(x.r.qtd || 1) > 1 ? ` <span class="fin-qtd">× ${x.r.qtd}</span>` : ""}</strong><span>${x.r.tipo === "entrada" ? esc(cliente(x.r.cliente_id)?.nome || "") : CAT_REC[x.r.categoria]}${x.r.periodicidade !== "mensal" ? ` · ${PERIODO[x.r.periodicidade]}` : ""}${x.ajuste ? (x.valor === 0 ? " · <em>não houve este mês</em>" : " · <em>ajustado este mês</em>") : ""}${x.valor ? notaIva(x.r.tipo, x.valor, x.r.iva) : ""}</span></div>
+          <div class="fin-linha__desc"><strong>${esc(x.r.descricao)}${(x.r.qtd || 1) > 1 ? ` <span class="fin-qtd">× ${x.r.qtd}</span>` : ""} ${chipPessoa(x.r.para_quem)}</strong><span>${x.r.tipo === "entrada" ? esc(cliente(x.r.cliente_id)?.nome || "") : CAT_REC[x.r.categoria]}${x.r.periodicidade !== "mensal" ? ` · ${PERIODO[x.r.periodicidade]}` : ""}${x.ajuste ? (x.valor === 0 ? " · <em>não houve este mês</em>" : " · <em>ajustado este mês</em>") : ""}${x.valor ? notaIva(x.r.tipo, x.valor, x.r.iva) : ""}</span></div>
           <label class="sr-only" for="aj-${x.r.id}">Valor em ${mesNome(mes)}</label>
           <input class="entrada fin-valor" id="aj-${x.r.id}" data-ajustar inputmode="decimal" value="${paraInput(x.valor)}" ${fecho ? "disabled" : ""}>
           <div class="fin-linha__acoes">${fecho ? "" : x.ajuste ? `<button type="button" data-repor title="Voltar ao valor habitual (${euros(totalRec(x.r))})">Repor</button>` : `<button type="button" data-saltar title="Não conta neste mês">Não houve</button>`}</div></li>`;
       const linhaPontual = (x) => `<li class="fin-linha" data-mov="${x.id}">
-          <div class="fin-linha__desc"><strong>${esc(x.descricao)}</strong><span>${new Date(x.data + "T12:00").toLocaleDateString("pt-PT", { day: "numeric", month: "short" })} · ${x.tipo === "entrada" ? esc(cliente(x.cliente_id)?.nome || "") : esc(x.categoria || "Variável")}${notaIva(x.tipo, x.valor_c, x.iva)}</span></div>
+          <div class="fin-linha__desc"><strong>${esc(x.descricao)}</strong><span>${new Date(x.data + "T12:00").toLocaleDateString("pt-PT", { day: "numeric", month: "short" })} · ${x.tipo === "entrada" ? esc(cliente(x.cliente_id)?.nome || "") : esc(x.categoria || "Variável")}${notaIva(x.tipo, x.valor_c, x.iva)}</span>
+            ${x.tipo === "saida" && x.pago_por ? `<span class="fin-pago">${chipPessoa(x.pago_por, "Pago por ")}${x.pago_por === "isabelly" || x.pago_por === "jessica" ? (x.ressarcido ? `<button type="button" class="fin-ressarcido sim" data-ressarcir="0" title="Desmarcar">✓ Ressarcido</button>` : `<button type="button" class="fin-ressarcido" data-ressarcir="1">Marcar como ressarcido</button>`) : ""}</span>` : ""}
+            ${x.notas ? `<span class="fin-nota-linha">${esc(x.notas)}</span>` : ""}</div>
           <span class="fin-linha__valor">${euros(x.valor_c)}</span>
           <div class="fin-linha__acoes">${fecho ? "" : `<button type="button" data-apagar-mov aria-label="Apagar ${esc(x.descricao)}">×</button>`}</div></li>`;
       const fixasSaida = fixas.filter((x) => x.r.tipo === "saida"), fixasEntrada = fixas.filter((x) => x.r.tipo === "entrada");
@@ -307,14 +322,18 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
             <h3 class="fin-sub">Fixos e assinaturas <span>${euros(t.fixos + t.assinaturas)}</span></h3>
             ${fixasSaida.length ? `<ul class="fin-linhas">${fixasSaida.map(linhaFixa).join("")}</ul>` : `<p class="fin-vazio">Sem fixos neste mês. <a href="#/financas/fixos">Acrescentar assinaturas e custos fixos</a></p>`}
             <h3 class="fin-sub">Gastos variáveis <span>${euros(t.variaveis)}</span></h3>
-            ${fecho ? "" : `<form class="fin-nova" data-nova="saida">
+            ${fecho ? "" : `<p class="fin-ajuda">O que surge durante o mês: material, anúncios, deslocações… Indique quem pagou: se foi alguém do próprio bolso, fica marcado para ressarcir.</p>
+            <form class="fin-nova" data-nova="saida">
               <input class="entrada" type="date" name="data" value="${diaPadrao}" min="${mes}-01" max="${mes}-31" aria-label="Data" required>
               <input class="entrada" name="descricao" placeholder="O que foi?" aria-label="Descrição" maxlength="160" required>
               <select class="entrada" name="categoria" aria-label="Categoria">${CAT_VARIAVEIS.map((c) => `<option>${c}</option>`).join("")}</select>
               <select class="entrada fin-nova__iva" name="iva" aria-label="IVA da fatura">${opIva(lerIva("saida"), "saida")}</select>
               <input class="entrada fin-valor" name="valor" inputmode="decimal" placeholder="Total pago €" aria-label="Valor pago (com IVA, se houver)" required>
+              <select class="entrada" name="pago_por" aria-label="Quem pagou">${["empresa", "isabelly", "jessica"].map((p) => `<option value="${p}"${p === lerPagador() ? " selected" : ""}>${p === "empresa" ? "Pago pela empresa" : `Pago pela ${PESSOA[p]}`}</option>`).join("")}</select>
+              <input class="entrada" name="notas" maxlength="300" placeholder="Nota (opcional): para quê, onde…" aria-label="Nota">
               <button class="botao botao--pequeno" type="submit"><span>Adicionar</span></button></form>`}
             ${varSaida.length ? `<ul class="fin-linhas">${varSaida.map(linhaPontual).join("")}</ul>` : `<p class="fin-vazio">Ainda sem gastos variáveis.</p>`}
+            ${(() => { const r = porRessarcir(varSaida); const k = Object.keys(r); return k.length ? `<p class="fin-ressarcir">A ressarcir este mês: ${k.map((p) => `<strong>${PESSOA[p]} ${euros(r[p])}</strong>`).join(" · ")}</p>` : ""; })()}
           </section>
           <section class="fin-cartao" aria-labelledby="fin-t-entradas">
             <div class="fin-cartao__cabeca"><h2 id="fin-t-entradas">Entradas <span>${euros(t.entradas)}</span></h2></div>
@@ -343,6 +362,8 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
       const li = ev.target.closest(".fin-linha");
       try {
         if (ev.target.closest("[data-saltar]")) { await enviar("movimentos", "POST", { tipo: dados.recorrentes.find((r) => r.id === li.dataset.rec).tipo, data: `${mes}-01`, descricao: "Não houve neste mês", valor: 0, recorrente_id: li.dataset.rec }); return repintar(); }
+        const rs = ev.target.closest("[data-ressarcir]");
+        if (rs) { await enviar(`movimentos/${li.dataset.mov}/ressarcido`, "POST", { ressarcido: rs.dataset.ressarcir === "1" }); aviso(rs.dataset.ressarcir === "1" ? "Marcado como ressarcido." : "Desmarcado."); return repintar(); }
         if (ev.target.closest("[data-repor]")) { const aj = M.linhas(mes).fixas.find((x) => x.r.id === li.dataset.rec).ajuste; await enviar(`movimentos/${aj.id}`, "DELETE"); return repintar(); }
         if (ev.target.closest("[data-apagar-mov]")) { if (!confirm("Apagar esta linha?")) return; await enviar(`movimentos/${li.dataset.mov}`, "DELETE"); aviso("Linha apagada."); return repintar(); }
         if (ev.target.closest("[data-fechar]")) { const t = M.totais(mes); await enviar(`fechos/${mes}`, "PUT", { entradas: t.entradas / 100, saidas: t.saidas / 100 }); aviso(`${mesNome(mes)} fechado.`); return repintar(); }
@@ -376,7 +397,7 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
       const d = Object.fromEntries(new FormData(f));
       try {
         await enviar("movimentos", "POST", { ...d, tipo: f.dataset.nova });
-        try { localStorage.setItem(`implement-fin-iva-${f.dataset.nova}`, d.iva); } catch { /* sem armazenamento */ }
+        try { localStorage.setItem(`implement-fin-iva-${f.dataset.nova}`, d.iva); if (d.pago_por) localStorage.setItem("implement-fin-pagador", d.pago_por); } catch { /* sem armazenamento */ }
         aviso(f.dataset.nova === "entrada" ? "Serviço registado." : "Gasto registado.");
         await repintar();
         $(`[data-nova="${f.dataset.nova}"] [name="descricao"]`)?.focus();
@@ -396,6 +417,7 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
           <label>Tipo<select class="entrada" name="categoria">${Object.entries(CAT_REC).map(([k, v]) => `<option value="${k}"${r.categoria === k ? " selected" : ""}>${v}</option>`).join("")}</select></label>
           <label class="fin-form__cliente"${r.categoria === "avenca" ? "" : " hidden"}>Cliente<select class="entrada" name="cliente_id"><option value="">Escolher…</option>${opClientes(r.cliente_id)}</select></label>
           <label class="fin-form__largo">Descrição<input class="entrada" name="descricao" maxlength="140" required value="${esc(r.descricao || "")}" placeholder="ex.: Canva Pro"></label>
+          <label><span>Para quem <span class="opcional">(só referência)</span></span><select class="entrada" name="para_quem">${[["", "—"], ["isabelly", "Isabelly"], ["jessica", "Jessica"], ["ambas", "Ambas"]].map(([v, n]) => `<option value="${v}"${(r.para_quem || "") === v ? " selected" : ""}>${n}</option>`).join("")}</select></label>
           <label class="fin-form__qtd">Quantidade<input class="entrada" name="qtd" type="number" min="1" max="999" step="1" inputmode="numeric" value="${r.qtd || 1}"></label>
           <label><span data-rotulo-valor>${r.categoria === "avenca" ? "Valor sem IVA (€)" : "Valor pago por unidade (€)"}</span><input class="entrada" name="valor" inputmode="decimal" required value="${r.valor_c ? paraInput(r.valor_c) : ""}" placeholder="0,00"></label>
           <label><span data-rotulo-iva>${r.categoria === "avenca" ? "IVA cobrado ao cliente" : "IVA na fatura"}</span><select class="entrada" name="iva">${opIva(r.iva, r.categoria === "avenca" ? "entrada" : "saida")}</select></label>
@@ -413,12 +435,14 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
           <div class="fin-kpi"><p>Custos fixos por mês</p><strong>${euros(totalMes("fixo"))}</strong><small>${euros(totalMes("fixo") * 12)} por ano</small></div>
           <div class="fin-kpi fin-kpi--pos"><p>Avenças por mês</p><strong>${euros(totalMes("avenca"))}</strong><small>${euros(totalMes("avenca") * 12)} por ano</small></div>
         </div>
+        ${(() => { const pp = {}; dados.recorrentes.filter((r) => r.tipo === "saida" && ativo(r) && r.para_quem).forEach((r) => (pp[r.para_quem] = (pp[r.para_quem] || 0) + equivalenteMes(r)));
+          const k = ["isabelly", "jessica", "ambas"].filter((p) => pp[p]); return k.length ? `<p class="fin-por-pessoa">Por pessoa (só para referência): ${k.map((p) => `${chipPessoa(p)} ${euros(pp[p])}/mês`).join(" · ")}</p>` : ""; })()}
         <section class="fin-cartao"><h2 class="fin-titulo">Acrescentar</h2>${formulario()}</section>
         ${grupos.map(([k, t, dica]) => {
           const l = dados.recorrentes.filter((r) => r.categoria === k).sort((a, b) => Number(ativo(b)) - Number(ativo(a)) || a.descricao.localeCompare(b.descricao));
           return `<section class="fin-cartao"><div class="fin-cartao__cabeca"><h2>${t} <span>${euros(totalMes(k))} / mês</span></h2></div>
             ${l.length ? `<ul class="fin-linhas">${l.map((r) => editar === r.id ? `<li class="fin-linha fin-linha--editar">${formulario(r)}</li>` : `<li class="fin-linha${ativo(r) ? "" : " fin-linha--terminado"}" data-rec="${r.id}">
-              <div class="fin-linha__desc"><strong>${esc(r.descricao)}</strong><span>${k === "avenca" ? esc(cliente(r.cliente_id)?.nome || "") + " · " : ""}desde ${MESES_CURTOS[Number(r.inicio.slice(5)) - 1]} ${r.inicio.slice(0, 4)}${r.fim ? ` até ${MESES_CURTOS[Number(r.fim.slice(5)) - 1]} ${r.fim.slice(0, 4)}` : ""}${ativo(r) ? "" : " · terminado"}</span></div>
+              <div class="fin-linha__desc"><strong>${esc(r.descricao)} ${chipPessoa(r.para_quem)}</strong><span>${k === "avenca" ? esc(cliente(r.cliente_id)?.nome || "") + " · " : ""}desde ${MESES_CURTOS[Number(r.inicio.slice(5)) - 1]} ${r.inicio.slice(0, 4)}${r.fim ? ` até ${MESES_CURTOS[Number(r.fim.slice(5)) - 1]} ${r.fim.slice(0, 4)}` : ""}${ativo(r) ? "" : " · terminado"}</span></div>
               <span class="fin-linha__valor">${(r.qtd || 1) > 1 ? `<small class="fin-qtd">${r.qtd} × ${euros(r.valor_c)} =</small> ` : ""}${euros(totalRec(r))} <small>${PERIODO[r.periodicidade]}</small><small class="fin-linha__iva">${r.iva ? (r.tipo === "entrada" ? `+ IVA ${r.iva}%` : `IVA ${r.iva}% dedutível`) : r.tipo === "entrada" ? "sem IVA" : ""}</small></span>
               <div class="fin-linha__acoes"><button type="button" data-editar>Editar</button>${ativo(r) && !r.fim ? '<button type="button" data-terminar title="Deixa de contar a partir do próximo mês">Terminar</button>' : ""}<button type="button" data-apagar-rec aria-label="Apagar">×</button></div></li>`).join("")}</ul>`
               : `<p class="fin-vazio">${dica}</p>`}</section>`;
