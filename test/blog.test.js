@@ -38,7 +38,7 @@ test("só e-mails @heyimplement.com e slugs limpos", () => {
 });
 
 test("API da equipa recusa pedidos sem sessão e de outra origem", async () => {
-  const env = { ASSETS: { fetch: () => new Response("x") }, DB: { exec: async () => {}, prepare: () => ({ bind: () => ({ first: async () => null, run: async () => ({}), all: async () => ({ results: [] }) }) }) } };
+  const env = { ASSETS: { fetch: () => new Response("x") }, DB: { exec: async () => {}, prepare: () => { const q = { first: async () => null, run: async () => ({}), all: async () => ({ results: [] }) }; return { ...q, bind: () => q }; } } };
   const r1 = await worker.fetch(new Request("https://heyimplement.com/api/admin/artigos"), env, {});
   assert.equal(r1.status, 401);
   const r2 = await worker.fetch(new Request("https://heyimplement.com/api/admin/pedir-acesso", { method: "POST", headers: { "Content-Type": "application/json", Origin: "https://evil.com", "X-Implement": "1" }, body: '{"email":"a@heyimplement.com"}' }), env, {});
