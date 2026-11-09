@@ -404,3 +404,5 @@
 .fin-nova [name="valor"] { grid-column: span 4; width: auto; }
 .fin-nova button { grid-column: span 3; justify-content: center; padding-inline: 10px; }
 @media (max-width: 700px) { .fin-nova [name="data"], .fin-nova [name="categoria"], .fin-nova [name="cliente_id"], .fin-nova [name="iva"], .fin-nova [name="valor"] { grid-column: span 6; } .fin-nova button { grid-column: 1 / -1; } }
+.fin-qtd { font-size: .8125rem; font-weight: 700; color: var(--roxo-profundo); }
+.fin-linha__valor .fin-qtd { font-weight: 500; color: var(--cinza); }

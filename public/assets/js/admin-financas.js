@@ -32,6 +32,9 @@ const notaIva = (tipo, valor, taxa) => {
   return tipo === "entrada" ? ` · <span class="fin-iva">+ IVA ${taxa}% (${euros(i)}) · cliente paga ${euros(valor + i)}</span>` : ` · <span class="fin-iva">IVA dedutível ${euros(i)}</span>`;
 };
 
+/* Valor total de um fixo (quantidade × preço unitário) */
+export const totalRec = (r) => r.valor_c * (r.qtd || 1);
+
 /* ---------- Motor de cálculo ---------- */
 export function motor(dados) {
   const { recorrentes, movimentos } = dados;
@@ -44,7 +47,7 @@ export function motor(dados) {
   function linhas(mes) {
     const fixas = recorrentes.filter((r) => aplica(r, mes)).map((r) => {
       const aj = ajustes.get(`${r.id}|${mes}`);
-      return { r, valor: aj ? aj.valor_c : r.valor_c, ajuste: aj || null };
+      return { r, valor: aj ? aj.valor_c : totalRec(r), ajuste: aj || null };
     });
     const pontuais = movimentos.filter((m) => !m.recorrente_id && m.data.slice(0, 7) === mes);
     return { fixas, pontuais };
@@ -279,10 +282,10 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
       const clientesAtivos = dados.clientes.filter((c) => c.ativo);
       const opClientes = (sel) => `<option value="">Cliente…</option>${clientesAtivos.map((c) => `<option value="${c.id}"${c.id === sel ? " selected" : ""}>${esc(c.nome)}</option>`).join("")}<option value="__novo">+ Novo cliente…</option>`;
       const linhaFixa = (x) => `<li class="fin-linha${x.valor === 0 ? " fin-linha--saltado" : ""}" data-rec="${x.r.id}">
-          <div class="fin-linha__desc"><strong>${esc(x.r.descricao)}</strong><span>${x.r.tipo === "entrada" ? esc(cliente(x.r.cliente_id)?.nome || "") : CAT_REC[x.r.categoria]}${x.r.periodicidade !== "mensal" ? ` · ${PERIODO[x.r.periodicidade]}` : ""}${x.ajuste ? (x.valor === 0 ? " · <em>não houve este mês</em>" : " · <em>ajustado este mês</em>") : ""}${x.valor ? notaIva(x.r.tipo, x.valor, x.r.iva) : ""}</span></div>
+          <div class="fin-linha__desc"><strong>${esc(x.r.descricao)}${(x.r.qtd || 1) > 1 ? ` <span class="fin-qtd">× ${x.r.qtd}</span>` : ""}</strong><span>${x.r.tipo === "entrada" ? esc(cliente(x.r.cliente_id)?.nome || "") : CAT_REC[x.r.categoria]}${x.r.periodicidade !== "mensal" ? ` · ${PERIODO[x.r.periodicidade]}` : ""}${x.ajuste ? (x.valor === 0 ? " · <em>não houve este mês</em>" : " · <em>ajustado este mês</em>") : ""}${x.valor ? notaIva(x.r.tipo, x.valor, x.r.iva) : ""}</span></div>
           <label class="sr-only" for="aj-${x.r.id}">Valor em ${mesNome(mes)}</label>
           <input class="entrada fin-valor" id="aj-${x.r.id}" data-ajustar inputmode="decimal" value="${paraInput(x.valor)}" ${fecho ? "disabled" : ""}>
-          <div class="fin-linha__acoes">${fecho ? "" : x.ajuste ? `<button type="button" data-repor title="Voltar ao valor habitual (${euros(x.r.valor_c)})">Repor</button>` : `<button type="button" data-saltar title="Não conta neste mês">Não houve</button>`}</div></li>`;
+          <div class="fin-linha__acoes">${fecho ? "" : x.ajuste ? `<button type="button" data-repor title="Voltar ao valor habitual (${euros(totalRec(x.r))})">Repor</button>` : `<button type="button" data-saltar title="Não conta neste mês">Não houve</button>`}</div></li>`;
       const linhaPontual = (x) => `<li class="fin-linha" data-mov="${x.id}">
           <div class="fin-linha__desc"><strong>${esc(x.descricao)}</strong><span>${new Date(x.data + "T12:00").toLocaleDateString("pt-PT", { day: "numeric", month: "short" })} · ${x.tipo === "entrada" ? esc(cliente(x.cliente_id)?.nome || "") : esc(x.categoria || "Variável")}${notaIva(x.tipo, x.valor_c, x.iva)}</span></div>
           <span class="fin-linha__valor">${euros(x.valor_c)}</span>
@@ -383,7 +386,7 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
 
   /* ===== Fixos e assinaturas ===== */
   function vistaFixos() {
-    const equivalenteMes = (r) => (r.periodicidade === "anual" ? r.valor_c / 12 : r.periodicidade === "trimestral" ? r.valor_c / 3 : r.valor_c);
+    const equivalenteMes = (r) => (r.periodicidade === "anual" ? totalRec(r) / 12 : r.periodicidade === "trimestral" ? totalRec(r) / 3 : totalRec(r));
     const ativo = (r) => !r.fim || r.fim >= mesAtual();
     const grupos = [["assinatura", "Assinaturas", "Canva, Adobe, Google Workspace, apps…"], ["fixo", "Custos fixos", "Contabilista, internet, telemóvel, renda, seguros…"], ["avenca", "Avenças de clientes", "O que cada cliente paga todos os meses"]];
     const opClientes = (sel) => dados.clientes.filter((c) => c.ativo || c.id === sel).map((c) => `<option value="${c.id}"${c.id === sel ? " selected" : ""}>${esc(c.nome)}</option>`).join("");
@@ -393,11 +396,12 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
           <label>Tipo<select class="entrada" name="categoria">${Object.entries(CAT_REC).map(([k, v]) => `<option value="${k}"${r.categoria === k ? " selected" : ""}>${v}</option>`).join("")}</select></label>
           <label class="fin-form__cliente"${r.categoria === "avenca" ? "" : " hidden"}>Cliente<select class="entrada" name="cliente_id"><option value="">Escolher…</option>${opClientes(r.cliente_id)}</select></label>
           <label class="fin-form__largo">Descrição<input class="entrada" name="descricao" maxlength="140" required value="${esc(r.descricao || "")}" placeholder="ex.: Canva Pro"></label>
-          <label><span data-rotulo-valor>${r.categoria === "avenca" ? "Valor sem IVA (€)" : "Valor pago (€)"}</span><input class="entrada" name="valor" inputmode="decimal" required value="${r.valor_c ? paraInput(r.valor_c) : ""}" placeholder="0,00"></label>
+          <label class="fin-form__qtd">Quantidade<input class="entrada" name="qtd" type="number" min="1" max="999" step="1" inputmode="numeric" value="${r.qtd || 1}"></label>
+          <label><span data-rotulo-valor>${r.categoria === "avenca" ? "Valor sem IVA (€)" : "Valor pago por unidade (€)"}</span><input class="entrada" name="valor" inputmode="decimal" required value="${r.valor_c ? paraInput(r.valor_c) : ""}" placeholder="0,00"></label>
           <label><span data-rotulo-iva>${r.categoria === "avenca" ? "IVA cobrado ao cliente" : "IVA na fatura"}</span><select class="entrada" name="iva">${opIva(r.iva, r.categoria === "avenca" ? "entrada" : "saida")}</select></label>
           <label>Repete<select class="entrada" name="periodicidade">${Object.entries(PERIODO).map(([k, v]) => `<option value="${k}"${(r.periodicidade || "mensal") === k ? " selected" : ""}>${v[0].toUpperCase() + v.slice(1)}</option>`).join("")}</select></label>
           <label>Desde<input class="entrada" type="month" name="inicio" required value="${r.inicio || mesAtual()}"></label>
-          <label>Até <span class="opcional">(opcional)</span><input class="entrada" type="month" name="fim" value="${r.fim || ""}"></label>
+          <label><span>Até <span class="opcional">(opcional)</span></span><input class="entrada" type="month" name="fim" value="${r.fim || ""}"></label>
         </div>
         <div class="fin-form__acoes"><button class="botao botao--pequeno" type="submit"><span>${r.id ? "Guardar" : "Acrescentar"}</span></button>${r.id ? '<button type="button" class="fin-cancelar" data-cancelar>Cancelar</button>' : ""}</div>
       </form>`;
@@ -415,7 +419,7 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
           return `<section class="fin-cartao"><div class="fin-cartao__cabeca"><h2>${t} <span>${euros(totalMes(k))} / mês</span></h2></div>
             ${l.length ? `<ul class="fin-linhas">${l.map((r) => editar === r.id ? `<li class="fin-linha fin-linha--editar">${formulario(r)}</li>` : `<li class="fin-linha${ativo(r) ? "" : " fin-linha--terminado"}" data-rec="${r.id}">
               <div class="fin-linha__desc"><strong>${esc(r.descricao)}</strong><span>${k === "avenca" ? esc(cliente(r.cliente_id)?.nome || "") + " · " : ""}desde ${MESES_CURTOS[Number(r.inicio.slice(5)) - 1]} ${r.inicio.slice(0, 4)}${r.fim ? ` até ${MESES_CURTOS[Number(r.fim.slice(5)) - 1]} ${r.fim.slice(0, 4)}` : ""}${ativo(r) ? "" : " · terminado"}</span></div>
-              <span class="fin-linha__valor">${euros(r.valor_c)} <small>${PERIODO[r.periodicidade]}</small><small class="fin-linha__iva">${r.iva ? (r.tipo === "entrada" ? `+ IVA ${r.iva}%` : `IVA ${r.iva}% dedutível`) : r.tipo === "entrada" ? "sem IVA" : ""}</small></span>
+              <span class="fin-linha__valor">${(r.qtd || 1) > 1 ? `<small class="fin-qtd">${r.qtd} × ${euros(r.valor_c)} =</small> ` : ""}${euros(totalRec(r))} <small>${PERIODO[r.periodicidade]}</small><small class="fin-linha__iva">${r.iva ? (r.tipo === "entrada" ? `+ IVA ${r.iva}%` : `IVA ${r.iva}% dedutível`) : r.tipo === "entrada" ? "sem IVA" : ""}</small></span>
               <div class="fin-linha__acoes"><button type="button" data-editar>Editar</button>${ativo(r) && !r.fim ? '<button type="button" data-terminar title="Deixa de contar a partir do próximo mês">Terminar</button>' : ""}<button type="button" data-apagar-rec aria-label="Apagar">×</button></div></li>`).join("")}</ul>`
               : `<p class="fin-vazio">${dica}</p>`}</section>`;
         }).join("")}`;
@@ -427,7 +431,7 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
         const av = ev.target.value === "avenca";
         $(".fin-form__cliente", f).hidden = !av;
         $("[data-rotulo-iva]", f).textContent = av ? "IVA cobrado ao cliente" : "IVA na fatura";
-        $("[data-rotulo-valor]", f).textContent = av ? "Valor sem IVA (€)" : "Valor pago (€)";
+        $("[data-rotulo-valor]", f).textContent = av ? "Valor sem IVA (€)" : "Valor pago por unidade (€)";
         const v = f.elements.iva.value;
         f.elements.iva.innerHTML = opIva(v, av ? "entrada" : "saida");
       }
@@ -468,7 +472,7 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
   function vistaClientes() {
     const atual = mesAtual();
     const resumo = (c) => {
-      const avenca = dados.recorrentes.filter((r) => r.cliente_id === c.id && r.inicio <= atual && (!r.fim || r.fim >= atual)).reduce((t, r) => t + (r.periodicidade === "anual" ? r.valor_c / 12 : r.periodicidade === "trimestral" ? r.valor_c / 3 : r.valor_c), 0);
+      const avenca = dados.recorrentes.filter((r) => r.cliente_id === c.id && r.inicio <= atual && (!r.fim || r.fim >= atual)).reduce((t, r) => t + (r.periodicidade === "anual" ? totalRec(r) / 12 : r.periodicidade === "trimestral" ? totalRec(r) / 3 : totalRec(r)), 0);
       let ano_ = 0, servicos = 0;
       for (let i = 1; i <= 12; i++) {
         const mes = `${ano}-${String(i).padStart(2, "0")}`;
@@ -482,10 +486,10 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
     };
     const formulario = (c = {}) => `<form class="fin-form" data-cli-form="${c.id || ""}"><div class="fin-form__grelha">
         <label class="fin-form__largo">Nome<input class="entrada" name="nome" required maxlength="120" value="${esc(c.nome || "")}" placeholder="ex.: Tasca do Mar"></label>
-        <label>Contacto <span class="opcional">(opcional)</span><input class="entrada" name="contacto" maxlength="200" value="${esc(c.contacto || "")}" placeholder="e-mail ou telefone"></label>
-        <label>NIF <span class="opcional">(opcional)</span><input class="entrada" name="nif" maxlength="20" value="${esc(c.nif || "")}"></label>
+        <label><span>Contacto <span class="opcional">(opcional)</span></span><input class="entrada" name="contacto" maxlength="200" value="${esc(c.contacto || "")}" placeholder="e-mail ou telefone"></label>
+        <label><span>NIF <span class="opcional">(opcional)</span></span><input class="entrada" name="nif" maxlength="20" value="${esc(c.nif || "")}"></label>
         <label>Faturação<select class="entrada" name="iva">${opIva(c.iva, "entrada")}</select></label>
-        <label class="fin-form__largo">Notas <span class="opcional">(opcional)</span><input class="entrada" name="notas" maxlength="600" value="${esc(c.notas || "")}"></label>
+        <label class="fin-form__largo"><span>Notas <span class="opcional">(opcional)</span></span><input class="entrada" name="notas" maxlength="600" value="${esc(c.notas || "")}"></label>
       </div><div class="fin-form__acoes"><button class="botao botao--pequeno" type="submit"><span>${c.id ? "Guardar" : "Acrescentar cliente"}</span></button>${c.id ? '<button type="button" class="fin-cancelar" data-cancelar>Cancelar</button>' : ""}</div></form>`;
     const desenhar = (editar = null) => {
       const lista = dados.clientes.map((c) => ({ c, ...resumo(c) })).sort((a, b) => b.c.ativo - a.c.ativo || b.ano - a.ano);
