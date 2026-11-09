@@ -970,11 +970,16 @@ select.entrada { appearance: none; background-image: url("data:image/svg+xml,%3C
 .caso__capa-img--horizontal { aspect-ratio: 16 / 9; object-fit: cover; }
 .caso__capa-img--vertical, .caso__capa-img--quadrado { width: auto !important; max-width: 100%; max-height: 82vh; margin-inline: auto; display: block; }
 .caso__corpo { --texto: 44rem; max-width: calc(var(--texto) + 2 * var(--margem)); }
-.caso__corpo:last-child { padding-bottom: clamp(64px, 9vw, 112px); }
+.caso { padding-bottom: clamp(64px, 9vw, 120px); }
+.caso__corpo { padding-bottom: 0; }
+.caso__corpo > * + * { margin-top: 1.4em; }
+.caso__corpo > figure, .caso__corpo > .galeria, .caso__corpo > .ecras, .caso__corpo > .antes-depois { margin-top: clamp(40px, 6vw, 72px) !important; margin-bottom: 0; }
+.caso__corpo > :first-child { margin-top: 0 !important; }
+.caso__corpo > figure + figure, .caso__corpo > figure + .galeria, .caso__corpo > .galeria + figure { margin-top: clamp(28px, 4vw, 48px) !important; }
 
 /* Blocos largos: galeria, ecrãs e antes/depois saem da coluna de texto */
 .galeria, .ecras, .antes-depois { width: min(1100px, calc(100vw - 2 * var(--margem))); margin-left: 50% !important; transform: translateX(-50%); }
-.galeria__grelha { display: grid; gap: 12px; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); }
+.galeria__grelha { display: grid; gap: clamp(10px, 1.6vw, 18px); grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); }
 .galeria--2 { --cols: 2; } .galeria--3 { --cols: 3; } .galeria--4 { --cols: 4; }
 .galeria__grelha img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px !important; }
 .galeria--2 .galeria__grelha img { aspect-ratio: 4 / 3; }
@@ -991,7 +996,7 @@ select.entrada { appearance: none; background-image: url("data:image/svg+xml,%3C
 .ecras__telemovel img { border-radius: 21px !important; width: 100%; aspect-ratio: 9 / 19.5; object-fit: cover; object-position: top; }
 .ecras figcaption { grid-column: 1 / -1; margin-top: 18px !important; }
 .ecras figcaption a { font-weight: 700; }
-.antes-depois__par { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.antes-depois__par { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px, 1.6vw, 18px); }
 .antes-depois__par > div { position: relative; }
 .antes-depois__par img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
 .antes-depois__par span { position: absolute; left: 14px; top: 14px; padding: 6px 12px; border-radius: 999px; background: rgba(23, 19, 31, .78); color: var(--branco); font: 700 .75rem/1 var(--sans); letter-spacing: .12em; text-transform: uppercase; }

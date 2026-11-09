@@ -27,7 +27,8 @@ assert 'aria-current' not in cabecalho and 'href="/work" data-i18n="c.nav.trabal
 rodape = absoluto(base[base.index('<footer class="rodape">'):base.index("</footer>") + len("</footer>")])
 
 cabeca = base[base.index('<meta name="theme-color"'):base.index("</head>")]
-cabeca = re.sub(r'\s*<script src="assets/js/contacto.js"[^>]*></script>', "", cabeca)
+cabeca = re.sub(r'\s*<script src="assets/js/contacto\.js[^"]*"[^>]*></script>', "", cabeca)
+assert "contacto.js" not in cabeca
 cabeca = absoluto(cabeca)
 
 js = (

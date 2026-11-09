@@ -471,7 +471,8 @@ def pagina(modo, base):
     cabeca = re.sub(r'<meta name="description"[^>]*>\n', "", cabeca)
     cabeca = re.sub(r'<meta name="robots"[^>]*>\n', "", cabeca)
     cabeca = re.sub(r'<link rel="canonical"[^>]*>\n', "", cabeca)
-    cabeca = cabeca.replace('<script src="assets/js/contacto.js" type="module"></script>\n', "")
+    cabeca = re.sub(r'<script src="assets/js/contacto\.js[^"]*" type="module"></script>\n?', "", cabeca)
+    assert "contacto.js" not in cabeca
     cabeca = cabeca.replace('<meta charset="utf-8">\n', '<meta charset="utf-8">\n' + "<!-- Gerado por scripts/servicos.py: altere o conteúdo lá e volte a gerar. -->\n", 1)
     cabeca = cabeca.replace('<meta name="viewport"', meta + '\n<meta name="viewport"', 1)
     cabeca = cabeca.replace('<script src="assets/js/i18n.js" defer></script>', '<script src="assets/js/i18n.js" defer></script>\n' + scripts)
