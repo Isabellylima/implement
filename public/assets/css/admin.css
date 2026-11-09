@@ -278,7 +278,10 @@
 .fin-mes-resumo__cabeca { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 12px; }
 .fin-mes-resumo__cabeca h2, .fin-titulo { font-size: clamp(1.375rem, 2.4vw, 1.75rem); }
 .fin-titulo small { font: 400 .875rem/1 var(--sans); color: var(--cinza); margin-left: 8px; }
-.fin-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.fin-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 24px; }
+.fin-mes-resumo .fin-kpis { margin-bottom: 0; }
+.fin-colunas > .fin-cartao { margin-bottom: 0; }
+.fin-colunas { margin-bottom: 24px; }
 .fin-kpis--mes { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 20px; }
 .fin-kpi { padding: 20px 22px; border-radius: var(--raio); background: var(--branco); box-shadow: var(--sombra); display: grid; gap: 6px; align-content: start; }
 .fin-kpi p { margin: 0; font-size: .8125rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cinza); }
