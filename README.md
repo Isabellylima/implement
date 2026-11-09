@@ -138,5 +138,6 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 - **Clientes:** nome, contacto, NIF; desativar em vez de apagar quando já têm valores.
 - **Fixos e assinaturas:** assinaturas e custos fixos (saídas) e avenças de clientes (entradas), mensais, trimestrais ou anuais, com mês de início e, opcionalmente, de fim. Contam sozinhos em cada mês.
 - **Mês a mês:** os fixos aparecem já lançados (pode ajustar o valor só daquele mês ou marcar «Não houve»); acrescentam-se os gastos variáveis e os serviços pontuais (cliente, serviço, valor). «Fechar o mês» bloqueia as alterações e guarda os totais.
+- **IVA:** cada cliente, avença, serviço, custo fixo ou gasto pode ser «sem IVA» ou «com IVA» (23/13/6%). Entradas: o valor escrito é sem IVA e o IVA soma-se (cliente paga mais). Saídas: o valor escrito é o total da fatura e o IVA lá dentro é dedutível. IVA a entregar = cobrado − dedutível, por mês e por trimestre; o resultado já desconta esse IVA.
 - **Painel:** resumo do mês, gráfico do ano (meses futuros = previsão: fixos + média dos últimos 3 meses de variáveis e serviços pontuais), trimestres para a declaração com exportação CSV, receita por cliente.
 - **Dados:** tabelas `fin_*` na D1, valores em cêntimos (`src/financas.js`).

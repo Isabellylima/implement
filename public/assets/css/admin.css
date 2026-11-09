@@ -366,7 +366,7 @@
 .fin-linha--terminado { opacity: .5; }
 .fin-linha--editar { display: block; }
 .fin-valor { width: 110px; min-height: 40px !important; padding: 6px 10px !important; text-align: right; font-variant-numeric: tabular-nums; }
-.fin-nova { display: grid; grid-template-columns: 150px minmax(0, 1fr) 110px auto; gap: 6px; padding: 10px; border-radius: var(--raio-pequeno); background: var(--nevoa); margin-bottom: 4px; }
+.fin-nova { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 6px; padding: 10px; border-radius: var(--raio-pequeno); background: var(--nevoa); margin-bottom: 4px; }
 .fin-nova [name="descricao"] { grid-column: 1 / -1; order: -1; }
 .fin-nova .entrada { min-height: 40px; padding: 6px 10px; font-size: .875rem; min-width: 0; }
 .fin-vazio { font-size: .875rem; color: var(--cinza); margin: 6px 0; }
@@ -382,10 +382,25 @@
 @media (max-width: 1100px) { .fin-kpis, .fin-trimestres { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fin-colunas { grid-template-columns: 1fr; } }
 @media (max-width: 700px) {
   .fin-kpis, .fin-kpis--mes, .fin-trimestres { grid-template-columns: 1fr; }
-  .fin-nova { grid-template-columns: 1fr 1fr; }
   .fin-form__grelha { grid-template-columns: 1fr 1fr; }
   .fin-barras li { grid-template-columns: 1fr auto; }
   .fin-barras__barra { grid-column: 1 / -1; grid-row: 2; }
   .fin-linha { grid-template-columns: minmax(0, 1fr) auto; }
   .fin-linha__acoes { grid-column: 1 / -1; }
 }
+
+/* IVA */
+.fin-kpi--iva { background: #FFF6E0; box-shadow: none; border: 1.5px solid #F5D58F; }
+.fin-kpi--iva strong { color: #7A4E00; }
+.fin-iva { color: #7A4E00; }
+.fin-linha__iva { display: block; font-size: .75rem; color: #7A4E00; font-weight: 500; text-align: right; }
+.fin-trimestre .fin-iva-bloco dt, .fin-trimestre .fin-iva-bloco dd { font-size: .8125rem; color: var(--cinza); }
+.fin-trimestre .fin-iva-total { padding: 6px 8px; margin: 0 -8px; border-radius: 8px; background: #FFF6E0; }
+.fin-trimestre .fin-iva-total dt { color: #7A4E00; font-weight: 700; }
+.fin-trimestre .fin-iva-total dd { color: #7A4E00; font-weight: 700; }
+.fin-nova [name="data"] { grid-column: span 4; }
+.fin-nova [name="categoria"], .fin-nova [name="cliente_id"] { grid-column: span 8; }
+.fin-nova [name="iva"] { grid-column: span 5; }
+.fin-nova [name="valor"] { grid-column: span 4; width: auto; }
+.fin-nova button { grid-column: span 3; justify-content: center; padding-inline: 10px; }
+@media (max-width: 700px) { .fin-nova [name="data"], .fin-nova [name="categoria"], .fin-nova [name="cliente_id"], .fin-nova [name="iva"], .fin-nova [name="valor"] { grid-column: span 6; } .fin-nova button { grid-column: 1 / -1; } }

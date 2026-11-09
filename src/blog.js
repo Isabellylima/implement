@@ -13,7 +13,7 @@
    Dados na D1 (binding DB). As tabelas são criadas automaticamente.
    Imagens: no R2 se existir o binding MEDIA; senão, na própria D1 (até 1,4 MB por imagem, já comprimida no browser). */
 import { CABECA, CABECALHO, RODAPE } from "./modelo.js";
-import { ESQUEMA_FINANCAS, apiFinancas } from "./financas.js";
+import { ESQUEMA_FINANCAS, apiFinancas, migrarFinancas } from "./financas.js";
 
 const DOMINIO = "heyimplement.com";
 const SESSAO_DIAS = 30;
@@ -44,6 +44,7 @@ let esquemaPronto = false;
 async function esquema(db) {
   if (esquemaPronto) return;
   await db.exec(ESQUEMA);
+  await migrarFinancas(db);
   esquemaPronto = true;
 }
 

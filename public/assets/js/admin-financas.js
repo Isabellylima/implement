@@ -9,6 +9,10 @@ const CAT_VARIAVEIS = ["Material", "Publicidade e anúncios", "Software e apps",
 const CAT_REC = { assinatura: "Assinatura", fixo: "Custo fixo", avenca: "Avença de cliente" };
 const PERIODO = { mensal: "por mês", trimestral: "por trimestre", anual: "por ano" };
 const COR = { entrada: "#7A45D8", saida: "#E0A126" };
+const TAXAS_IVA = [0, 23, 13, 6];
+const opIva = (sel, tipo) => TAXAS_IVA.map((t) => `<option value="${t}"${Number(sel || 0) === t ? " selected" : ""}>${t ? (tipo === "saida" ? `Fatura com IVA ${t}%` : `Com IVA ${t}%`) : "Sem IVA"}</option>`).join("");
+const trimestreDe = (mes) => Math.floor((Number(mes.slice(5)) - 1) / 3);
+const mesesTrimestre = (mes) => { const q = trimestreDe(mes); return [0, 1, 2].map((i) => `${mes.slice(0, 4)}-${String(q * 3 + i + 1).padStart(2, "0")}`); };
 
 const euros = (c, casas = true) => new Intl.NumberFormat("pt-PT", { style: "currency", currency: "EUR", minimumFractionDigits: casas ? 2 : 0, maximumFractionDigits: casas ? 2 : 0 }).format((c || 0) / 100);
 const paraInput = (c) => ((c || 0) / 100).toFixed(2).replace(".", ",");
@@ -17,6 +21,16 @@ const mesAtual = () => hoje().slice(0, 7);
 const mesNome = (m) => `${MESES[Number(m.slice(5)) - 1]} ${m.slice(0, 4)}`;
 const somaMes = (m, n) => { const d = new Date(Number(m.slice(0, 4)), Number(m.slice(5)) - 1 + n, 1); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`; };
 const mesesEntre = (a, b) => (Number(b.slice(0, 4)) - Number(a.slice(0, 4))) * 12 + Number(b.slice(5)) - Number(a.slice(5));
+
+/* IVA de uma linha. Entradas: o valor escrito é sem IVA e o IVA soma-se por cima (é o que o cliente paga a mais).
+   Saídas: o valor escrito é o total pago na fatura e o IVA está lá dentro (é o que se pode deduzir). */
+export const ivaDe = (tipo, valor, taxa) => (!taxa ? 0 : tipo === "entrada" ? Math.round((valor * taxa) / 100) : Math.round((valor * taxa) / (100 + taxa)));
+
+const notaIva = (tipo, valor, taxa) => {
+  if (!taxa) return tipo === "entrada" ? " · sem IVA" : "";
+  const i = ivaDe(tipo, valor, taxa);
+  return tipo === "entrada" ? ` · <span class="fin-iva">+ IVA ${taxa}% (${euros(i)}) · cliente paga ${euros(valor + i)}</span>` : ` · <span class="fin-iva">IVA dedutível ${euros(i)}</span>`;
+};
 
 /* ---------- Motor de cálculo ---------- */
 export function motor(dados) {
@@ -44,13 +58,22 @@ export function motor(dados) {
       assinaturas: soma(fixas.filter((x) => x.r.categoria === "assinatura")),
       fixos: soma(fixas.filter((x) => x.r.categoria === "fixo")),
       variaveis: soma(pontuais.filter((x) => x.tipo === "saida")),
+      ivaCobrado: 0, ivaDedutivel: 0,
     };
-    t.entradas = t.avencas + t.servicos;
+    for (const x of fixas) t[x.r.tipo === "entrada" ? "ivaCobrado" : "ivaDedutivel"] += ivaDe(x.r.tipo, x.valor, x.r.iva);
+    for (const x of pontuais) t[x.tipo === "entrada" ? "ivaCobrado" : "ivaDedutivel"] += ivaDe(x.tipo, x.valor_c, x.iva);
+    return fechar(t);
+  }
+  // Entradas = o que o cliente paga (valor + IVA); Saídas = o que se paga; Resultado = o que fica depois de entregar o IVA
+  function fechar(t) {
+    t.entradasBase = t.avencas + t.servicos;
+    t.entradas = t.entradasBase + t.ivaCobrado;
     t.saidas = t.assinaturas + t.fixos + t.variaveis;
-    t.resultado = t.entradas - t.saidas;
+    t.ivaPagar = t.ivaCobrado - t.ivaDedutivel;
+    t.resultado = t.entradas - t.saidas - t.ivaPagar;
     return t;
   }
-  // Previsão: meses futuros = fixos + média dos 3 meses anteriores ao mês atual (variáveis e serviços pontuais)
+  // Previsão: meses futuros = fixos + média dos 3 meses anteriores ao mês atual (variáveis e serviços pontuais, sem IVA)
   function medias() {
     const atual = mesAtual();
     const ms = [1, 2, 3].map((n) => somaMes(atual, -n));
@@ -62,9 +85,7 @@ export function motor(dados) {
     if (mes <= mesAtual() || !comMedias) return { ...t, previsao: mes > mesAtual() };
     const md = medias();
     const v = Math.max(t.variaveis, md.variaveis), s = Math.max(t.servicos, md.servicos);
-    const p = { ...t, variaveis: v, servicos: s, previsao: true, estimado: { variaveis: v - t.variaveis, servicos: s - t.servicos } };
-    p.entradas = p.avencas + p.servicos; p.saidas = p.assinaturas + p.fixos + p.variaveis; p.resultado = p.entradas - p.saidas;
-    return p;
+    return fechar({ ...t, variaveis: v, servicos: s, previsao: true, estimado: { variaveis: v - t.variaveis, servicos: s - t.servicos } });
   }
   return { aplica, linhas, totais, previsto, medias };
 }
@@ -116,9 +137,11 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
     const soma = (l, k) => l.reduce((s, t) => s + t[k], 0);
     const trimestres = [0, 1, 2, 3].map((q) => {
       const l = ts.slice(q * 3, q * 3 + 3);
-      return { q: q + 1, l, entradas: soma(l, "entradas"), saidas: soma(l, "saidas"), resultado: soma(l, "resultado"), previsao: l.some((t) => t.previsao), fechados: l.filter((t) => dados.fechos.some((f) => f.mes === t.mes)).length };
+      return { q: q + 1, l, entradas: soma(l, "entradas"), saidas: soma(l, "saidas"), resultado: soma(l, "resultado"), ivaCobrado: soma(l, "ivaCobrado"), ivaDedutivel: soma(l, "ivaDedutivel"), ivaPagar: soma(l, "ivaPagar"), previsao: l.some((t) => t.previsao), fechados: l.filter((t) => dados.fechos.some((f) => f.mes === t.mes)).length };
     });
     const qAtual = Math.floor((Number(atual.slice(5)) - 1) / 3) + 1;
+    const qFoco = trimestres[trimestreDe(mesFoco)];
+    const ivaAteAgora = mesesTrimestre(mesFoco).filter((m) => m <= mesFoco).reduce((t, m) => t + M.totais(m).ivaPagar, 0);
     const delta = (a, b) => { if (!b) return ""; const p = Math.round(((a - b) / Math.abs(b)) * 100); return `<span class="fin-delta ${p >= 0 ? "sobe" : "desce"}">${p >= 0 ? "▲" : "▼"} ${Math.abs(p)}% vs. mês anterior</span>`; };
     const porCliente = {};
     for (const m of meses.filter((x) => x <= atual)) {
@@ -138,10 +161,10 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
       <section class="fin-mes-resumo" aria-labelledby="fin-t-mes">
         <div class="fin-mes-resumo__cabeca"><h2 id="fin-t-mes">${mesNome(mesFoco)}</h2><a class="ligacao-seta" href="#/financas/mes/${mesFoco}">Ver o mês</a></div>
         <div class="fin-kpis">
-          <div class="fin-kpi"><p>Entradas</p><strong>${euros(tf.entradas)}</strong>${delta(tf.entradas, anterior.entradas)}<small>Avenças ${euros(tf.avencas)} · pontuais ${euros(tf.servicos)}</small></div>
+          <div class="fin-kpi"><p>Entradas</p><strong>${euros(tf.entradas)}</strong>${delta(tf.entradas, anterior.entradas)}<small>Avenças ${euros(tf.avencas)} · pontuais ${euros(tf.servicos)}${tf.ivaCobrado ? ` · IVA cobrado ${euros(tf.ivaCobrado)}` : ""}</small></div>
           <div class="fin-kpi"><p>Saídas</p><strong>${euros(tf.saidas)}</strong>${delta(tf.saidas, anterior.saidas)}<small>Fixos e assinaturas ${euros(tf.fixos + tf.assinaturas)} · variáveis ${euros(tf.variaveis)}</small></div>
-          <div class="fin-kpi fin-kpi--${tf.resultado >= 0 ? "pos" : "neg"}"><p>Resultado</p><strong>${euros(tf.resultado)}</strong><small>${tf.entradas ? `Margem ${Math.round((tf.resultado / tf.entradas) * 100)}%` : "Sem entradas registadas"}</small></div>
-          <div class="fin-kpi"><p>Custos fixos por mês</p><strong>${euros(tf.fixos + tf.assinaturas)}</strong><small>O mínimo que sai todos os meses</small></div>
+          <div class="fin-kpi fin-kpi--${tf.resultado >= 0 ? "pos" : "neg"}"><p>Resultado</p><strong>${euros(tf.resultado)}</strong><small>${tf.entradasBase ? `Já sem o IVA a entregar · margem ${Math.round((tf.resultado / tf.entradasBase) * 100)}%` : "Sem entradas registadas"}</small></div>
+          <div class="fin-kpi fin-kpi--iva"><p>Separar para o IVA</p><strong>${euros(Math.max(0, ivaAteAgora))}</strong><small>${qFoco.q}.º trimestre até ${MESES[Number(mesFoco.slice(5)) - 1].toLowerCase()}${ivaAteAgora < 0 ? ` · crédito de ${euros(-ivaAteAgora)}` : ""} · previsão do trimestre ${euros(qFoco.ivaPagar)}</small></div>
         </div>
       </section>
 
@@ -151,9 +174,9 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
         <div class="fin-grafico" id="grafico"></div>
         <p class="fin-nota">A previsão soma os fixos, as assinaturas e as avenças de cada mês com a média dos últimos três meses de gastos variáveis (${euros(M.medias().variaveis)}) e de serviços pontuais (${euros(M.medias().servicos)}).</p>
         <details class="fin-tabela-anual"><summary>Ver os valores em tabela</summary>
-          <div class="fin-rolar"><table class="fin-tabela"><thead><tr><th>Mês</th><th>Entradas</th><th>Saídas</th><th>Resultado</th><th></th></tr></thead><tbody>
-          ${ts.map((t) => `<tr${t.previsao ? ' class="previsao"' : ""}><td><a href="#/financas/mes/${t.mes}">${MESES[Number(t.mes.slice(5)) - 1]}</a></td><td>${euros(t.entradas)}</td><td>${euros(t.saidas)}</td><td class="${t.resultado < 0 ? "neg" : ""}">${euros(t.resultado)}</td><td>${t.previsao ? "Previsão" : dados.fechos.some((f) => f.mes === t.mes) ? "Fechado" : ""}</td></tr>`).join("")}
-          </tbody><tfoot><tr><th>${ano}</th><th>${euros(soma(ts, "entradas"))}</th><th>${euros(soma(ts, "saidas"))}</th><th>${euros(soma(ts, "resultado"))}</th><th></th></tr></tfoot></table></div></details>
+          <div class="fin-rolar"><table class="fin-tabela"><thead><tr><th>Mês</th><th>Entradas</th><th>Saídas</th><th>IVA a entregar</th><th>Resultado</th><th></th></tr></thead><tbody>
+          ${ts.map((t) => `<tr${t.previsao ? ' class="previsao"' : ""}><td><a href="#/financas/mes/${t.mes}">${MESES[Number(t.mes.slice(5)) - 1]}</a></td><td>${euros(t.entradas)}</td><td>${euros(t.saidas)}</td><td>${euros(t.ivaPagar)}</td><td class="${t.resultado < 0 ? "neg" : ""}">${euros(t.resultado)}</td><td>${t.previsao ? "Previsão" : dados.fechos.some((f) => f.mes === t.mes) ? "Fechado" : ""}</td></tr>`).join("")}
+          </tbody><tfoot><tr><th>${ano}</th><th>${euros(soma(ts, "entradas"))}</th><th>${euros(soma(ts, "saidas"))}</th><th>${euros(soma(ts, "ivaPagar"))}</th><th>${euros(soma(ts, "resultado"))}</th><th></th></tr></tfoot></table></div></details>
       </section>
 
       <section aria-labelledby="fin-t-tri">
@@ -162,7 +185,10 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
           <article class="fin-trimestre${ano === new Date().getFullYear() && t.q === qAtual ? " fin-trimestre--atual" : ""}">
             <header><h3>${t.q}.º trimestre</h3><p>${MESES_CURTOS[(t.q - 1) * 3]} – ${MESES_CURTOS[(t.q - 1) * 3 + 2]}</p>
               <span class="selo ${t.previsao ? "selo--agendado" : t.fechados === 3 ? "selo--publicado" : "selo--rascunho"}">${t.previsao ? (t.l.every((x) => x.previsao) ? "Previsão" : "Em curso") : t.fechados === 3 ? "Fechado" : `${t.fechados}/3 meses fechados`}</span></header>
-            <dl><div><dt>Entradas</dt><dd>${euros(t.entradas)}</dd></div><div><dt>Saídas</dt><dd>${euros(t.saidas)}</dd></div><div class="fin-res"><dt>Resultado</dt><dd class="${t.resultado < 0 ? "neg" : ""}">${euros(t.resultado)}</dd></div></dl>
+            <dl><div><dt>Entradas</dt><dd>${euros(t.entradas)}</dd></div><div><dt>Saídas</dt><dd>${euros(t.saidas)}</dd></div>
+              <div class="fin-iva-bloco"><dt>IVA cobrado</dt><dd>${euros(t.ivaCobrado)}</dd></div><div class="fin-iva-bloco"><dt>IVA dedutível</dt><dd>− ${euros(t.ivaDedutivel)}</dd></div>
+              <div class="fin-iva-total"><dt>${t.ivaPagar >= 0 ? "IVA a entregar" : "IVA a recuperar"}</dt><dd>${euros(Math.abs(t.ivaPagar))}</dd></div>
+              <div class="fin-res"><dt>Resultado</dt><dd class="${t.resultado < 0 ? "neg" : ""}">${euros(t.resultado)}</dd></div></dl>
             <button type="button" class="fin-exportar" data-exportar="${t.q}">Exportar para o contabilista (CSV)</button>
           </article>`).join("")}
         </div>
@@ -217,13 +243,19 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
 
   function exportarTrimestre(q) {
     const meses = [0, 1, 2].map((i) => `${ano}-${String((q - 1) * 3 + i + 1).padStart(2, "0")}`);
-    const linhasCsv = [["Data", "Tipo", "Categoria", "Descrição", "Cliente", "Valor (EUR)"]];
+    const linhasCsv = [["Data", "Tipo", "Categoria", "Descrição", "Cliente", "Valor sem IVA (EUR)", "Taxa IVA", "IVA (EUR)", "Total (EUR)"]];
+    const num = (c) => (c / 100).toFixed(2).replace(".", ",");
+    const valores = (tipo, valor, taxa) => { const i = ivaDe(tipo, valor, taxa); const base = tipo === "entrada" ? valor : valor - i; return [num(base), taxa ? `${taxa}%` : "Sem IVA", num(i), num(base + i)]; };
     for (const mes of meses) {
       const { fixas, pontuais } = M.linhas(mes);
-      fixas.filter((x) => x.valor > 0).forEach((x) => linhasCsv.push([x.ajuste?.data || `${mes}-01`, x.r.tipo === "entrada" ? "Entrada" : "Saída", CAT_REC[x.r.categoria], x.r.descricao, cliente(x.r.cliente_id)?.nome || "", (x.valor / 100).toFixed(2).replace(".", ",")]));
-      pontuais.forEach((x) => linhasCsv.push([x.data, x.tipo === "entrada" ? "Entrada" : "Saída", x.tipo === "entrada" ? "Serviço" : x.categoria || "Variável", x.descricao, cliente(x.cliente_id)?.nome || "", (x.valor_c / 100).toFixed(2).replace(".", ",")]));
+      fixas.filter((x) => x.valor > 0).forEach((x) => linhasCsv.push([x.ajuste?.data || `${mes}-01`, x.r.tipo === "entrada" ? "Entrada" : "Saída", CAT_REC[x.r.categoria], x.r.descricao, cliente(x.r.cliente_id)?.nome || "", ...valores(x.r.tipo, x.valor, x.r.iva)]));
+      pontuais.forEach((x) => linhasCsv.push([x.data, x.tipo === "entrada" ? "Entrada" : "Saída", x.tipo === "entrada" ? "Serviço" : x.categoria || "Variável", x.descricao, cliente(x.cliente_id)?.nome || "", ...valores(x.tipo, x.valor_c, x.iva)]));
     }
+    const cab = linhasCsv.shift();
     linhasCsv.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+    const tq = [0, 1, 2].map((i) => M.totais(meses[i])).reduce((a, t) => ({ c: a.c + t.ivaCobrado, d: a.d + t.ivaDedutivel }), { c: 0, d: 0 });
+    linhasCsv.unshift(cab);
+    linhasCsv.push([], ["", "", "", "IVA cobrado (liquidado)", "", "", "", num(tq.c), ""], ["", "", "", "IVA dedutível", "", "", "", num(tq.d), ""], ["", "", "", tq.c - tq.d >= 0 ? "IVA a entregar" : "IVA a recuperar", "", "", "", num(Math.abs(tq.c - tq.d)), ""]);
     const csv = "﻿" + linhasCsv.map((l) => l.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(";")).join("\r\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
@@ -231,6 +263,8 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
     document.body.append(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   }
+
+  function lerIva(tipo) { try { return Number(localStorage.getItem(`implement-fin-iva-${tipo}`) || 0); } catch { return 0; } }
 
   /* ===== Mês ===== */
   async function vistaMes(mes) {
@@ -245,12 +279,12 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
       const clientesAtivos = dados.clientes.filter((c) => c.ativo);
       const opClientes = (sel) => `<option value="">Cliente…</option>${clientesAtivos.map((c) => `<option value="${c.id}"${c.id === sel ? " selected" : ""}>${esc(c.nome)}</option>`).join("")}<option value="__novo">+ Novo cliente…</option>`;
       const linhaFixa = (x) => `<li class="fin-linha${x.valor === 0 ? " fin-linha--saltado" : ""}" data-rec="${x.r.id}">
-          <div class="fin-linha__desc"><strong>${esc(x.r.descricao)}</strong><span>${x.r.tipo === "entrada" ? esc(cliente(x.r.cliente_id)?.nome || "") : CAT_REC[x.r.categoria]}${x.r.periodicidade !== "mensal" ? ` · ${PERIODO[x.r.periodicidade]}` : ""}${x.ajuste ? (x.valor === 0 ? " · <em>não houve este mês</em>" : " · <em>ajustado este mês</em>") : ""}</span></div>
+          <div class="fin-linha__desc"><strong>${esc(x.r.descricao)}</strong><span>${x.r.tipo === "entrada" ? esc(cliente(x.r.cliente_id)?.nome || "") : CAT_REC[x.r.categoria]}${x.r.periodicidade !== "mensal" ? ` · ${PERIODO[x.r.periodicidade]}` : ""}${x.ajuste ? (x.valor === 0 ? " · <em>não houve este mês</em>" : " · <em>ajustado este mês</em>") : ""}${x.valor ? notaIva(x.r.tipo, x.valor, x.r.iva) : ""}</span></div>
           <label class="sr-only" for="aj-${x.r.id}">Valor em ${mesNome(mes)}</label>
           <input class="entrada fin-valor" id="aj-${x.r.id}" data-ajustar inputmode="decimal" value="${paraInput(x.valor)}" ${fecho ? "disabled" : ""}>
           <div class="fin-linha__acoes">${fecho ? "" : x.ajuste ? `<button type="button" data-repor title="Voltar ao valor habitual (${euros(x.r.valor_c)})">Repor</button>` : `<button type="button" data-saltar title="Não conta neste mês">Não houve</button>`}</div></li>`;
       const linhaPontual = (x) => `<li class="fin-linha" data-mov="${x.id}">
-          <div class="fin-linha__desc"><strong>${esc(x.descricao)}</strong><span>${new Date(x.data + "T12:00").toLocaleDateString("pt-PT", { day: "numeric", month: "short" })} · ${x.tipo === "entrada" ? esc(cliente(x.cliente_id)?.nome || "") : esc(x.categoria || "Variável")}</span></div>
+          <div class="fin-linha__desc"><strong>${esc(x.descricao)}</strong><span>${new Date(x.data + "T12:00").toLocaleDateString("pt-PT", { day: "numeric", month: "short" })} · ${x.tipo === "entrada" ? esc(cliente(x.cliente_id)?.nome || "") : esc(x.categoria || "Variável")}${notaIva(x.tipo, x.valor_c, x.iva)}</span></div>
           <span class="fin-linha__valor">${euros(x.valor_c)}</span>
           <div class="fin-linha__acoes">${fecho ? "" : `<button type="button" data-apagar-mov aria-label="Apagar ${esc(x.descricao)}">×</button>`}</div></li>`;
       const fixasSaida = fixas.filter((x) => x.r.tipo === "saida"), fixasEntrada = fixas.filter((x) => x.r.tipo === "entrada");
@@ -258,10 +292,11 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
       app.innerHTML = `${separadores("mes")}
         <div class="fin-mes-nav"><a href="#/financas/mes/${somaMes(mes, -1)}" aria-label="Mês anterior">‹</a><h2>${mesNome(mes)}</h2><a href="#/financas/mes/${somaMes(mes, 1)}" aria-label="Mês seguinte">›</a>
           ${fecho ? `<span class="selo selo--publicado">Fechado</span>` : futuro ? `<span class="selo selo--agendado">Mês futuro</span>` : `<span class="selo selo--rascunho">Em aberto</span>`}</div>
-        <div class="fin-kpis fin-kpis--mes">
-          <div class="fin-kpi"><p>Entradas</p><strong>${euros(t.entradas)}</strong></div>
-          <div class="fin-kpi"><p>Saídas</p><strong>${euros(t.saidas)}</strong></div>
-          <div class="fin-kpi fin-kpi--${t.resultado >= 0 ? "pos" : "neg"}"><p>Resultado</p><strong>${euros(t.resultado)}</strong></div>
+        <div class="fin-kpis">
+          <div class="fin-kpi"><p>Entradas</p><strong>${euros(t.entradas)}</strong><small>${t.ivaCobrado ? `${euros(t.entradasBase)} + IVA cobrado ${euros(t.ivaCobrado)}` : "Sem IVA cobrado"}</small></div>
+          <div class="fin-kpi"><p>Saídas</p><strong>${euros(t.saidas)}</strong><small>${t.ivaDedutivel ? `Inclui IVA dedutível ${euros(t.ivaDedutivel)}` : "Sem IVA dedutível"}</small></div>
+          <div class="fin-kpi fin-kpi--iva"><p>Separar para o IVA</p><strong>${euros(Math.max(0, t.ivaPagar))}</strong><small>${t.ivaPagar < 0 ? `Crédito de ${euros(-t.ivaPagar)} · ` : ""}${trimestreDe(mes) + 1}.º trimestre até agora: ${euros(mesesTrimestre(mes).filter((m) => m <= mes).reduce((s, m) => s + M.totais(m).ivaPagar, 0))}</small></div>
+          <div class="fin-kpi fin-kpi--${t.resultado >= 0 ? "pos" : "neg"}"><p>Resultado</p><strong>${euros(t.resultado)}</strong><small>O que fica, já sem o IVA a entregar</small></div>
         </div>
         <div class="fin-colunas">
           <section class="fin-cartao" aria-labelledby="fin-t-saidas">
@@ -273,7 +308,8 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
               <input class="entrada" type="date" name="data" value="${diaPadrao}" min="${mes}-01" max="${mes}-31" aria-label="Data" required>
               <input class="entrada" name="descricao" placeholder="O que foi?" aria-label="Descrição" maxlength="160" required>
               <select class="entrada" name="categoria" aria-label="Categoria">${CAT_VARIAVEIS.map((c) => `<option>${c}</option>`).join("")}</select>
-              <input class="entrada fin-valor" name="valor" inputmode="decimal" placeholder="0,00 €" aria-label="Valor" required>
+              <select class="entrada fin-nova__iva" name="iva" aria-label="IVA da fatura">${opIva(lerIva("saida"), "saida")}</select>
+              <input class="entrada fin-valor" name="valor" inputmode="decimal" placeholder="Total pago €" aria-label="Valor pago (com IVA, se houver)" required>
               <button class="botao botao--pequeno" type="submit"><span>Adicionar</span></button></form>`}
             ${varSaida.length ? `<ul class="fin-linhas">${varSaida.map(linhaPontual).join("")}</ul>` : `<p class="fin-vazio">Ainda sem gastos variáveis.</p>`}
           </section>
@@ -286,7 +322,8 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
               <input class="entrada" type="date" name="data" value="${diaPadrao}" min="${mes}-01" max="${mes}-31" aria-label="Data" required>
               <select class="entrada" name="cliente_id" aria-label="Cliente" required>${opClientes("")}</select>
               <input class="entrada" name="descricao" placeholder="Serviço feito" aria-label="Serviço" maxlength="160" required>
-              <input class="entrada fin-valor" name="valor" inputmode="decimal" placeholder="0,00 €" aria-label="Valor" required>
+              <select class="entrada fin-nova__iva" name="iva" aria-label="IVA">${opIva(lerIva("entrada"), "entrada")}</select>
+              <input class="entrada fin-valor" name="valor" inputmode="decimal" placeholder="Valor sem IVA €" aria-label="Valor sem IVA" required>
               <button class="botao botao--pequeno" type="submit"><span>Adicionar</span></button></form>`}
             ${pontEntrada.length ? `<ul class="fin-linhas">${pontEntrada.map(linhaPontual).join("")}</ul>` : `<p class="fin-vazio">Ainda sem serviços pontuais.</p>`}
           </section>
@@ -317,6 +354,11 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
         catch (e) { aviso(e.message, "erro"); ev.target.value = ""; }
         return;
       }
+      if (ev.target.name === "cliente_id" && ev.target.closest("[data-nova]")) {
+        const c = cliente(ev.target.value);
+        if (c) ev.target.closest("form").elements.iva.value = String(c.iva || 0);
+        return;
+      }
       if (ev.target.matches("[data-ajustar]")) {
         const li = ev.target.closest(".fin-linha");
         const r = dados.recorrentes.find((x) => x.id === li.dataset.rec);
@@ -331,6 +373,7 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
       const d = Object.fromEntries(new FormData(f));
       try {
         await enviar("movimentos", "POST", { ...d, tipo: f.dataset.nova });
+        try { localStorage.setItem(`implement-fin-iva-${f.dataset.nova}`, d.iva); } catch { /* sem armazenamento */ }
         aviso(f.dataset.nova === "entrada" ? "Serviço registado." : "Gasto registado.");
         await repintar();
         $(`[data-nova="${f.dataset.nova}"] [name="descricao"]`)?.focus();
@@ -350,7 +393,8 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
           <label>Tipo<select class="entrada" name="categoria">${Object.entries(CAT_REC).map(([k, v]) => `<option value="${k}"${r.categoria === k ? " selected" : ""}>${v}</option>`).join("")}</select></label>
           <label class="fin-form__cliente"${r.categoria === "avenca" ? "" : " hidden"}>Cliente<select class="entrada" name="cliente_id"><option value="">Escolher…</option>${opClientes(r.cliente_id)}</select></label>
           <label class="fin-form__largo">Descrição<input class="entrada" name="descricao" maxlength="140" required value="${esc(r.descricao || "")}" placeholder="ex.: Canva Pro"></label>
-          <label>Valor (€)<input class="entrada" name="valor" inputmode="decimal" required value="${r.valor_c ? paraInput(r.valor_c) : ""}" placeholder="0,00"></label>
+          <label><span data-rotulo-valor>${r.categoria === "avenca" ? "Valor sem IVA (€)" : "Valor pago (€)"}</span><input class="entrada" name="valor" inputmode="decimal" required value="${r.valor_c ? paraInput(r.valor_c) : ""}" placeholder="0,00"></label>
+          <label><span data-rotulo-iva>${r.categoria === "avenca" ? "IVA cobrado ao cliente" : "IVA na fatura"}</span><select class="entrada" name="iva">${opIva(r.iva, r.categoria === "avenca" ? "entrada" : "saida")}</select></label>
           <label>Repete<select class="entrada" name="periodicidade">${Object.entries(PERIODO).map(([k, v]) => `<option value="${k}"${(r.periodicidade || "mensal") === k ? " selected" : ""}>${v[0].toUpperCase() + v.slice(1)}</option>`).join("")}</select></label>
           <label>Desde<input class="entrada" type="month" name="inicio" required value="${r.inicio || mesAtual()}"></label>
           <label>Até <span class="opcional">(opcional)</span><input class="entrada" type="month" name="fim" value="${r.fim || ""}"></label>
@@ -371,17 +415,23 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
           return `<section class="fin-cartao"><div class="fin-cartao__cabeca"><h2>${t} <span>${euros(totalMes(k))} / mês</span></h2></div>
             ${l.length ? `<ul class="fin-linhas">${l.map((r) => editar === r.id ? `<li class="fin-linha fin-linha--editar">${formulario(r)}</li>` : `<li class="fin-linha${ativo(r) ? "" : " fin-linha--terminado"}" data-rec="${r.id}">
               <div class="fin-linha__desc"><strong>${esc(r.descricao)}</strong><span>${k === "avenca" ? esc(cliente(r.cliente_id)?.nome || "") + " · " : ""}desde ${MESES_CURTOS[Number(r.inicio.slice(5)) - 1]} ${r.inicio.slice(0, 4)}${r.fim ? ` até ${MESES_CURTOS[Number(r.fim.slice(5)) - 1]} ${r.fim.slice(0, 4)}` : ""}${ativo(r) ? "" : " · terminado"}</span></div>
-              <span class="fin-linha__valor">${euros(r.valor_c)} <small>${PERIODO[r.periodicidade]}</small></span>
+              <span class="fin-linha__valor">${euros(r.valor_c)} <small>${PERIODO[r.periodicidade]}</small><small class="fin-linha__iva">${r.iva ? (r.tipo === "entrada" ? `+ IVA ${r.iva}%` : `IVA ${r.iva}% dedutível`) : r.tipo === "entrada" ? "sem IVA" : ""}</small></span>
               <div class="fin-linha__acoes"><button type="button" data-editar>Editar</button>${ativo(r) && !r.fim ? '<button type="button" data-terminar title="Deixa de contar a partir do próximo mês">Terminar</button>' : ""}<button type="button" data-apagar-rec aria-label="Apagar">×</button></div></li>`).join("")}</ul>`
               : `<p class="fin-vazio">${dica}</p>`}</section>`;
         }).join("")}`;
     };
     desenhar();
     app.onchange = (ev) => {
+      const f = ev.target.closest("form");
       if (ev.target.name === "categoria") {
-        const f = ev.target.closest("form");
-        $(".fin-form__cliente", f).hidden = ev.target.value !== "avenca";
+        const av = ev.target.value === "avenca";
+        $(".fin-form__cliente", f).hidden = !av;
+        $("[data-rotulo-iva]", f).textContent = av ? "IVA cobrado ao cliente" : "IVA na fatura";
+        $("[data-rotulo-valor]", f).textContent = av ? "Valor sem IVA (€)" : "Valor pago (€)";
+        const v = f.elements.iva.value;
+        f.elements.iva.innerHTML = opIva(v, av ? "entrada" : "saida");
       }
+      if (ev.target.name === "cliente_id" && f) { const c = cliente(ev.target.value); if (c) f.elements.iva.value = String(c.iva || 0); }
     };
     app.onclick = async (ev) => {
       const li = ev.target.closest("[data-rec]");
@@ -434,6 +484,7 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
         <label class="fin-form__largo">Nome<input class="entrada" name="nome" required maxlength="120" value="${esc(c.nome || "")}" placeholder="ex.: Tasca do Mar"></label>
         <label>Contacto <span class="opcional">(opcional)</span><input class="entrada" name="contacto" maxlength="200" value="${esc(c.contacto || "")}" placeholder="e-mail ou telefone"></label>
         <label>NIF <span class="opcional">(opcional)</span><input class="entrada" name="nif" maxlength="20" value="${esc(c.nif || "")}"></label>
+        <label>Faturação<select class="entrada" name="iva">${opIva(c.iva, "entrada")}</select></label>
         <label class="fin-form__largo">Notas <span class="opcional">(opcional)</span><input class="entrada" name="notas" maxlength="600" value="${esc(c.notas || "")}"></label>
       </div><div class="fin-form__acoes"><button class="botao botao--pequeno" type="submit"><span>${c.id ? "Guardar" : "Acrescentar cliente"}</span></button>${c.id ? '<button type="button" class="fin-cancelar" data-cancelar>Cancelar</button>' : ""}</div></form>`;
     const desenhar = (editar = null) => {
@@ -441,10 +492,10 @@ export async function vistaFinancas(caminho, { app, api, aviso, esc, $, $$ }) {
       app.innerHTML = `${separadores("clientes")}
         <section class="fin-cartao"><h2 class="fin-titulo">Novo cliente</h2>${formulario()}</section>
         <section class="fin-cartao"><div class="fin-cartao__cabeca"><h2>Clientes <span>${dados.clientes.filter((c) => c.ativo).length} ativos</span></h2></div>
-        ${lista.length ? `<div class="fin-rolar"><table class="fin-tabela fin-tabela--clientes"><thead><tr><th>Cliente</th><th>Avença / mês</th><th>Serviços pontuais em ${ano}</th><th>Recebido em ${ano}</th><th></th></tr></thead><tbody>
-          ${lista.map(({ c, avenca, ano: total, servicos }) => editar === c.id ? `<tr><td colspan="5">${formulario(c)}</td></tr>` : `<tr data-cli="${c.id}"${c.ativo ? "" : ' class="inativo"'}>
+        ${lista.length ? `<div class="fin-rolar"><table class="fin-tabela fin-tabela--clientes"><thead><tr><th>Cliente</th><th>Faturação</th><th>Avença / mês</th><th>Serviços pontuais em ${ano}</th><th>Faturado em ${ano} <small>(sem IVA)</small></th><th></th></tr></thead><tbody>
+          ${lista.map(({ c, avenca, ano: total, servicos }) => editar === c.id ? `<tr><td colspan="6">${formulario(c)}</td></tr>` : `<tr data-cli="${c.id}"${c.ativo ? "" : ' class="inativo"'}>
             <td><strong>${esc(c.nome)}</strong>${c.contacto || c.nif ? `<small>${esc([c.contacto, c.nif && "NIF " + c.nif].filter(Boolean).join(" · "))}</small>` : ""}${c.ativo ? "" : "<small>Inativo</small>"}</td>
-            <td>${avenca ? euros(avenca) : "—"}</td><td>${servicos || "—"}</td><td><strong>${euros(total)}</strong></td>
+            <td>${c.iva ? `Com IVA ${c.iva}%` : "Sem IVA"}</td><td>${avenca ? euros(avenca) : "—"}</td><td>${servicos || "—"}</td><td><strong>${euros(total)}</strong></td>
             <td class="fin-acoes-tabela"><button type="button" data-editar>Editar</button><button type="button" data-ativo>${c.ativo ? "Desativar" : "Reativar"}</button><button type="button" data-apagar-cli aria-label="Apagar">×</button></td></tr>`).join("")}
           </tbody></table></div>` : `<p class="fin-vazio">Ainda sem clientes. Depois de os registar, junte as avenças em «Fixos e assinaturas» e os serviços pontuais em «Mês a mês».</p>`}</section>`;
     };
