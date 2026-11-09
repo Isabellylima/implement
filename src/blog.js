@@ -54,11 +54,13 @@ const JSON_H = { "Content-Type": "application/json; charset=utf-8", "Cache-Contr
 const json = (dados, estado = 200, extra = {}) => new Response(JSON.stringify(dados), { status: estado, headers: { ...JSON_H, ...extra } });
 const agora = () => new Date().toISOString();
 
+const METRICOOL = "https://tracker.metricool.com https://*.metricool.com";
 const CSP_BASE = "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
 const FRAMES = "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://www.loom.com https://www.instagram.com https://www.tiktok.com; media-src 'self'";
 const CABECALHOS_HTML = {
   "Content-Type": "text/html; charset=utf-8",
-  "Content-Security-Policy": `${CSP_BASE}; img-src 'self' data: https://i.ytimg.com; ${FRAMES}`,
+  // Páginas públicas: também o Metricool (estatísticas); a área da equipa usa só CSP_BASE
+  "Content-Security-Policy": `${CSP_BASE.replace("script-src 'self'", "script-src 'self' " + METRICOOL).replace("connect-src 'self'", "connect-src 'self' " + METRICOOL)}; img-src 'self' data: https://i.ytimg.com ${METRICOOL}; ${FRAMES}`,
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "Strict-Transport-Security": "max-age=31536000",
