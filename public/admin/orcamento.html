@@ -10,8 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
 <link rel="stylesheet" href="/assets/css/site.css?v=9072923bf3">
-<link rel="stylesheet" href="/assets/css/admin.css?v=6205509d25">
+<link rel="stylesheet" href="/assets/css/admin.css?v=a5937e28f6">
 <title>Orçamentos · Implement</title>
+<script src="/assets/js/admin-menu.js?v=43ebb83002" type="module"></script>
 <script src="/assets/js/admin-conta.js?v=1a9a325186" type="module"></script>
 <script src="/assets/js/orcamento.js?v=0ee5427260" type="module"></script>
 </head>
@@ -22,14 +23,32 @@
     <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Área da equipa</span></span>
   </a>
   <nav class="admin-topo__nav" aria-label="Área da equipa">
-    <a href="/admin/#/" data-rota="lista">Artigos</a>
-    <a href="/admin/#/autoras" data-rota="autoras">Autoras</a>
-    <a href="/admin/#/trabalhos" data-rota="trabalhos">Trabalhos</a>
-    <a href="/admin/#/marcas" data-rota="marcas">Marcas</a>
-    <a href="/admin/#/financas" data-rota="financas">Finanças</a>
-    <a href="/admin/orcamento" data-rota="orcamento" aria-current="page">Orçamentos</a>
-    <a href="/precario" target="_blank" rel="noopener">Preçário ↗</a>
-    <a href="/insights" target="_blank" rel="noopener">Ver blog ↗</a>
+    <div class="admin-grupo">
+      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-site">Site <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="admin-grupo__menu" id="menu-site" hidden>
+        <a href="/admin/#/" data-rota="lista">Artigos</a>
+        <a href="/admin/#/autoras" data-rota="autoras">Autoras</a>
+      </div>
+    </div>
+    <div class="admin-grupo">
+      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-portfolio">Portfólio <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="admin-grupo__menu" id="menu-portfolio" hidden>
+        <a href="/admin/#/trabalhos" data-rota="trabalhos">Trabalhos</a>
+        <a href="/admin/#/marcas" data-rota="marcas">Marcas</a>
+      </div>
+    </div>
+    <div class="admin-grupo">
+      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-financeiro">Financeiro <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="admin-grupo__menu" id="menu-financeiro" hidden>
+        <a href="/admin/#/financas" data-rota="financas">Finanças</a>
+        <a href="/admin/orcamento" data-rota="orcamento" aria-current="page">Orçamentos</a>
+        <div class="admin-grupo__linha">
+          <a href="/precario" target="_blank" rel="noopener">Preçário ↗</a>
+          <button type="button" class="admin-grupo__copiar" data-copiar="/precario" title="Copiar o link do preçário para enviar a um cliente">Copiar link</button>
+        </div>
+      </div>
+    </div>
+    <a class="admin-topo__ver" href="/" target="_blank" rel="noopener">Ver site ↗</a>
   </nav>
   <div class="admin-topo__conta"><span id="conta"></span><button type="button" id="sair">Sair</button></div>
 </header>
