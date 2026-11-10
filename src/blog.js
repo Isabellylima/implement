@@ -55,7 +55,7 @@ const json = (dados, estado = 200, extra = {}) => new Response(JSON.stringify(da
 const agora = () => new Date().toISOString();
 
 const METRICOOL = "https://tracker.metricool.com https://*.metricool.com";
-const CSP_BASE = "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.bunny.net; font-src 'self' https://fonts.bunny.net; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+const CSP_BASE = "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
 const FRAMES = "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://www.loom.com https://www.instagram.com https://www.tiktok.com; media-src 'self'";
 const CABECALHOS_HTML = {
   "Content-Type": "text/html; charset=utf-8",
