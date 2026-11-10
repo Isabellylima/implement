@@ -11,7 +11,7 @@ const BEE='<svg viewBox="0 0 64 40" class="bee"><ellipse cx="17" cy="15" rx="15"
 /* kind: imp = só Implement · col = collab (nos dois feeds) · eisa = só Izza */
 const posts=[
 /* ---------- IMPLEMENT (terças) ---------- */
-{id:"P1",kind:"imp",date:"2026-11-10",fmt:"Reel",pillar:"Marca · rebranding",
+{id:"P1",kind:"imp",date:"2026-11-17",fmt:"Reel",pillar:"Marca · rebranding",
  tile:BEE+'<div class="h">Nova fase.<br><mark>A mesma intenção.</mark></div>',
  title:"Nova fase, a mesma intenção",
  visual:"<b>Reel de 10–15 s.</b> O logótipo antigo dá lugar à abelha, que ganha vida com um movimento suave. Frase final: “Nova fase. A mesma intenção.”",
@@ -27,7 +27,7 @@ New identity, same intention.
 Like bees, we believe in steady, organised teamwork that helps every business grow its online presence with consistency.
 
 💬 Let’s talk about your business.`,tags:"#rebranding #novaidentidade"},
-{id:"P2",kind:"imp",date:"2026-11-17",fmt:"Carrossel",pillar:"Presença digital",photo:"detalhe",
+{id:"P2",kind:"imp",date:"2026-11-24",fmt:"Carrossel",pillar:"Presença digital",photo:"detalhe",
  tile:'<div class="h">5 sinais de que a sua presença digital <mark>precisa de atenção</mark></div>',
  title:"5 sinais de que a sua presença digital precisa de atenção",
  visual:"<b>Carrossel de 7 slides.</b> Capa design; no meio, alternar slides de texto com fotos de detalhe do ensaio (mãos no telemóvel, ecrã) com o sinal escrito por cima:",
@@ -44,7 +44,7 @@ An outdated online presence sends a message, even when business is going well.
 Swipe through the 5 most common signs it’s time to get organised. How many do you recognise?
 
 💬 Let’s talk about your business.`,tags:"#redessociais #socialmedia"},
-{id:"P3",kind:"imp",date:"2026-11-24",fmt:"Estático",pillar:"Empreendedores reais",
+{id:"P3",kind:"imp",date:"2026-12-01",fmt:"Estático",pillar:"Empreendedores reais",
  tile:'<div class="h">Não precisa de estar em todas as redes. Precisa de estar bem nas <mark><b>certas</b></mark>.</div>',
  title:"Não precisa de estar em todas as redes",
  visual:"<b>Post estático.</b> Frase em Bodoni, palavra “certas” em roxo marcada a amarelo. Abelha pequena no canto.",
@@ -60,7 +60,7 @@ You need to be good on the right ones: where your clients already are, with a cl
 Less noise, better results. That’s where we start with every client.
 
 💬 Let’s talk about your business.`,tags:"#empreendedorismo #pme"},
-{id:"P4",kind:"imp",date:"2026-12-01",fmt:"Carrossel",pillar:"Portfólio",
+{id:"P4",kind:"imp",date:"2026-12-08",fmt:"Carrossel",pillar:"Portfólio",
  tile:'<div class="s">Antes</div><div class="h u-my2">→</div><div class="s s-roxo">Depois</div>',
  title:"Antes e depois: um caso real",
  visual:"<b>Carrossel de 6 slides</b> com um cliente real:",
@@ -78,7 +78,7 @@ With [Client name], we started by listening: what the business does best, who it
 Then we organised everything: identity, messaging and content with a clear direction. Swipe to see the before and after.
 
 💬 Let’s talk about your business.`,tags:"#portfolio #antesedepois"},
-{id:"P5",kind:"imp",date:"2026-12-08",fmt:"Reel",pillar:"Novas tecnologias",
+{id:"P5",kind:"imp",date:"2027-01-05",fmt:"Reel",pillar:"Novas tecnologias",
  tile:'<div class="h">IA no seu negócio: <mark>por onde começar?</mark></div>',
  title:"IA no seu negócio: o que faz sentido",
  visual:"<b>Reel de 30–40 s</b> com texto animado sobre detalhes do ensaio (mãos no portátil): responder mais depressa a perguntas frequentes; organizar o calendário de conteúdo; perceber o que resulta. Fecho: “A IA ajuda. Quem conhece o seu cliente é você.”",
@@ -95,7 +95,7 @@ You don’t need to be a tech expert to benefit from it. Simple uses can give yo
 What AI won’t replace: knowing your clients and communicating honestly. That’s where we work alongside you.
 
 💬 Let’s talk about your business.`,tags:"#inteligenciaartificial #aiformarketing"},
-{id:"P6",kind:"imp",date:"2026-12-15",fmt:"Carrossel",pillar:"Estratégia",photo:"detalhe",
+{id:"P6",kind:"imp",date:"2026-12-29",fmt:"Carrossel",pillar:"Estratégia",photo:"detalhe",
  tile:'<div class="h">Prepare 2027 em <mark>4 perguntas</mark></div>',
  title:"Prepare 2027 em 4 perguntas",
  visual:"<b>Carrossel de 6 slides</b>, para guardar. Cada pergunta sobre uma foto de detalhe (agenda, caneta, café) com véu lilás:",
@@ -128,7 +128,7 @@ People who open their doors every day, even when it’s hard, and who trusted us
 Thank you for letting us into your business. Happy holidays, see you in 2027.
 
 💬 Count on us in 2027.`,tags:"#bastidores #boasfestas"},
-{id:"P8",kind:"imp",date:"2026-12-29",fmt:"Carrossel",pillar:"Presença digital · Google",
+{id:"P8",kind:"imp",date:"2026-12-15",fmt:"Carrossel",pillar:"Presença digital · Google",
  tile:'<div class="h">Google Business: <mark>6 ajustes</mark> antes de janeiro</div>',
  title:"Google Business: 6 ajustes antes de janeiro",
  visual:"<b>Carrossel de 8 slides</b> em checklist, lilás com visto amarelo:",
@@ -145,7 +145,7 @@ Wrong opening hours, old photos or unanswered reviews push clients away before t
 Here are 6 simple fixes to start the year with your profile in order. Save it for later.
 
 💬 Let’s talk about your business.`,tags:"#googlebusiness #negociolocal"},
-{id:"P9",kind:"imp",date:"2027-01-05",fmt:"Reel",pillar:"A Implement como solução",
+{id:"P9",kind:"imp",date:"2027-01-12",fmt:"Reel",pillar:"A Implement como solução",
  tile:'<div class="h">Você cuida do negócio. <b><mark>Nós tratamos do digital.</mark></b></div>',
  title:"2027: a sua presença digital, resolvida",
  visual:"<b>Reel curto</b> com os 6 serviços a passar sobre detalhes do ensaio. Capa com a frase do site. Termina no ecrã do heyimplement.com.",
@@ -164,7 +164,7 @@ Implement handles your social media, content, branding, website and Google Busin
 💬 Book a call.`,tags:"#marketingportugal #agenciadigital"},
 
 /* ---------- COLLAB Izza × Implement (quintas) ---------- */
-{id:"C1",kind:"col",date:"2026-11-12",fmt:"Carrossel",pillar:"Apresentação",photo:"retrato",
+{id:"C1",kind:"col",date:"2026-11-19",fmt:"Carrossel",pillar:"Apresentação",photo:"retrato",
  tile:'<div class="h">Quem está por trás da <mark>Implement?</mark></div>',
  title:"Quem está por trás da Implement",
  visual:"<b>Carrossel de 5 slides.</b> Capa design, sem rosto. A partir do 2.º slide entra o teu retrato do ensaio:",
@@ -181,7 +181,7 @@ I’m Isabelly, part of the marketing and communication team. Every day I help b
 From now on I’ll share what I learn here, in a simple way.
 
 💬 Let’s talk about your business.`,tags:"#equipa #bastidores"},
-{id:"C2",kind:"col",date:"2026-11-19",fmt:"Reel",pillar:"Bastidores",photo:"detalhe",
+{id:"C2",kind:"col",date:"2026-11-26",fmt:"Reel",pillar:"Bastidores",photo:"detalhe",
  tile:'<div class="s">Um dia na</div><div class="h u-mt2">Implement</div>',
  title:"Um dia de trabalho na Implement",
  visual:"<b>Reel de 20–30 s</b> com cortes rápidos de detalhes: café, agenda aberta, mãos no portátil, telemóvel a gravar, ecrã de edição. Texto no ecrã: 9h planeamento · 11h gravação · 15h edição · 17h relatório.",
@@ -197,7 +197,7 @@ Planning, filming, editing and reviewing. Behind every post there are hours of o
 That’s the invisible work, and that’s why it works.
 
 💬 Let’s talk about your business.`,tags:"#diadetrabalho #bastidores"},
-{id:"C3",kind:"col",date:"2026-11-26",fmt:"Carrossel",pillar:"Gestão de tempo",
+{id:"C3",kind:"col",date:"2026-12-03",fmt:"Carrossel",pillar:"Gestão de tempo",
  tile:'<div class="h">O que delegar <mark>primeiro</mark> no seu negócio</div>',
  title:"O que delegar primeiro no seu negócio",
  visual:"<b>Carrossel de 6 slides</b>, só design:",
@@ -214,7 +214,7 @@ Delegating isn’t losing control, it’s choosing where your time matters most.
 Swipe for the 4 criteria we use with clients to decide what comes off the owner’s list first.
 
 💬 Let’s talk about your business.`,tags:"#gestaodotempo #delegar"},
-{id:"C4",kind:"col",date:"2026-12-03",fmt:"Carrossel",pillar:"Novas apps",photo:"detalhe",
+{id:"C4",kind:"col",date:"2026-12-10",fmt:"Carrossel",pillar:"Novas apps",photo:"detalhe",
  tile:'<div class="h">4 apps que todo pequeno negócio <mark>devia conhecer</mark></div>',
  title:"4 apps que todo pequeno negócio devia conhecer",
  visual:"<b>Carrossel de 6 slides.</b> Cada app com uma foto de detalhe (mão a segurar o telemóvel) e o ícone desenhado de forma simples, sem logótipos oficiais:",
@@ -231,7 +231,7 @@ These 4 apps handle everyday tasks for any small business: designing, scheduling
 Save it to try later. And if you’d rather someone handled it for you, we’re here.
 
 💬 Let’s talk about your business.`,tags:"#apps #ferramentasdigitais"},
-{id:"C5",kind:"col",date:"2026-12-10",fmt:"Carrossel",pillar:"Portfólio · processo",photo:"detalhe",
+{id:"C5",kind:"col",date:"2027-01-07",fmt:"Carrossel",pillar:"Portfólio · processo",photo:"detalhe",
  tile:'<div class="h">Do diagnóstico ao post</div><div class="s u-f9 u-mt3">como trabalhamos</div>',
  title:"Do diagnóstico ao post: como trabalhamos",
  visual:"<b>Carrossel de 6 slides</b> com o processo do site, em sequência real:",
@@ -266,7 +266,7 @@ This is the starting prompt we use with AI:
 Then we review everything with a human eye. AI brings ideas, strategy chooses.
 
 💬 Let’s talk about your business.`,tags:"#prompt #inteligenciaartificial"},
-{id:"C7",kind:"col",date:"2026-12-23",fmt:"Reel",pillar:"Empreendedores reais",photo:"retrato",
+{id:"C7",kind:"col",date:"2026-12-24",fmt:"Reel",pillar:"Empreendedores reais",photo:"retrato",
  tile:'<div class="h">Quem cuida do negócio também precisa de <mark>cuidado</mark></div>',
  title:"Quem cuida do negócio também precisa de cuidado",
  visual:"<b>Reel falado, 40–60 s.</b> Tu à câmara, tom calmo. Três ideias: horários com fim, delegar o que pesa, pedir ajuda cedo. Liga à tua história sem repetir os detalhes.",
@@ -282,7 +282,7 @@ Running a business is tiring. When your mind isn’t well, the business feels it
 To close the year, three reminders: put an end to your workday, delegate what weighs on you and ask for help early, from friends or a professional.
 
 💬 Happy holidays. Count on us in 2027.`,tags:"#saudemental #empreendedorismo"},
-{id:"C8",kind:"col",date:"2026-12-30",fmt:"Carrossel",pillar:"Presença digital",
+{id:"C8",kind:"col",date:"2026-12-31",fmt:"Carrossel",pillar:"Presença digital",
  tile:'<div class="h">3 lições de 2026 sobre <mark>presença digital</mark></div>',
  title:"3 lições de 2026 sobre presença digital",
  visual:"<b>Carrossel de 5 slides</b>, só design:",
@@ -299,7 +299,7 @@ Post consistently, show real people and say clearly what you do. It sounds simpl
 We’re taking these three lessons into 2027, with every client.
 
 💬 Let’s talk about your business.`,tags:"#retrospetiva #licoes2026"},
-{id:"C9",kind:"col",date:"2027-01-07",fmt:"Reel",pillar:"Novas tecnologias",photo:"retrato",
+{id:"C9",kind:"col",date:"2027-01-14",fmt:"Reel",pillar:"Novas tecnologias",photo:"retrato",
  tile:'<div class="h">O que observar no digital <mark>em 2027</mark></div>',
  title:"O que observar no digital em 2027",
  visual:"<b>Reel falado.</b> Três pontos com texto no ecrã: vídeo curto continua forte; as pessoas também perguntam a assistentes de IA, por isso o site e o Google precisam de informação clara; o perfil do Google é a montra local.",
@@ -317,7 +317,7 @@ You don’t need to do everything. You need to do what matters, well.
 💬 Let’s talk about your business.`,tags:"#tendencias2027 #inteligenciaartificial"},
 
 /* ---------- EISA pessoal (segundas) ---------- */
-{id:"E1",kind:"eisa",date:"2026-11-09",fmt:"Reel",pillar:"Pessoal · regresso",photo:"retrato",
+{id:"E1",kind:"eisa",date:"2026-11-16",fmt:"Reel",pillar:"Pessoal · regresso",photo:"retrato",
  tile:SIL+'<div class="h">Voltei. E com mais <mark>clareza</mark> do que nunca.</div>',
  title:"Voltei, e com mais clareza do que nunca",
  visual:"<b>Reel falado, 60–90 s.</b> Luz suave, fundo simples, tom leve. Roteiro:",
@@ -334,7 +334,7 @@ Por aqui vou partilhar o que eu descubro sobre IA, tecnologia, organização e f
 Se você está numa fase difícil, fala com alguém. Ninguém precisa passar por isso sozinho.
 
 💬 Bora recomeçar junto?`,tags:"#recomeço #tdah"},
-{id:"E2",kind:"eisa",date:"2026-11-16",fmt:"Reel",pillar:"Gestão de tempo",photo:"retrato",
+{id:"E2",kind:"eisa",date:"2026-11-23",fmt:"Reel",pillar:"Gestão de tempo",photo:"retrato",
  tile:SIL+'<div class="h">Como organizo a semana com a cabeça <mark>a mil</mark></div>',
  title:"Como organizo a semana com a cabeça a mil",
  visual:"<b>Reel falado, 40–60 s</b>, luz lilás. Quatro pontos com texto no ecrã:",
@@ -346,7 +346,7 @@ O que funciona comigo: tirar tudo da cabeça no domingo, escolher só 3 priorida
 No vídeo mostro como monto a minha semana. Salva pra testar no domingo.
 
 💬 E você, como organiza a sua?`,tags:"#organizacao #rotina"},
-{id:"E3",kind:"eisa",date:"2026-11-23",fmt:"Reel",pillar:"Novas apps",photo:"retrato",
+{id:"E3",kind:"eisa",date:"2026-11-30",fmt:"Reel",pillar:"Novas apps",photo:"retrato",
  tile:SIL+'<div class="h">3 apps que <mark>organizam</mark> a minha cabeça</div>',
  title:"3 apps que organizam a minha cabeça",
  visual:"<b>Reel</b> com gravação de ecrã do teu telemóvel intercalada contigo a falar:",
@@ -358,7 +358,7 @@ Uso 3 apps todos os dias: uma pro tempo, uma pras tarefas e uma pras ideias. Nen
 No vídeo mostro como uso cada uma. Qual delas você já usa?
 
 💬 Me conta nos comentários.`,tags:"#apps #produtividadedigital"},
-{id:"E4",kind:"eisa",date:"2026-11-30",fmt:"Reel",pillar:"IA no dia a dia",photo:"retrato",
+{id:"E4",kind:"eisa",date:"2026-12-07",fmt:"Reel",pillar:"IA no dia a dia",photo:"retrato",
  tile:SIL+'<div class="h">Planejo a semana com IA em <mark>10 minutos</mark></div>',
  title:"Como uso IA para planejar a semana em 10 minutos",
  visual:"<b>Reel falado + gravação de ecrã</b> do prompt a correr num assistente de IA. Mostra o antes (lista bagunçada) e o depois (semana organizada).",
@@ -370,7 +370,7 @@ O prompt que uso toda segunda:
 Em 10 minutos tenho a semana no papel. A decisão final continua sendo minha.
 
 💬 Salva e testa amanhã.`,tags:"#ia #prompt"},
-{id:"E5",kind:"eisa",date:"2026-12-07",fmt:"Reel",pillar:"Pessoal · criança interior",photo:"retrato",
+{id:"E5",kind:"eisa",date:"2026-12-14",fmt:"Reel",pillar:"Pessoal · criança interior",photo:"retrato",
  tile:SIL+'<div class="h">Voltei a fazer o que eu amava <mark>aos 10 anos</mark></div>',
  title:"Voltei a fazer o que eu amava em criança",
  visual:"<b>Reel falado</b>, com 2 ou 3 cortes de ti a fazer essas coisas (ler, desenhar, ouvir música, o que for). Fecha com um sonho que realizaste este ano.",
@@ -382,7 +382,7 @@ A resposta me levou de volta a [coisa que amavas fazer], a [outra] e a [outra]. 
 Olhar pra criança que eu fui me lembrou do que me move. E isso aparece no meu trabalho também.
 
 💬 O que você amava fazer quando era criança?`,tags:"#criancainterior #sonhos"},
-{id:"E6",kind:"eisa",date:"2026-12-14",fmt:"Reel",pillar:"Filosofia × IA",photo:"retrato",
+{id:"E6",kind:"eisa",date:"2027-01-04",fmt:"Reel",pillar:"Filosofia × IA",photo:"retrato",
  tile:SIL+'<div class="h">O que Sócrates perguntaria a uma <mark>IA?</mark></div>',
  title:"O que Sócrates perguntaria a uma IA?",
  visual:"<b>Reel falado, 45–60 s.</b> Ideia central: Sócrates ensinava a perguntar, não a responder. A IA dá respostas em segundos, por isso o valor passa a estar na pergunta. Fecha com um exemplo de pergunta boa vs. fraca a uma IA.",
@@ -393,7 +393,7 @@ Uma pergunta vaga dá uma resposta vaga, com gente ou com IA. Uma pergunta boa m
 
 No vídeo mostro a diferença na prática.
 
-💬 Qual foi a melhor pergunta que você fez esse ano?`,tags:"#filosofia #socrates"},
+💬 Qual pergunta você quer fazer em 2027?`,tags:"#filosofia #socrates"},
 {id:"E7",kind:"eisa",date:"2026-12-21",fmt:"Reel",pillar:"Filosofia × tempo",photo:"retrato",
  tile:SIL+'<div class="h">Sêneca e o tempo: a vida não é <mark>curta</mark></div>',
  title:"Sêneca e o tempo: a vida não é curta",
@@ -418,7 +418,7 @@ Realizei sonhos: [sonho 1], [sonho 2], [sonho 3].
 Entro em 2027 com o trabalho a todo vapor e a cabeça no lugar.
 
 💜 Obrigada a quem esteve por perto.`,tags:"#retrospectiva2026 #sonhosrealizados"},
-{id:"E9",kind:"eisa",date:"2027-01-04",fmt:"Reel",pillar:"Filosofia × IA",photo:"retrato",
+{id:"E9",kind:"eisa",date:"2027-01-11",fmt:"Reel",pillar:"Filosofia × IA",photo:"retrato",
  tile:SIL+'<div class="h">A IA vai <mark>pensar</mark> por nós?</div>',
  title:"A IA vai pensar por nós?",
  visual:"<b>Reel falado + ecrã.</b> A evolução da IA em 2026 em 3 frases, e a tua posição: usar a IA para pensar melhor, não para deixar de pensar. Mostra as ferramentas que usas no dia a dia (assistente de IA, NotebookLM, CapCut, Canva).",
@@ -433,7 +433,7 @@ Em 2027 quero usar a tecnologia pra ter mais tempo pra pensar, não menos.
 💬 E você, como está usando a IA?`,tags:"#evolucaodaia #filosofia"},
 
 /* ---------- JESS pessoal (quartas) ---------- */
-{id:"J1",kind:"jess",date:"2026-11-11",fmt:"Reel",pillar:"Apresentação",pl:"Foto/vídeo da Jess",
+{id:"J1",kind:"jess",date:"2026-11-18",fmt:"Reel",pillar:"Apresentação",pl:"Foto/vídeo da Jess",
  tile:SIL+'<div class="h">Mãe, designer e a <mark>recomeçar</mark></div>',
  title:"Mãe, designer e a recomeçar",
  visual:"<b>Reel falado, 45–60 s</b>, espontâneo, em casa. Roteiro:",
@@ -446,7 +446,7 @@ Hoje trabalho com design e redes sociais para negócios locais, estou a estudar 
 Por aqui vou partilhar isso tudo: o trabalho, as cores que me inspiram, a casa, as viagens e os dias que não correm como planeado.
 
 💬 Conta-me: também estás a mudar de rumo?`,tags:"#maedobento #recomeco"},
-{id:"J2",kind:"jess",date:"2026-11-18",fmt:"Reel",pillar:"Trabalhar de casa",pl:"Foto/vídeo da Jess",
+{id:"J2",kind:"jess",date:"2026-11-25",fmt:"Reel",pillar:"Trabalhar de casa",pl:"Foto/vídeo da Jess",
  tile:SIL+'<div class="h">Trabalhar de casa com um bebé: <mark>a verdade</mark></div>',
  title:"Trabalhar de casa com um bebé de 8 meses",
  visual:"<b>Reel “um dia comigo”</b>, cortes rápidos com texto no ecrã: as sestas viram blocos de trabalho; tarefas leves com ele ao colo; o computador abre de novo quando ele dorme à noite.",
@@ -456,7 +456,7 @@ Por aqui vou partilhar isso tudo: o trabalho, as cores que me inspiram, a casa, 
 E está tudo bem. O importante é avançar um bocadinho todos os dias.
 
 💬 Quem também trabalha com os filhos por perto?`,tags:"#trabalharemcasa #maetrabalhadora"},
-{id:"J3",kind:"jess",date:"2026-11-25",fmt:"Carrossel",pillar:"TBT · viagens",pl:"Fotos de viagem da Jess",
+{id:"J3",kind:"jess",date:"2026-12-02",fmt:"Carrossel",pillar:"TBT · viagens",pl:"Fotos de viagem da Jess",
  tile:SIL+'<div class="s">tbt</div><div class="h u-mt2">5 lugares da Europa que <mark>não esqueço</mark></div>',
  title:"TBT: 5 lugares da Europa que não esqueço",
  visual:"<b>Carrossel de 6–8 fotos de viagem</b> da Jess. Primeira foto com o título; nas seguintes, só o nome do lugar num cantinho rosa.",
@@ -472,7 +472,7 @@ E está tudo bem. O importante é avançar um bocadinho todos os dias.
 O que tenho mais saudades? As cores. Cada cidade tem a sua paleta, e é aí que vou buscar muita inspiração para o meu trabalho.
 
 💬 Qual destes já visitaste?`,tags:"#tbt #viagenseuropa"},
-{id:"J4",kind:"jess",date:"2026-12-02",fmt:"Reel",pillar:"Criatividade · cerâmica fria",pl:"Vídeo da Jess",
+{id:"J4",kind:"jess",date:"2026-12-09",fmt:"Reel",pillar:"Criatividade · cerâmica fria",pl:"Vídeo da Jess",
  tile:SIL+'<div class="h">Enfeites de Natal em <mark>cerâmica fria</mark></div>',
  title:"Enfeites de Natal em cerâmica fria",
  visual:"<b>Reel de processo</b>, de cima, com as mãos da Jess: amassar, moldar, pintar. Voz off ou texto no ecrã com os materiais.",
@@ -482,7 +482,7 @@ A cerâmica fria foi o meu hobby durante muito tempo, e este Natal voltei a ela 
 Só precisas de massa de cerâmica fria, um rolo, cortadores de bolachas e tinta. Deixa secar bem antes de pintar.
 
 💬 Queres o passo a passo completo? Diz-me nos comentários.`,tags:"#ceramicafria #diynatal"},
-{id:"J5",kind:"jess",date:"2026-12-09",fmt:"Reel",pillar:"Transição de carreira",pl:"Foto/vídeo da Jess",
+{id:"J5",kind:"jess",date:"2027-01-06",fmt:"Reel",pillar:"Transição de carreira",pl:"Foto/vídeo da Jess",
  tile:SIL+'<div class="h">Voltei a <mark>estudar</mark> (com um bebé ao colo)</div>',
  title:"Voltei a estudar",
  visual:"<b>Reel falado</b>, à secretária. O que está a estudar (design, social media, estratégia), como encaixa o estudo no dia e porque decidiu mudar.",
@@ -505,7 +505,7 @@ O truque? Uma peça com cor, mesmo nos dias mais simples.
 {id:"J7",kind:"jess",date:"2026-12-23",fmt:"Reel",pillar:"Decoração",pl:"Vídeo da Jess",
  tile:SIL+'<div class="h">Mesa de Natal com o que <mark>já tens em casa</mark></div>',
  title:"Mesa de Natal com o que já tens em casa",
- visual:"<b>Reel antes e depois</b> da mesa: escolher 3 cores, juntar texturas (linho, madeira, verde natural), usar os enfeites de cerâmica fria do post de 2 dez.",
+ visual:"<b>Reel antes e depois</b> da mesa: escolher 3 cores, juntar texturas (linho, madeira, verde natural), usar os enfeites de cerâmica fria do post de 9 dez.",
  cap:`Uma mesa de Natal bonita não precisa de compras novas. 🎄
 
 Escolhe 3 cores, junta texturas diferentes e traz um pouco de natureza para a mesa. O resto já está em casa.
@@ -522,7 +522,7 @@ Mudei de carreira, voltei a estudar e comecei a trabalhar com o que me faz feliz
 Nem tudo foi fácil, mas olho para trás com muito orgulho.
 
 💛 Obrigada a quem acompanhou. Venha 2027.`,tags:"#retrospetiva #maternidade"},
-{id:"J9",kind:"jess",date:"2027-01-06",fmt:"Reel",pillar:"Viagens",pl:"Foto/vídeo da Jess",
+{id:"J9",kind:"jess",date:"2027-01-13",fmt:"Reel",pillar:"Viagens",pl:"Foto/vídeo da Jess",
  tile:SIL+'<div class="h">Onde quero levar o Bento <mark>em 2027</mark></div>',
  title:"Onde quero levar o Bento em 2027",
  visual:"<b>Reel falado</b> com fotos dos destinos a passar: 3 lugares na Europa que quer visitar em família e porquê.",
@@ -539,7 +539,7 @@ Viajar com bebé é outra aventura, mas quero que ele cresça a conhecer o mundo
 💬 Dicas de viagens com bebés são muito bem-vindas!`,tags:"#viajarcombebe #europa"},
 
 /* ---------- COLLAB Jess × Implement (sábados) ---------- */
-{id:"K1",kind:"jcol",date:"2026-11-14",fmt:"Carrossel",pillar:"Apresentação",pl:"Retrato da Jess (slide 2)",
+{id:"K1",kind:"jcol",date:"2026-11-21",fmt:"Carrossel",pillar:"Apresentação",pl:"Retrato da Jess (slide 2)",
  tile:'<div class="h">Quem dá <mark>forma</mark> às marcas da Implement?</div>',
  title:"Quem dá forma às marcas da Implement",
  visual:"<b>Carrossel de 5 slides.</b> Capa design, sem rosto; retrato da Jess no 2.º slide:",
@@ -556,7 +556,7 @@ Jess is our designer. She creates visual identities, menus, price lists and cont
 She turns strategy into something you can see.
 
 💬 Let’s talk about your business.`,tags:"#design #equipa"},
-{id:"K2",kind:"jcol",date:"2026-11-21",fmt:"Carrossel",pillar:"Design · cor",
+{id:"K2",kind:"jcol",date:"2026-11-28",fmt:"Carrossel",pillar:"Design · cor",
  tile:'<div class="h">Como escolher as <mark>cores</mark> da sua marca</div>',
  title:"Como escolher as cores da sua marca",
  visual:"<b>Carrossel de 6 slides</b> com amostras de cor:",
@@ -573,7 +573,7 @@ It’s not about your favourite colour, it’s about what you want clients to fe
 Swipe to see how we choose palettes for local businesses, in 5 simple steps.
 
 💬 Let’s talk about your business.`,tags:"#paletadecores #identidadevisual"},
-{id:"K3",kind:"jcol",date:"2026-11-28",fmt:"Carrossel",pillar:"Negócios locais",
+{id:"K3",kind:"jcol",date:"2026-12-05",fmt:"Carrossel",pillar:"Negócios locais",
  tile:'<div class="h">Menus e preçários que <mark>vendem</mark></div>',
  title:"Menus e preçários que vendem: 5 dicas",
  visual:"<b>Carrossel de 7 slides</b> com exemplos ilustrados (sem marcas reais):",
@@ -590,7 +590,7 @@ In restaurants, services or retail, the price list is one of the most-seen piece
 Here are 5 tips we always use when designing one. Save it to review yours.
 
 💬 Let’s talk about your business.`,tags:"#menu #restauracao"},
-{id:"K4",kind:"jcol",date:"2026-12-05",fmt:"Reel",pillar:"Fotografia",pl:"Vídeo da Jess",
+{id:"K4",kind:"jcol",date:"2026-12-19",fmt:"Reel",pillar:"Fotografia",pl:"Vídeo da Jess",
  tile:'<div class="h">Fotos de produto com o telemóvel: <mark>4 truques</mark></div>',
  title:"Fotos de produto com o telemóvel: 4 truques",
  visual:"<b>Reel</b> com a Jess a mostrar ao vivo: luz de janela de lado, fundo neutro, limpar a lente, fotografar de cima e a 45°. Capa é só a frase.",
@@ -606,7 +606,7 @@ Side natural light, a simple background, a clean lens and two good angles change
 Jess shows how we do it in our client sessions.
 
 💬 Let’s talk about your business.`,tags:"#fotografiadeproduto #dicasdefoto"},
-{id:"K5",kind:"jcol",date:"2026-12-12",fmt:"Reel",pillar:"Bastidores · sessão",pl:"Vídeo da Jess",
+{id:"K5",kind:"jcol",date:"2027-01-02",fmt:"Reel",pillar:"Bastidores · sessão",pl:"Vídeo da Jess",
  tile:'<div class="s">bastidores</div><div class="h u-mt2">de uma sessão para um <mark>negócio local</mark></div>',
  title:"Bastidores de uma sessão fotográfica",
  visual:"<b>Reel de bastidores</b> numa sessão com um cliente: montar a luz, escolher props com a paleta da marca, o resultado final.",
@@ -623,7 +623,7 @@ Before shooting, we pick colours and props that match the brand identity. Then i
 The result: images that look like the business, not stock photos.
 
 💬 Let’s talk about your business.`,tags:"#bastidores #fotografia"},
-{id:"K6",kind:"jcol",date:"2026-12-19",fmt:"Carrossel",pillar:"Design · Natal",
+{id:"K6",kind:"jcol",date:"2026-12-12",fmt:"Carrossel",pillar:"Design · Natal",
  tile:'<div class="h">Natal no feed sem perder a <mark>identidade</mark></div>',
  title:"Natal no feed sem perder a identidade",
  visual:"<b>Carrossel de 5 slides</b>, com exemplos de antes e depois desenhados:",
@@ -656,7 +656,7 @@ That’s why we value realistic deadlines, clear agreements and a team that supp
 That’s how we work together, and with every client.
 
 💬 Happy holidays. Let’s talk about your business in 2027.`,tags:"#maeempreendedora #equipa"},
-{id:"K8",kind:"jcol",date:"2027-01-02",fmt:"Carrossel",pillar:"Design · renovação",
+{id:"K8",kind:"jcol",date:"2027-01-09",fmt:"Carrossel",pillar:"Design · renovação",
  tile:'<div class="h">Renovar a imagem em 2027 <mark>sem mudar tudo</mark></div>',
  title:"Renovar a imagem em 2027 sem mudar tudo",
  visual:"<b>Carrossel de 6 slides</b>, só design:",
@@ -673,7 +673,7 @@ Often it’s enough to tidy what’s there: current photos, fewer colours and th
 Here are 4 tweaks that make a business look refreshed without starting from scratch.
 
 💬 Let’s talk about your business.`,tags:"#rebranding #design2027"},
-{id:"K9",kind:"jcol",date:"2027-01-09",fmt:"Carrossel",pillar:"Design · educação",
+{id:"K9",kind:"jcol",date:"2027-01-16",fmt:"Carrossel",pillar:"Design · educação",
  tile:'<div class="h">Identidade visual é <mark>mais</mark> do que um logótipo</div>',
  title:"Identidade visual é mais do que um logótipo",
  visual:"<b>Carrossel de 6 slides</b> com o exemplo da própria Implement (abelha, paleta, letras):",
