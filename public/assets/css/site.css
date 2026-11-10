@@ -1060,3 +1060,20 @@ select.entrada { appearance: none; background-image: url("data:image/svg+xml,%3C
 .sobre-video .botao--secundario::before { background: var(--branco); }
 .sobre-video .botao--secundario:hover { --cor: var(--noite); }
 .heroi-sobre h1 { max-width: 19ch; }
+
+/* Vídeos externos: cartão com botão até a pessoa decidir ver */
+.video-adiado { background: radial-gradient(80% 90% at 75% 15%, rgba(139, 82, 232, .65), transparent 60%), var(--noite); }
+.video-adiado__botao { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 12px; padding: 20px; border: 0; background: none; color: var(--branco); cursor: pointer; font: inherit; text-align: center; }
+.video-adiado__play { position: relative; width: 72px; height: 72px; border-radius: 50%; background: var(--mel); box-shadow: 0 10px 30px rgba(0, 0, 0, .25); transition: transform .3s var(--mola); }
+.video-adiado__play::after { content: ""; position: absolute; left: 29px; top: 23px; border-left: 20px solid var(--tinta); border-top: 13px solid transparent; border-bottom: 13px solid transparent; }
+.video-adiado__botao:hover .video-adiado__play, .video-adiado__botao:focus-visible .video-adiado__play { transform: scale(1.08); }
+.video-adiado__texto { font-weight: 700; font-size: 1.0625rem; }
+.video-adiado__texto small { font-weight: 400; opacity: .8; }
+.video-adiado__aviso { max-width: 30ch; font-size: .75rem; line-height: 1.4; opacity: .72; }
+.artigo__video--instagram .video-adiado, .artigo__video--tiktok .video-adiado { background: radial-gradient(80% 90% at 75% 15%, rgba(139, 82, 232, .65), transparent 60%), var(--noite); }
+
+/* Política de privacidade: o texto existe nas duas línguas e mostra-se a do site */
+html[lang^="pt"] .so-en, html:not([lang^="pt"]) .so-pt { display: none; }
+.contentor.legal, .contentor.legal-topo { --texto: 44rem; max-width: calc(var(--texto) + 2 * var(--margem)); }
+.contentor.legal { padding-top: 0; }
+.legal__data { font-size: .95rem; color: #6b6478; }

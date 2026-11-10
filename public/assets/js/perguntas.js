@@ -171,8 +171,8 @@ export const ETAPAS = [
         o("instagram", "Instagram", "Instagram"), o("google", "Google", "Google"), o("recomendacao", "A recommendation", "Recomendação"), o("cliente", "I saw your work for a client", "Vi um trabalho vosso para um cliente"), o("outro", "Other", "Outro") ] },
       { id: "notas", tipo: "area", largo: true, max: 1500, linhas: 3, en: "Anything else we should know?", pt: "Mais alguma coisa que devamos saber?" },
       { id: "consentimento", tipo: "consentimento", obrigatorio: true, largo: true,
-        en: "I agree that Implement may use these answers to contact me and prepare a proposal. They are not shared with anyone else.",
-        pt: "Aceito que a Implement use estas respostas para me contactar e preparar uma proposta. Não são partilhadas com mais ninguém." },
+        en: "I agree that Implement may use these answers to contact me and prepare a proposal. They are not shared with anyone else. See our privacy policy.",
+        pt: "Aceito que a Implement use estas respostas para me contactar e preparar uma proposta. Não são partilhadas com mais ninguém. Veja a nossa política de privacidade." },
     ],
   },
 ];
@@ -257,8 +257,8 @@ export const CONTACTO = [
     o("parceria", "Partnership", "Parceria"), o("outro", "Something else", "Outro assunto") ] },
   { id: "mensagem", tipo: "area", obrigatorio: true, largo: true, max: 3000, en: "Message", pt: "Mensagem" },
   { id: "consentimento", tipo: "consentimento", obrigatorio: true, largo: true,
-    en: "I agree that Implement may use these details to reply to my message.",
-    pt: "Aceito que a Implement use estes dados para responder à minha mensagem." },
+    en: "I agree that Implement may use these details to reply to my message. See our privacy policy.",
+    pt: "Aceito que a Implement use estes dados para responder à minha mensagem. Veja a nossa política de privacidade." },
 ];
 
 export function validarContacto(respostas) {

@@ -1,6 +1,6 @@
 /* Implement — formulário «Start a Project» por etapas.
    As perguntas e as regras de validação vêm de perguntas.js (as mesmas que o Worker usa). */
-import { ETAPAS, GRUPOS, visivel, validarCampo, validarTudo, textoResposta } from "./perguntas.js?v=881589d3f5";
+import { ETAPAS, GRUPOS, visivel, validarCampo, validarTudo, textoResposta } from "./perguntas.js?v=9e40c8846f";
 
 const CHAVE = "implement:projeto:v1";
 const T = {
@@ -84,7 +84,7 @@ function htmlCampo(c) {
         <div class="servicos-escolha">${c.opcoes.map((x, i) => `<label class="opcao"><input type="checkbox" name="${c.id}" value="${esc(x.v)}" id="${id}-${i}">
           <span><svg aria-hidden="true"><use href="assets/img/sprite.svg#${x.icone}"/></svg><strong>${esc(x[idioma()])}</strong><small>${esc(x["d" + idioma()])}</small></span></label>`).join("")}</div>${erro}</fieldset>`;
     case "consentimento":
-      return `<div class="${classes}" ${attrs}><label class="consentimento"><input type="checkbox" id="${id}" name="${c.id}" value="sim" aria-describedby="${id}-erro"${req}><span>${esc(l(c))}</span></label>${erro}</div>`;
+      return `<div class="${classes}" ${attrs}><label class="consentimento"><input type="checkbox" id="${id}" name="${c.id}" value="sim" aria-describedby="${id}-erro"${req}><span>${esc(l(c)).replace(/(privacy policy|política de privacidade)/, '<a href="/privacy.html" target="_blank" rel="noopener">$1</a>')}</span></label>${erro}</div>`;
   }
   return "";
 }

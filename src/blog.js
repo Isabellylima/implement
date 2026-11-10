@@ -55,7 +55,7 @@ const json = (dados, estado = 200, extra = {}) => new Response(JSON.stringify(da
 const agora = () => new Date().toISOString();
 
 const METRICOOL = "https://tracker.metricool.com https://*.metricool.com";
-const CSP_BASE = "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+const CSP_BASE = "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.bunny.net; font-src 'self' https://fonts.bunny.net; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
 const FRAMES = "frame-src https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com https://www.loom.com https://www.instagram.com https://www.tiktok.com; media-src 'self'";
 const CABECALHOS_HTML = {
   "Content-Type": "text/html; charset=utf-8",
@@ -219,8 +219,8 @@ export function limparBlocos(lista) {
 }
 
 const ROTULOS = {
-  pt: { antes: "Antes", depois: "Depois", video: "Vídeo", imagem: "Imagem", ver: "Ver website" },
-  en: { antes: "Before", depois: "After", video: "Video", imagem: "Image", ver: "Visit website" },
+  pt: { antes: "Antes", depois: "Depois", video: "Vídeo", imagem: "Imagem", ver: "Ver website", verVideo: "Ver vídeo", aviso: (f) => `Ao carregar, o vídeo é mostrado a partir do ${f}, que pode usar cookies.` },
+  en: { antes: "Before", depois: "After", video: "Video", imagem: "Image", ver: "Visit website", verVideo: "Play video", aviso: (f) => `When you press play, the video loads from ${f}, which may use cookies.` },
 };
 const iframeVideo = (v, titulo) => `<iframe src="${esc(v.src)}" title="${esc(titulo)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"${v.fonte === "instagram" || v.fonte === "tiktok" ? ' scrolling="no"' : ""}></iframe>`;
 
@@ -243,7 +243,10 @@ export function blocosHtml(blocos, { idioma = "pt", altBase = "" } = {}) {
         if (b.ficheiro) return `<figure class="artigo__video${b.vertical ? " artigo__video--vertical" : ""}"><div class="artigo__video-caixa artigo__video-caixa--ficheiro"><video src="${esc(b.ficheiro)}" controls playsinline preload="metadata"></video></div>${legenda(b)}</figure>`;
         const v = videoEmbed(b.url);
         if (!v) return "";
-        return `<figure class="artigo__video${v.vertical ? " artigo__video--vertical" : ""} artigo__video--${v.fonte}"><div class="artigo__video-caixa">${iframeVideo(v, b.legenda || R.video)}</div>${legenda(b)}</figure>`;
+        // Só carrega o leitor externo (e os cookies dele) quando a pessoa carrega no botão: assets/js/videos.js
+        const FONTES = { youtube: "YouTube", vimeo: "Vimeo", loom: "Loom", instagram: "Instagram", tiktok: "TikTok" };
+        const f = FONTES[v.fonte] || v.fonte;
+        return `<figure class="artigo__video${v.vertical ? " artigo__video--vertical" : ""} artigo__video--${v.fonte}"><div class="artigo__video-caixa video-adiado" data-src="${esc(v.src)}" data-fonte="${v.fonte}" data-titulo="${esc(b.legenda || R.video)}"><button type="button" class="video-adiado__botao"><span class="video-adiado__play" aria-hidden="true"></span><span class="video-adiado__texto">${R.verVideo} <small>· ${f}</small></span><span class="video-adiado__aviso">${R.aviso(f)}</span></button><noscript>${iframeVideo(v, b.legenda || R.video)}</noscript></div>${legenda(b)}</figure>`;
       }
       case "galeria": return `<figure class="galeria galeria--${b.colunas}"><div class="galeria__grelha">${b.imagens.map((x) => `<img src="${esc(x.src)}" alt="${alt(x.alt, ++nImg)}" loading="lazy" decoding="async">`).join("")}</div>${legenda(b)}</figure>`;
       case "ecras": return `<figure class="ecras${b.desktop && b.mobile ? "" : " ecras--um"}">
@@ -554,7 +557,7 @@ async function guardarTrabalho(request, env, s, id) {
   const conteudo = limparBlocos(c.conteudo);
   if (estado === "publicado") {
     if (!categorias.length) throw new ErroPedido(400, "Escolha pelo menos um tipo de trabalho.");
-    if (!capa && !conteudo.some((b) => b.t === "video" && videoEmbed(b.url)?.miniatura)) throw new ErroPedido(400, "Acrescente uma imagem de capa: é ela que aparece na grelha do portfólio.");
+    if (!capa) throw new ErroPedido(400, "Acrescente uma imagem de capa: é ela que aparece na grelha do portfólio.");
   }
   let link = txt(c.link, 300);
   if (link && !/^https?:\/\//i.test(link)) link = "https://" + link;
@@ -675,6 +678,7 @@ ${indexar ? "" : '<meta name="robots" content="noindex">'}
 <meta property="og:url" content="${esc(canonico)}">
 ${imagem ? `<meta property="og:image" content="${esc(img)}">\n<meta name="twitter:card" content="summary_large_image">` : ""}
 ${CABECA}
+<script src="/assets/js/videos.js" defer></script>
 ${extraHead}
 </head>
 <body class="${classe}">
@@ -817,7 +821,7 @@ const TT = {
   en: { todos: "All work", cliente: "Client", ano: "Year", local: "Location", servicos: "Services", ver: "View the project", proximo: "More work", rascunho: "Preview · draft" },
 };
 const catNome = (id, idioma) => CATEGORIAS.find((c) => c.id === id)?.[idioma === "en" ? "en" : "pt"] || id;
-const capaDe = (t) => t.capa || JSON.parse(t.conteudo || "[]").map((b) => b.t === "video" && videoEmbed(b.url)?.miniatura).find(Boolean) || "";
+const capaDe = (t) => t.capa || "";
 const temVideo = (t) => JSON.parse(t.conteudo || "[]").some((b) => b.t === "video");
 
 function cartaoTrabalho(t) {

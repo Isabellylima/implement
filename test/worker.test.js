@@ -19,7 +19,8 @@ function ambiente({ db = true, email = true } = {}) {
     ASSETS: { fetch: () => new Response("asset") },
     EMAIL_DESTINO: "info@heyimplement.com", EMAIL_REMETENTE: "site@heyimplement.com",
   };
-  if (db) env.DB = { prepare: (sql) => ({ bind: (...v) => ({ run: async () => { registos.sql.push({ sql, v }); return { success: true }; } }) }) };
+  // As limpezas automáticas (DELETE de registos com mais de 24 meses) ficam à parte
+  if (db) env.DB = { prepare: (sql) => ({ bind: (...v) => ({ run: async () => { (/^DELETE/.test(sql) ? (registos.limpezas ||= []) : registos.sql).push({ sql, v }); return { success: true }; } }) }) };
   if (email) env.EMAIL = { send: async (m) => { registos.emails.push(m); return { messageId: "x" }; } };
   const esperas = [];
   const ctx = { waitUntil: (p) => esperas.push(p) };
@@ -51,7 +52,7 @@ test("cria a tabela na primeira utilização", async () => {
     exec: async (sql) => { assert.match(sql, /CREATE TABLE IF NOT EXISTS pedidos/); criada = true; },
     prepare: (sql) => ({ bind: (...v) => ({ run: async () => {
       if (!criada) throw new Error("D1_ERROR: no such table: pedidos: SQLITE_ERROR");
-      registos.sql.push({ sql, v }); return { success: true };
+      if (!/^DELETE/.test(sql)) registos.sql.push({ sql, v }); return { success: true };
     } }) }),
   };
   const r = await worker.fetch(pedir({ respostas: BASE, inicio: 1 }), env, ctx);
@@ -164,4 +165,14 @@ test("contacto: cria a tabela na primeira mensagem", async () => {
 test("contacto: e-mail escapa HTML", () => {
   const { html } = montarEmailMensagem({ id: "MSG-AAAAAA", criado_em: "x", r: { ...MSG, mensagem: "<img src=x onerror=alert(1)>" } });
   assert.ok(!html.includes("<img src=x"));
+});
+
+test("pedidos e mensagens com mais de 24 meses são apagados ao guardar um novo", async () => {
+  const { env, ctx, registos, esperas } = ambiente({ email: false });
+  await worker.fetch(pedir({ respostas: BASE, inicio: 1 }), env, ctx);
+  await Promise.all(esperas);
+  const l = registos.limpezas || [];
+  assert.deepEqual(l.map((x) => x.sql.match(/FROM (\w+)/)[1]), ["pedidos", "mensagens"]);
+  const meses = (Date.now() - new Date(l[0].v[0]).getTime()) / (30.44 * 86400000);
+  assert.ok(meses > 23.5 && meses < 24.5);
 });

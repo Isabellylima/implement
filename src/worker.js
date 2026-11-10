@@ -94,6 +94,7 @@ async function receberPedido(request, env, ctx, url) {
     try {
       await guardarPedido(env.DB, pedido);
       guardado = true;
+      ctx.waitUntil(apagarAntigos(env.DB));
     } catch (e) {
       console.error(JSON.stringify({ evento: "d1_falhou", referencia, erro: String(e && e.message).slice(0, 300) }));
     }
@@ -117,6 +118,17 @@ async function receberPedido(request, env, ctx, url) {
 
   console.log(JSON.stringify({ evento: "pedido_recebido", referencia, servicos: limpas.servicos }));
   return json({ ok: true, referencia });
+}
+
+/* Prazo de conservação (política de privacidade): pedidos e mensagens com mais de 24 meses são apagados. */
+const MESES_CONSERVACAO = 24;
+async function apagarAntigos(db) {
+  const limite = new Date();
+  limite.setMonth(limite.getMonth() - MESES_CONSERVACAO);
+  for (const tabela of ["pedidos", "mensagens"]) {
+    try { await db.prepare(`DELETE FROM ${tabela} WHERE criado_em < ?`).bind(limite.toISOString()).run(); }
+    catch (e) { if (!/no such table/i.test(String(e && e.message))) console.error(JSON.stringify({ evento: "limpeza_falhou", tabela, erro: String(e && e.message).slice(0, 200) })); }
+  }
 }
 
 function novaReferencia() {
@@ -247,6 +259,7 @@ async function receberMensagem(request, env, ctx, url) {
         await inserir();
       }
       guardado = true;
+      ctx.waitUntil(apagarAntigos(env.DB));
     } catch (e) {
       console.error(JSON.stringify({ evento: "d1_mensagem_falhou", referencia, erro: String(e && e.message).slice(0, 300) }));
     }

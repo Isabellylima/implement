@@ -1,6 +1,6 @@
 /* Implement — formulário da página Contacto.
    Os campos e a validação vêm de perguntas.js (CONTACTO), os mesmos que o Worker usa em /api/contacto. */
-import { CONTACTO, validarCampo, validarContacto } from "./perguntas.js?v=881589d3f5";
+import { CONTACTO, validarCampo, validarContacto } from "./perguntas.js?v=9e40c8846f";
 
 const T = {
   opcional: { en: "optional", pt: "opcional" },
@@ -33,7 +33,7 @@ function htmlCampo(c) {
   const req = c.obrigatorio ? ' required aria-required="true"' : "";
   const classe = `campo${c.largo ? " campo--largo" : ""}`;
   if (c.tipo === "consentimento") {
-    return `<div class="${classe}" data-campo="${c.id}"><label class="consentimento"><input type="checkbox" id="${id}" name="${c.id}" value="sim" aria-describedby="${id}-erro"${req}><span>${esc(c[idioma()])}</span></label>${erro}</div>`;
+    return `<div class="${classe}" data-campo="${c.id}"><label class="consentimento"><input type="checkbox" id="${id}" name="${c.id}" value="sim" aria-describedby="${id}-erro"${req}><span>${esc(c[idioma()]).replace(/(privacy policy|política de privacidade)/, '<a href="/privacy.html" target="_blank" rel="noopener">$1</a>')}</span></label>${erro}</div>`;
   }
   let controlo;
   if (c.tipo === "area") controlo = `<textarea class="entrada" id="${id}" name="${c.id}" rows="6" maxlength="${c.max}" aria-describedby="${id}-erro"${req}></textarea>`;

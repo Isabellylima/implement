@@ -2,6 +2,7 @@
    O HTML está escrito em inglês; aqui fica o português de Portugal para cada chave data-i18n.
    Para corrigir um texto em PT, altere-o aqui. Para o inglês, altere-o diretamente no HTML. */
 window.IMPLEMENT_PT = {
+    "pv.legenda": "Legal",
   /* Comum: cabeçalho e rodapé */
   "c.saltar": "Saltar para o conteúdo",
   "c.menu": "Menu",

@@ -547,7 +547,7 @@ const CFG_TRABALHO = {
   }),
   validar: (d) => {
     if (!d.categorias.length) return "Escolha pelo menos um tipo de trabalho (ao lado).";
-    if (!d.capa && !d.conteudo.some((b) => b.t === "video" && videoEmbed(b.url)?.fonte === "youtube")) return "Acrescente uma imagem de capa: é ela que aparece na grelha do portfólio.";
+    if (!d.capa) return "Acrescente uma imagem de capa: é ela que aparece na grelha do portfólio.";
     return "";
   },
   aoCarregarCapa: (r) => { $("#formato").value = formatoDe(r.largura, r.altura); },
