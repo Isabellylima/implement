@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1C0F3A">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
+<link rel="stylesheet" href="/assets/css/site.css?v=e8676ae089">
+<link rel="stylesheet" href="/assets/css/admin.css?v=a5937e28f6">
+<title>Plano de conteúdo · Implement</title>
+<link rel="stylesheet" href="/admin/conteudo.css">
+<script src="/assets/js/admin-menu.js?v=43ebb83002" type="module"></script>
+<script src="/assets/js/admin-conta.js?v=1a9a325186" type="module"></script>
+<script src="/admin/conteudo.js" defer></script>
+</head>
+<body class="admin admin--conteudo">
+<header class="admin-topo">
+  <a class="marca marca--clara" href="/admin/" aria-label="Editor de artigos">
+    <svg class="abelha abelha--lilas" aria-hidden="true"><use href="/assets/img/sprite.svg#abelha"/></svg>
+    <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Área da equipa</span></span>
+  </a>
+  <nav class="admin-topo__nav" aria-label="Área da equipa">
+    <div class="admin-grupo">
+      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-site">Site <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="admin-grupo__menu" id="menu-site" hidden>
+        <a href="/admin/#/" data-rota="lista">Artigos</a>
+        <a href="/admin/#/autoras" data-rota="autoras">Autoras</a>
+      </div>
+    </div>
+    <div class="admin-grupo">
+      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-portfolio">Portfólio <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="admin-grupo__menu" id="menu-portfolio" hidden>
+        <a href="/admin/#/trabalhos" data-rota="trabalhos">Trabalhos</a>
+        <a href="/admin/#/marcas" data-rota="marcas">Marcas</a>
+      </div>
+    </div>
+    <div class="admin-grupo">
+      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-financeiro">Financeiro <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="admin-grupo__menu" id="menu-financeiro" hidden>
+        <a href="/admin/#/financas" data-rota="financas">Finanças</a>
+        <a href="/admin/orcamento" data-rota="orcamento">Orçamentos</a>
+        <div class="admin-grupo__linha">
+          <a href="/precario" target="_blank" rel="noopener">Preçário ↗</a>
+          <button type="button" class="admin-grupo__copiar" data-copiar="/precario" title="Copiar o link do preçário para enviar a um cliente">Copiar link</button>
+        </div>
+      </div>
+    </div>
+    <div class="admin-grupo">
+      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-redes">Redes sociais <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="admin-grupo__menu" id="menu-redes" hidden>
+        <a href="/admin/conteudo" data-rota="conteudo" aria-current="page">Plano de conteúdo</a>
+      </div>
+    </div>
+    <a class="admin-topo__ver" href="/" target="_blank" rel="noopener">Ver site ↗</a>
+  </nav>
+  <div class="admin-topo__conta"><span id="conta"></span><button type="button" id="sair">Sair</button></div>
+</header>
+<main id="conteudo" class="cc">
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Plano de conteúdo · 9 nov 2026 – 9 jan 2027</span>
+    <h1>Três feeds, <em>uma</em> família</h1>
+    <p>A Implement publica à terça. A Izza publica à segunda (pessoal) e à quinta (collab). A Jess publica à quarta (pessoal) e ao sábado (collab). As collabs aparecem nos dois feeds. Toque num quadrado para ver o post.</p>
+  </header>
+
+  <nav class="tabs" aria-label="Contas">
+    <a href="#implement" id="tab-implement">@heyimplement</a>
+    <a href="#eisa" id="tab-eisa">@hey_izza_</a>
+    <a href="#jess" id="tab-jess">@byjessdesign_</a>
+  </nav>
+
+  <section id="view-implement">
+    <div class="notes">
+      <div class="note"><span class="eyebrow">Ritmo</span><p><span class="cc-n">3</span> posts por semana: terça é da Implement, quinta é a collab com a Izza, sábado a collab com a Jess. Todas as capas são design: frase, cor, nada de rosto.</p></div>
+      <div class="note"><span class="eyebrow">Fotos do ensaio</span><p>Aqui só entram fotos de detalhe (mãos no portátil, telemóvel, caderno, café), sempre dentro dos carrosséis e nunca na capa.</p></div>
+      <div class="note"><span class="eyebrow">Paleta</span><p>Lilás, branco e roxo escuro em diagonal. O amarelo só marca a palavra-chave.</p><div class="palette" aria-hidden="true"><i class="sw-lilas"></i><i class="sw-branco"></i><i class="sw-noite"></i><i class="sw-amarelo"></i><i class="sw-cinza"></i></div></div>
+    </div>
+    <div class="layout">
+      <div class="phone" aria-label="Pré-visualização do feed da Implement">
+        <div class="prof">
+          <div class="avatar" aria-hidden="true"><svg viewBox="0 0 64 40" width="44" height="28"><ellipse cx="17" cy="15" rx="15" ry="9" fill="none" stroke="#8C52FF" stroke-width="3.2" transform="rotate(-12 17 15)"/><ellipse cx="47" cy="15" rx="15" ry="9" fill="none" stroke="#8C52FF" stroke-width="3.2" transform="rotate(12 47 15)"/><ellipse cx="32" cy="24" rx="5.5" ry="12" fill="#8C52FF"/><rect x="26" y="22" width="12" height="2.2" fill="#fff"/><rect x="26.5" y="27" width="11" height="2.2" fill="#fff"/></svg></div>
+          <div><b>Implement | Brand &amp; Digital Presence</b><div class="stats"><span><b>30</b> posts</span><span><b>115</b> seguidores</span><span><b>136</b> a seguir</span></div></div>
+        </div>
+        <div class="bio">Helping businesses <i>Implement</i> their best digital strategy<br>Strategy, content &amp; positioning for brands.<br>linktr.ee/heyimplement</div>
+        <div class="grid" id="grid-implement"></div>
+        <div class="legend"><span><i></i>Collab com a Izza ou a Jess</span><span>Última linha: posts já publicados</span></div>
+      </div>
+      <div class="cal" id="cal-implement"></div>
+    </div>
+  </section>
+
+  <section id="view-eisa" hidden>
+    <div class="notes">
+      <div class="note"><span class="eyebrow">Posicionamento</span><p>IA, tecnologia e filosofia, com vida real no meio. Descobertas práticas (apps, prompts, organização) alternam com reflexões sobre tempo, sonhos e o futuro da IA.</p></div>
+      <div class="note"><span class="eyebrow">Ritmo</span><p><span class="cc-n">2</span> posts por semana. Segunda é pessoal (reel a falar, capa com o teu retrato). Quinta é collab com a Implement (capa design).</p></div>
+      <div class="note"><span class="eyebrow">Paleta</span><p>A mesma da Implement, com mais roxo escuro e amarelo. Os retratos do ensaio dão o calor que o feed da agência não tem.</p><div class="palette" aria-hidden="true"><i class="sw-noite"></i><i class="sw-amarelo"></i><i class="sw-lilas"></i><i class="sw-branco"></i></div></div>
+    </div>
+    <div class="care">
+      <h3>Antes do primeiro post</h3>
+      <ul>
+        <li>Contacto com os clientes: em curso até ao fim de semana, junto com o pedido de autorização para o portfólio.</li>
+        <li>O TDAH e a fase difícil aparecem só no primeiro post, por cima. Depois a história segue pelo lado bom: criança interior, sonhos e trabalho a todo vapor.</li>
+        <li>Partilhas a tua experiência, sem dizer a ninguém o que fazer. Assim não influencias quem está a passar por algo parecido.</li>
+        <li>Grava 2 ou 3 vídeos na mesma sessão de luz. Assim o ritmo de 2 posts por semana não pesa.</li>
+      </ul>
+    </div>
+    <div class="layout">
+      <div class="phone" aria-label="Pré-visualização do feed da Izza">
+        <div class="prof">
+          <div class="avatar e" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64"><circle cx="32" cy="26" r="11" fill="#F8F6FC" opacity=".55"/><path d="M10 64c2-14 11-21 22-21s20 7 22 21z" fill="#F8F6FC" opacity=".55"/></svg></div>
+          <div><b>Isabelly Silva</b><div class="stats cc-sub">hey_izza_ · retrato do ensaio na foto de perfil</div></div>
+        </div>
+        <div class="bio">IA, tecnologia &amp; filosofia sem complicar<br>Tempo, sonhos e vida real<br>marketing na @heyimplement 💜</div>
+        <div class="grid" id="grid-eisa"></div>
+        <div class="legend"><span><i></i>Collab com a Implement</span><span>Gradiente lilás = foto do ensaio</span></div>
+      </div>
+      <div class="cal" id="cal-eisa"></div>
+    </div>
+  </section>
+
+  <section id="view-jess" hidden>
+    <div class="notes">
+      <div class="note"><span class="eyebrow">Posicionamento</span><p>Designer para negócios locais, mãe e a recomeçar no digital. O olhar de cor (fotografia, casa, cerâmica fria, looks, viagens) é o que a distingue.</p></div>
+      <div class="note"><span class="eyebrow">Ritmo</span><p><span class="cc-n">2</span> posts por semana. Quarta é pessoal, com a Jess a falar para a câmara. Sábado é collab com a Implement, sobre design e imagem de marca, com capa design.</p></div>
+      <div class="note"><span class="eyebrow">Paleta</span><p>A da Implement com o rosa e o amarelo que a Jess já usa. O rosa fica nos posts dela; nas collabs manda a paleta da agência.</p><div class="palette" aria-hidden="true"><i class="sw-rosa"></i><i class="sw-amarelo"></i><i class="sw-lilas"></i><i class="sw-branco"></i><i class="sw-noite"></i></div></div>
+    </div>
+    <div class="care">
+      <h3>Antes de começar</h3>
+      <ul>
+        <li>Decidam o que mostrar do Bento: mãos, pés, de costas ou ao colo funciona bem sem expor o rosto. A escolha é da Jess, mas convém ser a mesma em todos os posts.</li>
+        <li>Para os TBT de viagens, ela escolhe os lugares e as fotos dela; a copy já tem os espaços marcados.</li>
+        <li>Os reels pessoais são falados e espontâneos. O roteiro serve de guia, não de texto para decorar.</li>
+      </ul>
+    </div>
+    <div class="layout">
+      <div class="phone" aria-label="Pré-visualização do feed da Jess">
+        <div class="prof">
+          <div class="avatar j" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64"><circle cx="32" cy="26" r="11" fill="#fff" opacity=".6"/><path d="M10 64c2-14 11-21 22-21s20 7 22 21z" fill="#fff" opacity=".6"/></svg></div>
+          <div><b>Jéssica Martins | Design Algarve</b><div class="stats"><span><b>20</b> posts</span><span><b>51</b> seguidores</span><span><b>10</b> a seguir</span></div></div>
+        </div>
+        <div class="bio">Design para negócios locais 🍽️✂️🛠️<br>✦ Mãe a recomeçar no digital<br>✦ Cores, casa e viagens · na @heyimplement<br>📍 Algarve | 📩 Peça o seu orçamento</div>
+        <div class="grid" id="grid-jess"></div>
+        <div class="legend"><span><i></i>Collab com a Implement</span><span>Gradiente rosa = foto da Jess</span></div>
+      </div>
+      <div class="cal" id="cal-jess"></div>
+    </div>
+  </section>
+</div>
+</main>
+</body>
+</html>

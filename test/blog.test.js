@@ -46,6 +46,12 @@ test("API da equipa recusa pedidos sem sessão e de outra origem", async () => {
   const r3 = await worker.fetch(new Request("https://heyimplement.com/admin/"), env, {});
   assert.equal(r3.status, 302);
   assert.match(r3.headers.get("Location"), /\/admin\/login$/);
+  // O plano de conteúdo (e os seus ficheiros) também só abre com sessão
+  for (const c of ["/admin/conteudo", "/admin/conteudo.js", "/admin/conteudo.css"]) {
+    const r = await worker.fetch(new Request("https://heyimplement.com" + c), env, {});
+    assert.equal(r.status, 302, c);
+    assert.match(r.headers.get("Location"), /\/admin\/login$/);
+  }
 });
 
 test("portfólio: reels do Instagram/TikTok e blocos de galeria, ecrãs e antes/depois", () => {
