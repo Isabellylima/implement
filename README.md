@@ -112,7 +112,7 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 ## Blog e área da equipa
 
 - **Escrever:** `heyimplement.com/admin` → entrar com um e-mail `@heyimplement.com` (chega um link por e-mail, válido 15 min, uma vez). Sessão de 30 dias.
-- **Plano de conteúdo:** `heyimplement.com/admin/conteudo` (menu Redes sociais) — feeds da Implement, da Izza e da Jess, com a copy de cada post. Os ficheiros estão em `public/admin/conteudo.*` e só abrem com sessão iniciada.
+- **Plano de conteúdo:** `heyimplement.com/admin/conteudo` (menu Tarefas → Plano de conteúdos) — feeds da Implement, da Izza e da Jess, com a copy de cada post. Os ficheiros estão em `public/admin/conteudo.*` e só abrem com sessão iniciada.
 - **Artigos:** título, resumo, imagem de capa, parágrafos, títulos, listas, citações, imagens, vídeos (YouTube, Vimeo, Loom) e separadores. Rascunho, publicar ou agendar (data futura).
 - **Autoras:** Isabelly Silva e Jessica Martins; foto, função e descrição editáveis em «Autoras».
 - **Público:** `/insights` (lista) e `/insights/<endereço>` (artigo), gerados pelo Worker a partir da D1.

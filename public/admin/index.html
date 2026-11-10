@@ -10,9 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
 <link rel="stylesheet" href="/assets/css/site.css?v=e8676ae089">
-<link rel="stylesheet" href="/assets/css/admin.css?v=4551ed5ad1">
+<link rel="stylesheet" href="/assets/css/admin.css?v=a31244e61e">
 <title>Área da equipa · Implement</title>
-<script src="/assets/js/admin-menu.js?v=43ebb83002" type="module"></script>
+<script src="/assets/js/admin-menu.js?v=c5c5feec85" type="module"></script>
 <script src="/assets/js/admin.js?v=1f9366a5d4" type="module"></script>
 </head>
 <body class="admin">
@@ -22,7 +22,13 @@
     <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Área da equipa</span></span>
   </a>
   <nav class="admin-topo__nav" aria-label="Área da equipa">
-    <a class="admin-topo__link" href="/admin/#/tarefas" data-rota="tarefas">Tarefas</a>
+    <div class="admin-grupo">
+      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-tarefas">Tarefas <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="admin-grupo__menu" id="menu-tarefas" hidden>
+        <a href="/admin/#/tarefas" data-rota="tarefas">Lista de tarefas</a>
+        <a href="/admin/conteudo" data-rota="conteudo">Plano de conteúdos</a>
+      </div>
+    </div>
     <div class="admin-grupo">
       <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-site">Site <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="admin-grupo__menu" id="menu-site" hidden>
@@ -46,12 +52,6 @@
           <a href="/precario" target="_blank" rel="noopener">Preçário ↗</a>
           <button type="button" class="admin-grupo__copiar" data-copiar="/precario" title="Copiar o link do preçário para enviar a um cliente">Copiar link</button>
         </div>
-      </div>
-    </div>
-    <div class="admin-grupo">
-      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-redes">Redes sociais <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <div class="admin-grupo__menu" id="menu-redes" hidden>
-        <a href="/admin/conteudo" data-rota="conteudo">Plano de conteúdo</a>
       </div>
     </div>
     <a class="admin-topo__ver" href="/" target="_blank" rel="noopener">Ver site ↗</a>

@@ -1,4 +1,4 @@
-/* Implement — menu da área da equipa: submenus (Site, Portfólio, Financeiro) e «Copiar link» do preçário. */
+/* Implement — menu da área da equipa: submenus (Tarefas, Site, Portfólio, Financeiro) e «Copiar link» do preçário. */
 const grupos = [...document.querySelectorAll(".admin-grupo")];
 const fechar = (excepto) => grupos.forEach((g) => {
   if (g === excepto) return;

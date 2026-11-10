@@ -448,9 +448,6 @@
 }
 
 /* Tarefas */
-.admin-topo__link { display: inline-flex; align-items: center; color: var(--lilas); text-decoration: none; padding: 8px 14px; border-radius: 999px; font: 500 .9375rem/1.2 var(--sans); }
-.admin-topo__link:hover { color: var(--branco); background: rgba(205, 184, 247, .14); }
-.admin-topo__link[aria-current] { color: var(--noite); background: var(--lilas); }
 .tar-nova { display: grid; grid-template-columns: minmax(0, 1fr) 150px 170px auto; gap: 12px; align-items: end; }
 .tar-nova label, .tar-editar label { display: grid; gap: 6px; font-size: .8125rem; font-weight: 700; color: #4A4357; }
 .tar-nova .entrada, .tar-editar .entrada { min-height: 44px; padding: 8px 12px; font-size: .9375rem; font-weight: 400; }
