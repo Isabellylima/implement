@@ -2,6 +2,7 @@
    Rotas: #/ (artigos), #/novo, #/editar/<id>, #/autoras, #/trabalhos, #/trabalhos/novo, #/trabalhos/<id>.
    O conteúdo é guardado como blocos; o servidor volta a limpar tudo antes de guardar e de publicar. */
 
+import { vistaTarefas } from "./admin-tarefas.js?v=162b8de119";
 import { vistaFinancas } from "./admin-financas.js?v=97760e6b26";
 
 const app = document.getElementById("app");
@@ -157,12 +158,13 @@ async function rota() {
   }
   sujo = false; editorAtual = null; app.onclick = null; app.onchange = null; app.onsubmit = null;
   const h = location.hash.replace(/^#/, "") || "/";
-  const seccao = h.startsWith("/autoras") ? "autoras" : h.startsWith("/trabalhos") ? "trabalhos" : h.startsWith("/marcas") ? "marcas" : h.startsWith("/financas") ? "financas" : "lista";
+  const seccao = h.startsWith("/autoras") ? "autoras" : h.startsWith("/trabalhos") ? "trabalhos" : h.startsWith("/marcas") ? "marcas" : h.startsWith("/financas") ? "financas" : h.startsWith("/tarefas") ? "tarefas" : "lista";
   $$(".admin-topo__nav [data-rota]").forEach((a) => a.toggleAttribute("aria-current", a.dataset.rota === seccao));
   try {
     if (!autoras.length) autoras = (await api("autoras")).autoras;
     if (h.startsWith("/autoras")) await vistaAutoras();
     else if (h.startsWith("/marcas")) await vistaMarcas();
+    else if (h.startsWith("/tarefas")) await vistaTarefas({ app, api, aviso, esc });
     else if (h.startsWith("/financas")) await vistaFinancas(h, { app, api, aviso, esc, $, $$ });
     else if (h === "/trabalhos") await vistaTrabalhos();
     else if (h === "/trabalhos/novo") vistaNovoTrabalho();
