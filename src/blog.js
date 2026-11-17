@@ -305,6 +305,7 @@ export async function tratarBlog(request, env, ctx, url) {
     if (p === "/work") return await paginaTrabalhos(request, env, url);
     if (p.startsWith("/work/")) return await paginaTrabalho(request, env, url, decodeURIComponent(p.slice(6)).replace(/\/$/, ""));
     if (p === "/insights") return await paginaLista(request, env, url);
+    if (p === "/insights/feed.xml" || p === "/insights/rss" || p === "/insights/feed") return await feedRss(env, url);
     if (p.startsWith("/insights/")) return await paginaArtigo(request, env, url, decodeURIComponent(p.slice(10)).replace(/\/$/, ""));
     if (p.startsWith("/media/")) return await servirImagem(request, env, ctx, p.slice(7));
     if (p === "/api/marcas" && request.method === "GET") return await marcasPublicas(env);
@@ -678,6 +679,7 @@ function pagina({ titulo, descricao, canonico, imagem, tipo = "website", corpo, 
 ${tituloPt ? `<meta name="titulo-pt" content="${esc(tituloPt)}">` : ""}
 <meta name="description" content="${esc(descricao)}">
 <link rel="canonical" href="${esc(canonico)}">
+<link rel="alternate" type="application/rss+xml" title="Implement — Insights" href="/insights/feed.xml">
 ${indexar ? "" : '<meta name="robots" content="noindex">'}
 <meta property="og:type" content="${tipo}">
 <meta property="og:title" content="${esc(titulo)}">
@@ -712,6 +714,54 @@ function cartaoArtigo(a, autora) {
       ${a.resumo ? `<span class="cartao-artigo__resumo">${esc(a.resumo)}</span>` : ""}
       <span class="autoria">${autora?.foto ? `<img src="${esc(autora.foto)}" alt="" width="36" height="36" loading="lazy">` : ""}<span><strong>${esc(autora?.nome || "")}</strong><span>${esc(dataLonga(a.publicado_em, idioma))} · ${esc(T[idioma].leitura(minutosLeitura(blocos)))}</span></span></span>
     </span></a></li>`;
+}
+
+/* RSS 2.0 dos artigos publicados (/insights/feed.xml) — para o Metricool e leitores de feeds */
+async function feedRss(env, url) {
+  let artigos = [], autoras = {};
+  if (env.DB) {
+    await esquema(env.DB);
+    artigos = (await env.DB.prepare("SELECT slug, titulo, resumo, capa, capa_alt, autora_id, categoria, idioma, conteudo, publicado_em, atualizado_em FROM artigos WHERE estado = 'publicado' AND publicado_em <= ? ORDER BY publicado_em DESC LIMIT 30").bind(agora()).all()).results;
+    autoras = await autorasMapa(env.DB);
+  }
+  const x = (t) => String(t ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const cdata = (t) => `<![CDATA[${String(t).replace(/]]>/g, "]]]]><![CDATA[>")}]]>`;
+  const abs = (u) => new URL(u, url.origin).toString();
+  const absHtml = (h) => h.replace(/(src|href)="\/(?!\/)/g, `$1="${url.origin}/`);
+  // Nos leitores de feeds não há o nosso JS: o vídeo passa a ser um link simples
+  const semVideo = (h) => h.replace(/<figure class="artigo__video[\s\S]*?data-src="([^"]+)"[\s\S]*?<\/figure>/g, (_, src) => `<p><a href="${src}">▶ Ver vídeo</a></p>`);
+  const tipoImg = (u) => (/\.png(\?|$)/i.test(u) ? "image/png" : /\.webp(\?|$)/i.test(u) ? "image/webp" : /\.gif(\?|$)/i.test(u) ? "image/gif" : "image/jpeg");
+  const itens = artigos.map((a) => {
+    const link = `${url.origin}/insights/${a.slug}`;
+    let blocos = []; try { blocos = JSON.parse(a.conteudo || "[]"); } catch {}
+    const capa = a.capa ? abs(a.capa) : "";
+    const corpo = (capa ? `<p><img src="${x(capa)}" alt="${x(a.capa_alt)}"></p>` : "") + absHtml(semVideo(blocosHtml(blocos, { idioma: a.idioma })));
+    return `    <item>
+      <title>${x(a.titulo)}</title>
+      <link>${x(link)}</link>
+      <guid isPermaLink="true">${x(link)}</guid>
+      <pubDate>${new Date(a.publicado_em).toUTCString()}</pubDate>
+      ${autoras[a.autora_id]?.nome ? `<dc:creator>${x(autoras[a.autora_id].nome)}</dc:creator>` : ""}
+      ${a.categoria ? `<category>${x(a.categoria)}</category>` : ""}
+      <description>${x(a.resumo)}</description>
+      <content:encoded>${cdata(corpo)}</content:encoded>
+      ${capa ? `<media:content url="${x(capa)}" medium="image" type="${tipoImg(capa)}"/>\n      <enclosure url="${x(capa)}" type="${tipoImg(capa)}" length="0"/>` : ""}
+    </item>`;
+  }).join("\n");
+  const ultimo = artigos[0] ? new Date(artigos[0].publicado_em).toUTCString() : new Date().toUTCString();
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Implement — Insights</title>
+    <link>${url.origin}/insights</link>
+    <atom:link href="${url.origin}/insights/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Articles by Implement on social media, branding, websites and content for growing businesses.</description>
+    <language>pt-PT</language>
+    <lastBuildDate>${ultimo}</lastBuildDate>
+${itens}
+  </channel>
+</rss>`;
+  return new Response(xml, { headers: { "Content-Type": "application/rss+xml; charset=utf-8", "Cache-Control": "public, max-age=600", "X-Content-Type-Options": "nosniff", "Access-Control-Allow-Origin": "*" } });
 }
 
 async function paginaLista(request, env, url) {
