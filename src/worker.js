@@ -54,7 +54,7 @@ export default {
       }
     }
     if (url.pathname === "/api/saude" && request.method === "GET") {
-      return json({ ok: true, baseDeDados: Boolean(env.DB), email: Boolean(env.EMAIL), hubspot: { contactos: hubspotAtivo(env, "contacto"), newsletter: hubspotAtivo(env, "newsletter") } });
+      return json({ ok: true, baseDeDados: Boolean(env.DB), email: Boolean(env.EMAIL), hubspot: { contactos: hubspotAtivo(env, "contacto"), projeto: hubspotAtivo(env, "projeto"), newsletter: hubspotAtivo(env, "newsletter") } });
     }
     if (url.pathname.startsWith("/api/")) return json({ ok: false, erro: "Não encontrado" }, 404);
     return env.ASSETS.fetch(request);
@@ -127,17 +127,23 @@ async function receberPedido(request, env, ctx, url) {
     return json({ ok: false, erro: "Não foi possível registar o pedido" }, 502);
   }
 
-  if (hubspotAtivo(env, "contacto")) ctx.waitUntil(paraHubspot(env, "pedido", {
-    email: limpas.email, nome: limpas.nome, telefone: limpas.telefone, empresa: limpas.empresa, idioma,
-    mensagem: resumoPedido(pedido), pagina: `${url.origin}/start-a-project`, origem: "Começar um projeto",
-  }, referencia));
+  if (hubspotAtivo(env, "projeto")) {
+    const campo = (id) => ETAPAS.flatMap((e) => e.campos).find((c) => c.id === id);
+    const website = (String(limpas.links || "").match(/(?:https?:\/\/|www\.)[^\s,;]+/i) || [])[0];
+    ctx.waitUntil(paraHubspot(env, "projeto", {
+      email: limpas.email, nome: limpas.nome, telefone: limpas.telefone, empresa: limpas.empresa, idioma,
+      cidade: limpas.localizacao, website: website && !/instagram|facebook|tiktok|linkedin|youtube/i.test(website) ? website : undefined,
+      cargo: limpas.cargo ? textoResposta(campo("cargo"), limpas.cargo, "pt") : undefined,
+      mensagem: resumoPedido(pedido), pagina: `${url.origin}/start-a-project`, origem: "Começar um projeto",
+    }, referencia));
+  }
   console.log(JSON.stringify({ evento: "pedido_recebido", referencia, servicos: limpas.servicos }));
   return json({ ok: true, referencia });
 }
 
 /* HubSpot: cópia do contacto (com o pedido/mensagem no campo «message»). Uma falha aqui nunca afeta o cliente. */
 async function paraHubspot(env, tipo, dados, referencia) {
-  try { await enviarHubspot(env, "contacto", dados); console.log(JSON.stringify({ evento: "hubspot_ok", tipo, referencia })); }
+  try { await enviarHubspot(env, tipo === "projeto" ? "projeto" : "contacto", dados); console.log(JSON.stringify({ evento: "hubspot_ok", tipo, referencia })); }
   catch (e) { console.error(JSON.stringify({ evento: "hubspot_falhou", tipo, referencia, erro: String(e && e.message).slice(0, 300) })); }
 }
 

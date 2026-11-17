@@ -236,7 +236,9 @@ test("pedido «Começar um projeto» vai para o HubSpot com o resumo", comFetch(
   assert.equal(campos.firstname, "Ana");
   assert.equal(campos.lastname, "Costa");
   assert.equal(campos.company, "Café Aurora");
-  assert.match(campos.message, /Pedido|IMP-/);
+  assert.match(campos.message, /IMP-/);
+  assert.match(campos.message, /Café de especialidade/);
+  assert.equal(campos.city, "Porto, Portugal");
   assert.equal(chamadas[0].corpo.legalConsentOptions.consent.communications, undefined);
 }));
 
@@ -246,4 +248,13 @@ test("sem HubSpot configurado não se chama a API", comFetch(async (chamadas) =>
   await worker.fetch(nl({ email: "ana@cafeaurora.pt", consentimento: true }), env, ctx);
   await Promise.all(esperas);
   assert.equal(chamadas.length, 0);
+}));
+
+test("com formulário próprio, «Começar um projeto» vai para esse formulário do HubSpot", comFetch(async (chamadas) => {
+  const { env, ctx, esperas } = ambiente();
+  Object.assign(env, HUB, { HUBSPOT_FORM_PROJETO: "form-projeto" });
+  await worker.fetch(pedir({ respostas: { ...BASE, links: "www.cafeaurora.pt, instagram.com/cafeaurora" }, idioma: "pt", inicio: Date.now() - 300000 }), env, ctx);
+  await Promise.all(esperas);
+  assert.match(chamadas[0].url, /submit\/12345\/form-projeto$/);
+  assert.equal(chamadas[0].corpo.fields.find((f) => f.name === "website").value, "www.cafeaurora.pt");
 }));
