@@ -500,3 +500,15 @@
   .tar-nova { grid-template-columns: 1fr 1fr; }
   .tar-nova__titulo, .tar-nova .botao { grid-column: 1 / -1; }
 }
+
+/* Newsletter */
+.nl-admin-resumo { display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 16px; margin-bottom: 20px; }
+.nl-admin-resumo .fin-cartao { margin: 0; }
+.nl-admin-numero { font: 700 2.2rem/1 var(--serifa); color: var(--tinta); margin: 6px 0 0; }
+.nl-admin-hub { margin: 8px 0 0; font-size: .9375rem; color: var(--cinza); }
+.nl-admin-hub--sim { color: #1F7A47; font-weight: 500; }
+.nl-admin-tabela td small { color: var(--cinza); }
+.nl-admin-vazio { margin: 0; background: none; }
+@media (max-width: 760px) { .nl-admin-resumo { grid-template-columns: 1fr 1fr; } .nl-admin-resumo > :last-child { grid-column: 1 / -1; } .nl-admin-tabela { font-size: .8125rem; } }
+.nl-admin-tabela th, .nl-admin-tabela td { text-align: left !important; }
+.nl-admin-tabela td { white-space: normal; }

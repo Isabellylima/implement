@@ -15,6 +15,7 @@
 import { CABECA, CABECALHO, RODAPE } from "./modelo.js";
 import { ESQUEMA_FINANCAS, apiFinancas, migrarFinancas } from "./financas.js";
 import { ESQUEMA_TAREFAS, apiTarefas } from "./tarefas.js";
+import { ESQUEMA_NEWSLETTER, apiNewsletter } from "./newsletter.js";
 
 const DOMINIO = "heyimplement.com";
 const SESSAO_DIAS = 30;
@@ -40,6 +41,7 @@ const ESQUEMA = [
   "CREATE INDEX IF NOT EXISTS tentativas_chave ON tentativas (chave, momento);",
   ...ESQUEMA_FINANCAS,
   ...ESQUEMA_TAREFAS,
+  ...ESQUEMA_NEWSLETTER,
 ].join("\n");
 
 let esquemaPronto = false;
@@ -375,6 +377,11 @@ async function api(request, env, ctx, url, rota) {
       .bind(nome, String(c.cargo || "").trim().slice(0, 80), String(c.bio || "").trim().slice(0, 600), foto, m[1]).run();
     if (!r.meta || r.meta.changes === 0) { const e = await env.DB.prepare("SELECT id FROM autoras WHERE id = ?").bind(m[1]).first(); if (!e) throw new ErroPedido(404, "Autora não encontrada."); }
     return json({ ok: true });
+  }
+
+  if (rota === "newsletter" || rota.startsWith("newsletter/")) {
+    const r = await apiNewsletter(rota, metodo, env, { json, ErroPedido });
+    if (r) return r;
   }
 
   if (rota === "tarefas" || rota.startsWith("tarefas/")) {

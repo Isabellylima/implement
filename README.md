@@ -142,3 +142,8 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 - **IVA:** cada cliente, avença, serviço, custo fixo ou gasto pode ser «sem IVA» ou «com IVA» (23/13/6%). Entradas: o valor escrito é sem IVA e o IVA soma-se (cliente paga mais). Saídas: o valor escrito é o total da fatura e o IVA lá dentro é dedutível. IVA a entregar = cobrado − dedutível, por mês e por trimestre; o resultado já desconta esse IVA.
 - **Painel:** resumo do mês, gráfico do ano (meses futuros = previsão: fixos + média dos últimos 3 meses de variáveis e serviços pontuais), trimestres para a declaração com exportação CSV, receita por cliente.
 - **Dados:** tabelas `fin_*` na D1, valores em cêntimos (`src/financas.js`).
+
+## Newsletter e HubSpot
+
+- **Newsletter:** faixa antes do rodapé em todas as páginas (menos formulários e preçário) e um convite (pop-up) que aparece uma vez — depois de 25 s ou de meia página; «Agora não» pausa 30 dias. `POST /api/newsletter` guarda na D1 (tabela `newsletter`). Lista e exportação CSV em `/admin/#/newsletter` (menu Site).
+- **HubSpot:** `src/hubspot.js` envia pela Forms API v3 (sem chave secreta). Preencher em `wrangler.jsonc → vars`: `HUBSPOT_PORTAL` (Hub ID), `HUBSPOT_FORM_CONTACTO` (recebe Contacto e Começar um projeto, com o pedido no campo `message`), `HUBSPOT_FORM_NEWSLETTER` e, opcional, `HUBSPOT_SUBSCRICAO` (ID do tipo de subscrição de marketing). Sem estas variáveis, nada é enviado e o resto funciona igual. `/api/saude` mostra se está ligado.

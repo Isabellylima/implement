@@ -176,3 +176,74 @@ test("pedidos e mensagens com mais de 24 meses são apagados ao guardar um novo"
   const meses = (Date.now() - new Date(l[0].v[0]).getTime()) / (30.44 * 86400000);
   assert.ok(meses > 23.5 && meses < 24.5);
 });
+
+/* ---------- Newsletter e HubSpot ---------- */
+const HUB = { HUBSPOT_PORTAL: "12345", HUBSPOT_FORM_CONTACTO: "form-contacto", HUBSPOT_FORM_NEWSLETTER: "form-news", HUBSPOT_SUBSCRICAO: "999" };
+function comFetch(fn) {
+  return async () => {
+    const original = globalThis.fetch;
+    const chamadas = [];
+    globalThis.fetch = async (u, o) => { chamadas.push({ url: String(u), corpo: JSON.parse(o.body) }); return new Response("{}", { status: 200 }); };
+    try { await fn(chamadas); } finally { globalThis.fetch = original; }
+  };
+}
+const nl = (corpo) => new Request("https://heyimplement.com/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json", Origin: "https://heyimplement.com" }, body: JSON.stringify(corpo) });
+
+test("newsletter: exige e-mail válido e consentimento", async () => {
+  const { env, ctx } = ambiente();
+  let r = await worker.fetch(nl({ email: "nao-e-email", consentimento: true }), env, ctx);
+  assert.equal(r.status, 400);
+  r = await worker.fetch(nl({ email: "ana@cafeaurora.pt" }), env, ctx);
+  assert.equal(r.status, 400);
+  r = await worker.fetch(new Request("https://heyimplement.com/api/newsletter", { method: "POST", headers: { "Content-Type": "application/json", Origin: "https://outro.com" }, body: "{}" }), env, ctx);
+  assert.equal(r.status, 403);
+});
+
+test("newsletter: guarda e envia para o HubSpot com o consentimento", comFetch(async (chamadas) => {
+  const { env, ctx, registos, esperas } = ambiente();
+  Object.assign(env, HUB);
+  const r = await worker.fetch(nl({ email: "Ana@CafeAurora.pt", consentimento: true, idioma: "pt", origem: "popup", pagina: "/services" }), env, ctx);
+  assert.equal(r.status, 200);
+  await Promise.all(esperas);
+  assert.match(registos.sql[0].sql, /INSERT INTO newsletter/);
+  assert.equal(registos.sql[0].v[1], "ana@cafeaurora.pt");
+  assert.equal(chamadas.length, 1);
+  assert.match(chamadas[0].url, /submit\/12345\/form-news$/);
+  assert.deepEqual(chamadas[0].corpo.fields, [{ objectTypeId: "0-1", name: "email", value: "ana@cafeaurora.pt" }]);
+  assert.equal(chamadas[0].corpo.legalConsentOptions.consent.communications[0].subscriptionTypeId, 999);
+  assert.equal(chamadas[0].corpo.context.pageUri, "https://heyimplement.com/services");
+}));
+
+test("newsletter: campo-armadilha não guarda nada", comFetch(async (chamadas) => {
+  const { env, ctx, registos } = ambiente();
+  Object.assign(env, HUB);
+  const r = await worker.fetch(nl({ email: "bot@x.com", consentimento: true, site_empresa: "spam" }), env, ctx);
+  assert.equal(r.status, 200);
+  assert.equal(registos.sql.length, 0);
+  assert.equal(chamadas.length, 0);
+}));
+
+test("pedido «Começar um projeto» vai para o HubSpot com o resumo", comFetch(async (chamadas) => {
+  const { env, ctx, esperas } = ambiente();
+  Object.assign(env, HUB);
+  const r = await worker.fetch(pedir({ respostas: BASE, idioma: "pt", inicio: Date.now() - 300000 }), env, ctx);
+  assert.equal(r.status, 200);
+  await Promise.all(esperas);
+  assert.equal(chamadas.length, 1);
+  assert.match(chamadas[0].url, /submit\/12345\/form-contacto$/);
+  const campos = Object.fromEntries(chamadas[0].corpo.fields.map((f) => [f.name, f.value]));
+  assert.equal(campos.email, "ana@cafeaurora.pt");
+  assert.equal(campos.firstname, "Ana");
+  assert.equal(campos.lastname, "Costa");
+  assert.equal(campos.company, "Café Aurora");
+  assert.match(campos.message, /Pedido|IMP-/);
+  assert.equal(chamadas[0].corpo.legalConsentOptions.consent.communications, undefined);
+}));
+
+test("sem HubSpot configurado não se chama a API", comFetch(async (chamadas) => {
+  const { env, ctx, esperas } = ambiente();
+  await worker.fetch(pedir({ respostas: BASE, idioma: "pt", inicio: Date.now() - 300000 }), env, ctx);
+  await worker.fetch(nl({ email: "ana@cafeaurora.pt", consentimento: true }), env, ctx);
+  await Promise.all(esperas);
+  assert.equal(chamadas.length, 0);
+}));

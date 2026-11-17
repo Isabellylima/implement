@@ -5,6 +5,8 @@
      GET  /api/saude            → estado da configuração (para confirmar a publicação)
    As perguntas e as regras de validação são as mesmas do formulário: public/assets/js/perguntas.js */
 import { tratarBlog } from "./blog.js";
+import { receberNewsletter } from "./newsletter.js";
+import { enviarHubspot, hubspotAtivo } from "./hubspot.js";
 import { ETAPAS, CONTACTO, validarTudo, validarContacto, textoResposta, visivel } from "../public/assets/js/perguntas.js";
 
 const LIMITE_BYTES = 64 * 1024;
@@ -42,8 +44,17 @@ export default {
         return json({ ok: false, erro: "Erro interno" }, 500);
       }
     }
+    if (url.pathname === "/api/newsletter") {
+      if (request.method !== "POST") return new Response(null, { status: 405, headers: { ...SEGURANCA, Allow: "POST" } });
+      try {
+        return await receberNewsletter(request, env, ctx, url, json);
+      } catch (e) {
+        console.error(JSON.stringify({ evento: "newsletter_falhou", erro: String(e && e.message).slice(0, 300) }));
+        return json({ ok: false, erro: "Erro interno" }, 500);
+      }
+    }
     if (url.pathname === "/api/saude" && request.method === "GET") {
-      return json({ ok: true, baseDeDados: Boolean(env.DB), email: Boolean(env.EMAIL) });
+      return json({ ok: true, baseDeDados: Boolean(env.DB), email: Boolean(env.EMAIL), hubspot: { contactos: hubspotAtivo(env, "contacto"), newsletter: hubspotAtivo(env, "newsletter") } });
     }
     if (url.pathname.startsWith("/api/")) return json({ ok: false, erro: "Não encontrado" }, 404);
     return env.ASSETS.fetch(request);
@@ -116,8 +127,23 @@ async function receberPedido(request, env, ctx, url) {
     return json({ ok: false, erro: "Não foi possível registar o pedido" }, 502);
   }
 
+  if (hubspotAtivo(env, "contacto")) ctx.waitUntil(paraHubspot(env, "pedido", {
+    email: limpas.email, nome: limpas.nome, telefone: limpas.telefone, empresa: limpas.empresa, idioma,
+    mensagem: resumoPedido(pedido), pagina: `${url.origin}/start-a-project`, origem: "Começar um projeto",
+  }, referencia));
   console.log(JSON.stringify({ evento: "pedido_recebido", referencia, servicos: limpas.servicos }));
   return json({ ok: true, referencia });
+}
+
+/* HubSpot: cópia do contacto (com o pedido/mensagem no campo «message»). Uma falha aqui nunca afeta o cliente. */
+async function paraHubspot(env, tipo, dados, referencia) {
+  try { await enviarHubspot(env, "contacto", dados); console.log(JSON.stringify({ evento: "hubspot_ok", tipo, referencia })); }
+  catch (e) { console.error(JSON.stringify({ evento: "hubspot_falhou", tipo, referencia, erro: String(e && e.message).slice(0, 300) })); }
+}
+
+/* O pedido «Começar um projeto» em texto (o mesmo do e-mail), para o campo «message» do HubSpot */
+function resumoPedido(pedido) {
+  return montarEmail(pedido).texto.replace(/\n\nResponder a este e-mail[\s\S]*$/, "").slice(0, 60000);
 }
 
 /* Prazo de conservação (política de privacidade): pedidos e mensagens com mais de 24 meses são apagados. */
@@ -278,6 +304,11 @@ async function receberMensagem(request, env, ctx, url) {
   } else if (!guardado) {
     return json({ ok: false, erro: "Não foi possível enviar a mensagem" }, 502);
   }
+  if (hubspotAtivo(env, "contacto")) ctx.waitUntil(paraHubspot(env, "mensagem", {
+    email: limpas.email, nome: limpas.nome, telefone: limpas.telefone, empresa: limpas.empresa, idioma: m.idioma,
+    mensagem: `${textoResposta(CONTACTO.find((c) => c.id === "assunto"), limpas.assunto, "pt") || "Contacto"}\n\n${limpas.mensagem}\n\n— ${referencia}`,
+    pagina: `${url.origin}/contact`, origem: "Contacto",
+  }, referencia));
   console.log(JSON.stringify({ evento: "mensagem_recebida", referencia }));
   return json({ ok: true, referencia });
 }

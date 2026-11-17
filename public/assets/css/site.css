@@ -1077,3 +1077,51 @@ html[lang^="pt"] .so-en, html:not([lang^="pt"]) .so-pt { display: none; }
 .contentor.legal, .contentor.legal-topo { --texto: 44rem; max-width: calc(var(--texto) + 2 * var(--margem)); }
 .contentor.legal { padding-top: 0; }
 .legal__data { font-size: .95rem; color: #6b6478; }
+
+/* ---------- Newsletter ---------- */
+.nl-faixa { background: var(--nevoa); border-top: 1px solid var(--linha); padding: clamp(48px, 7vw, 80px) 0; }
+.nl-faixa__grelha { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: center; }
+.nl-faixa h2 { font-family: var(--serifa); font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: 1.12; margin: 0 0 12px; color: var(--tinta); }
+.nl-faixa__texto { color: var(--cinza); margin: 0; max-width: 46ch; }
+.nl-form { display: grid; gap: 12px; }
+.nl-form__linha { display: flex; gap: 10px; }
+.nl-form__email { flex: 1; min-width: 0; min-height: 52px; padding: 0 18px; border: 1.5px solid var(--linha); border-radius: 999px; background: var(--branco); font: 400 1rem/1.2 var(--sans); color: var(--tinta); }
+.nl-form__email:focus { outline: none; border-color: var(--roxo); box-shadow: 0 0 0 4px rgba(139, 82, 232, .18); }
+.nl-form__botao { flex: none; min-height: 52px; }
+.nl-form__consent { display: flex; gap: 10px; align-items: flex-start; font-size: .875rem; line-height: 1.45; color: var(--cinza); cursor: pointer; }
+.nl-form__consent input { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--roxo); flex: none; }
+.nl-form__consent a { color: var(--roxo-profundo); }
+.nl-form__estado { margin: 0; font-size: .9375rem; font-weight: 500; color: var(--roxo-profundo); min-height: 1px; }
+.nl-form__estado:empty { display: none; }
+.nl-form__estado--erro { color: #B4233C; }
+.nl-form--feito .nl-form__estado, .nl-faixa__ja { font-size: 1.0625rem; }
+.nl-pop {
+  position: fixed; z-index: 70; left: calc(20px + env(safe-area-inset-left, 0px)); bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  width: min(380px, calc(100vw - 40px)); padding: 28px 24px 20px; border-radius: var(--raio);
+  background: var(--branco); box-shadow: var(--sombra-forte); border: 1px solid var(--linha);
+  opacity: 0; transform: translateY(24px); transition: opacity .4s var(--suave), transform .5s var(--suave);
+}
+.nl-pop--visivel { opacity: 1; transform: none; }
+.nl-pop h2 { font-family: var(--serifa); font-size: 1.45rem; line-height: 1.15; margin: 0 32px 8px 0; color: var(--tinta); }
+.nl-pop > p { margin: 0 0 16px; font-size: .9375rem; color: var(--cinza); }
+.nl-pop__abelha { width: 34px; height: 34px; color: var(--roxo); margin-bottom: 10px; }
+.nl-pop__fechar { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--nevoa); color: var(--tinta); font-size: 1.3rem; line-height: 1; cursor: pointer; }
+.nl-pop__fechar:hover { background: var(--linha); }
+.nl-pop .nl-form__linha { flex-direction: column; }
+.nl-pop .nl-form__email, .nl-pop .nl-form__botao { min-height: 48px; }
+.nl-pop .nl-form__botao { justify-content: center; }
+.nl-pop__depois { display: block; margin: 12px auto 0; border: 0; background: none; color: var(--cinza); font: 500 .875rem/1.2 var(--sans); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.nl-form--feito ~ .nl-pop__depois { display: none; }
+.menu-aberto .nl-pop { display: none; }
+@media (max-width: 760px) {
+  .nl-faixa__grelha { grid-template-columns: 1fr; }
+  .nl-form__linha { flex-direction: column; }
+  .nl-form__botao { justify-content: center; }
+  /* No telemóvel o convite fica por cima da zona do botão do WhatsApp */
+  .nl-pop { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); width: auto; padding: 24px 20px 16px; }
+  .nl-pop__abelha, .nl-pop > p { display: none; }
+  .nl-pop h2 { font-size: 1.25rem; margin-bottom: 14px; }
+  .nl-pop .nl-form__consent { font-size: .8125rem; }
+  .nl-pop__depois { margin-top: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .nl-pop { transition: none; } }
