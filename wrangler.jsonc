@@ -32,6 +32,11 @@
 
   "vars": {
     "EMAIL_DESTINO": "info@heyimplement.com",
-    "EMAIL_REMETENTE": "site@heyimplement.com"
+    "EMAIL_REMETENTE": "site@heyimplement.com",
+    // HubSpot (conta 149802693, região EU) — formulários «Site — Contactos», «Site — Iniciar projeto» e «Site — Newsletter»
+    "HUBSPOT_PORTAL": "149802693",
+    "HUBSPOT_FORM_CONTACTO": "f5a6d7d3-2652-4b57-94b5-1f04f187be06",
+    "HUBSPOT_FORM_PROJETO": "49432ffd-edb5-41a7-b60d-a8f89915f068",
+    "HUBSPOT_FORM_NEWSLETTER": "4e43269c-cfac-4dfc-b3ec-4496e06b11ac"
   }
 }
