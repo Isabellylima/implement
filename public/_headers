@@ -21,6 +21,12 @@
 /pacotes-sites.html
   X-Robots-Tag: noindex, nofollow
 
+/azimuth
+  X-Robots-Tag: noindex, nofollow
+
+/azimuth.html
+  X-Robots-Tag: noindex, nofollow
+
 /admin/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store

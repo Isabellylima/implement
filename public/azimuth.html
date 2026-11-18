@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- Gerado por scripts/azimuth.py: altere o conteúdo lá e volte a gerar. -->
+<title>Azimuth subscriptions — Implement</title>
+<meta name="titulo-pt" content="Assinaturas Azimuth — Implement">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Website hosting and winter content subscriptions for Azimuth.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C0F3A">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
+<link rel="stylesheet" href="assets/css/site.css?v=79f07820bd">
+<script src="assets/js/i18n.js?v=41291dd6f4" defer></script>
+<script src="assets/js/i18n-azimuth.js?v=d0058a30e6" defer></script>
+<script src="assets/js/site.js?v=0a1264b099" defer></script>
+<script src="assets/js/metricool.js?v=ae9ca1d97d" defer></script>
+<script src="assets/js/newsletter.js?v=8ebb1080f5" defer></script>
+</head>
+<body>
+<a class="saltar" href="#conteudo" data-i18n="c.saltar">Skip to content</a>
+
+<div class="faixa" aria-hidden="true">
+  <div class="faixa__pista">
+    <span data-i18n="c.faixa1">Based in Portugal. Working worldwide.</span>
+    <span data-i18n="c.faixa2">Strategy · Creativity · Results</span>
+    <span data-i18n="c.faixa3">Social media · Websites · Branding · Content · Google</span>
+    <span data-i18n="c.faixa4">Clear agreements. No miracle promises.</span>
+    <span data-i18n="c.faixa1">Based in Portugal. Working worldwide.</span>
+    <span data-i18n="c.faixa2">Strategy · Creativity · Results</span>
+    <span data-i18n="c.faixa3">Social media · Websites · Branding · Content · Google</span>
+    <span data-i18n="c.faixa4">Clear agreements. No miracle promises.</span>
+  </div>
+</div>
+
+<header class="topo">
+  <div class="contentor topo__interior">
+    <a class="marca" href="index.html" aria-label="Implement Digital Marketing — home">
+      <svg class="abelha" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
+      <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Digital Marketing</span></span>
+    </a>
+    <button class="hamburguer" type="button" aria-expanded="false" aria-controls="menu" data-i18n-aria="c.menu" aria-label="Menu"><span></span><span></span><span></span></button>
+    <nav class="menu" id="menu" aria-label="Main">
+      <ul class="menu__lista">
+        <li><a href="about.html" data-i18n="c.nav.sobre">About us</a></li>
+        <li><a href="services.html" data-i18n="c.nav.servicos">Services</a></li>
+        <li><a href="/work" data-i18n="c.nav.trabalho">Our work</a></li>
+        <li><a href="index.html#processo" data-i18n="c.nav.processo">Our process</a></li>
+        <li><a href="/insights" data-i18n="c.nav.insights">Insights</a></li>
+        <li><a href="contact.html" data-i18n="c.nav.contacto">Contact</a></li>
+      </ul>
+      <div class="idiomas" role="group" aria-label="Language">
+        <button type="button" data-idioma="en" aria-pressed="true">EN</button>
+        <button type="button" data-idioma="pt" aria-pressed="false">PT</button>
+      </div>
+      <a class="botao botao--pequeno" href="start-a-project.html"><span data-i18n="c.comecar">Start a project</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+<section class="heroi heroi-servicos heroi-servicos--precos ps-heroi">
+  <div class="contentor">
+    <p class="legenda" data-i18n="az.legenda">Azimuth · Subscriptions</p>
+    <h1 data-i18n-html="az.titulo">Your website and content, <span class="destaque">on autopilot.</span></h1>
+    <p class="heroi-servicos__intro" data-i18n="az.intro">Choose what you want to activate. Payment is made securely with Stripe, by card, and is charged automatically every month until the end of the plan.</p>
+    <p class="selo-iva"><span data-i18n="az.iva">Prices before VAT (23%)</span></p>
+  </div>
+</section>
+
+<section class="seccao ps-precos" id="assinaturas" aria-labelledby="t-assinaturas">
+  <div class="contentor">
+    <header class="cabeca-seccao">
+      <p class="legenda" data-i18n="az.ass.leg">Subscriptions</p>
+      <h2 id="t-assinaturas" data-i18n="az.ass.t">Two plans, one monthly payment each.</h2>
+    </header>
+    <ul class="ps-pacotes ps-pacotes--duas">
+      <li class="ps-pacote">
+        <p class="ps-pacote__leg" data-i18n="az.h.leg">12 months</p>
+        <h3 class="ps-pacote__nome" data-i18n="az.h.nome">Website hosting</h3>
+        <p class="ps-pacote__preco"><span data-i18n="az.h.preco">€35</span> <small><span data-i18n="az.mes.iva">/month + VAT</span></small></p>
+        <p class="ps-pacote__extra" data-i18n="az.h.total">€43.05/month with VAT · 12 payments</p>
+        <ul class="ps-lista"><li data-i18n="az.h.i.0">Your website online for a full year</li><li data-i18n="az.h.i.1">Automatic monthly payment by card</li><li data-i18n="az.h.i.2">12-month plan, then it ends</li></ul>
+        <a class="botao ps-pacote__botao" href="https://buy.stripe.com/dRm4gz5njafO3Xp1246Ri01" rel="noopener"><span data-i18n="az.h.botao">Subscribe</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+      </li>
+      <li class="ps-pacote ps-pacote--destaque">
+        <p class="ps-pacote__leg" data-i18n="az.c.leg">Winter · 4 months</p>
+        <h3 class="ps-pacote__nome" data-i18n="az.c.nome">Winter content</h3>
+        <p class="ps-pacote__preco"><span data-i18n="az.c.preco">€65</span> <small><span data-i18n="az.mes.iva">/month + VAT</span></small></p>
+        <p class="ps-pacote__extra" data-i18n="az.c.total">€79.95/month with VAT · 4 payments</p>
+        <ul class="ps-lista"><li data-i18n="az.c.i.0">2 posts a week on your feed</li><li data-i18n="az.c.i.1">About 8 posts a month, 4 months of content</li><li data-i18n="az.c.i.2">Automatic monthly payment by card</li><li data-i18n="az.c.i.3">4-month plan, then it ends</li></ul>
+        <a class="botao ps-pacote__botao" href="https://buy.stripe.com/bJe28r5njcnWctVbGI6Ri02" rel="noopener"><span data-i18n="az.c.botao">Subscribe</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="seccao catalogo--nevoa ps-como" aria-labelledby="t-como">
+  <div class="contentor">
+    <header class="cabeca-seccao">
+      <p class="legenda" data-i18n="az.como.leg">How it works</p>
+      <h2 id="t-como" data-i18n="az.como.t">Subscribe in a couple of minutes.</h2>
+    </header>
+    <ol class="passos ps-passos">
+      <li class="passo"><h3 data-i18n="az.como.1.t">Choose the plan</h3><p data-i18n="az.como.1.p">Click “Subscribe” on the plan you want. You can activate one or both.</p></li>
+      <li class="passo"><h3 data-i18n="az.como.2.t">Pay by card</h3><p data-i18n="az.como.2.p">The secure Stripe page opens. The first month is charged today.</p></li>
+      <li class="passo"><h3 data-i18n="az.como.3.t">We take it from there</h3><p data-i18n="az.como.3.p">You receive the receipt by email and the following months are charged automatically.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="seccao chamada" aria-labelledby="t-chamada">
+  <svg class="chamada__abelha chamada__abelha--1 abelha--branca" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
+  <svg class="chamada__abelha chamada__abelha--2 abelha--branca" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
+  <div class="contentor">
+    <h2 id="t-chamada" data-i18n="az.cta.t">Any questions before subscribing?</h2>
+    <p data-i18n="az.cta.p">Talk to us. We’ll reply quickly.</p>
+    <div class="chamada__acoes">
+      <a class="botao botao--claro" href="https://wa.me/351962951161?text=Ol%C3%A1%21%20Tenho%20uma%20d%C3%BAvida%20sobre%20as%20assinaturas%20da%20Azimuth." rel="noopener" data-whatsapp><span data-i18n="az.cta.wa">Talk on WhatsApp</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+      <a class="botao botao--secundario" href="mailto:info@heyimplement.com">info@heyimplement.com</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="rodape">
+  <div class="contentor">
+    <div class="rodape__grelha">
+      <div>
+        <a class="marca" href="index.html" aria-label="Implement — home">
+          <svg class="abelha abelha--lilas" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
+          <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Digital Marketing</span></span>
+        </a>
+        <p class="rodape__lema" data-i18n="c.lema">Strategy · Creativity · Results</p>
+        <ul class="redes" aria-label="Social media">
+          <li><a href="https://www.instagram.com/heyimplement" rel="noopener" aria-label="Instagram"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-instagram"/></svg></a></li>
+          <li><a href="https://www.facebook.com/heyimplement" rel="noopener" aria-label="Facebook"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-facebook"/></svg></a></li>
+          <li><a href="https://www.tiktok.com/@heyimplement" rel="noopener" aria-label="TikTok"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-tiktok"/></svg></a></li>
+          <li><a href="https://www.youtube.com/@heyimplement" rel="noopener" aria-label="YouTube"><svg aria-hidden="true"><use href="assets/img/sprite.svg#r-youtube"/></svg></a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 data-i18n="c.r.agencia">Agency</h2>
+        <ul>
+          <li><a href="about.html" data-i18n="c.nav.sobre">About us</a></li>
+          <li><a href="/work" data-i18n="c.nav.trabalho">Our work</a></li>
+          <li><a href="index.html#processo" data-i18n="c.nav.processo">Our process</a></li>
+          <li><a href="/insights" data-i18n="c.nav.insights">Insights</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 data-i18n="c.nav.servicos">Services</h2>
+        <ul>
+          <li><a href="services.html" data-i18n="c.r.s1">Strategy</a></li>
+          <li><a href="services.html" data-i18n="c.r.s2">Social media</a></li>
+          <li><a href="services.html" data-i18n="c.r.s3">Websites</a></li>
+          <li><a href="services.html" data-i18n="c.r.s4">Content &amp; photo</a></li>
+          <li><a href="services.html" data-i18n="c.r.s5">Branding &amp; design</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 data-i18n="c.nav.contacto">Contact</h2>
+        <ul>
+          <li><a href="mailto:info@heyimplement.com">info@heyimplement.com</a></li>
+          <li><a href="tel:+351933690514">(+351) 933 690 514</a></li>
+          <li><a href="https://wa.me/351962951161" rel="noopener" data-whatsapp>WhatsApp · +351 962 951 161</a></li>
+          <li><a href="start-a-project.html" data-i18n="c.comecar">Start a project</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="rodape__base">
+      <span>© <span data-ano>2026</span> Implement Digital Marketing · <span data-i18n="c.portugal">Portugal</span></span>
+      <a href="privacy.html" data-i18n="c.privacidade">Privacy policy</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

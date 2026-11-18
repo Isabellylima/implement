@@ -1168,3 +1168,6 @@ html[lang^="pt"] .so-en, html:not([lang^="pt"]) .so-pt { display: none; }
   .ps-mensal__grelha, .ps-extras__grelha { grid-template-columns: 1fr; }
   .ps-pacotes { max-width: 520px; }
 }
+
+.az-em-breve { cursor: default; opacity: .7; justify-content: center; }
+.ps-pacote--destaque .ps-pacote__extra { color: var(--lilas); }
