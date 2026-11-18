@@ -27,13 +27,13 @@ def lista(prefixo, itens):
 
 # Links de pagamento do Stripe (valores + IVA 23%). Vazio = o botão de pagamento não aparece.
 STRIPE = {
-    "essencial": "",      # 349 € + IVA, pago na adjudicação
-    "profissional": "",   # 50% de 690 € = 345 € + IVA
-    "premium": "",        # 50% de 1.190 € = 595 € + IVA
-    "mensal": "",         # 99 € de ativação + 59 €/mês, + IVA
-    "anual": "",          # 637 € + IVA, 12 meses de uma vez
-    "manutencao": "",     # 29 €/mês + IVA
-    "crescimento": "",    # 69 €/mês + IVA
+    "essencial": "https://buy.stripe.com/aFa6oHcPL5ZyctVfWY6Ri03",      # 349 € + IVA, pago na adjudicação
+    "profissional": "https://buy.stripe.com/eVq28raHD5ZyctV7qs6Ri04",   # 50% de 690 € = 345 € + IVA
+    "premium": "https://buy.stripe.com/eVq7sLaHDcnW2Tl4eg6Ri05",        # 50% de 1.190 € = 595 € + IVA
+    "mensal": "https://buy.stripe.com/cNicN5g1XgEc8dF9yA6Ri09",         # 99 € de ativação + 59 €/mês, + IVA
+    "anual": "https://buy.stripe.com/aFa9ATdTPew451th126Ri06",          # 637 € + IVA, 12 meses de uma vez
+    "manutencao": "https://buy.stripe.com/cNiaEX6rn3RqgKb2686Ri07",     # 29 €/mês + IVA
+    "crescimento": "https://buy.stripe.com/aFaeVd7vrcnW9hJ3ac6Ri08",    # 69 €/mês + IVA
 }
 
 
@@ -177,7 +177,7 @@ main = f'''<main id="conteudo">
     </header>
     <ul class="ps-cartoes">
       <li class="ps-cartao">{t("ps.pag.1.t", "One-off payment", "Pagamento único", "h3")}{t("ps.pag.1.p", "50% when you confirm and 50% on delivery.", "50% na adjudicação e 50% na entrega.", "p")}{t("ps.pag.1.n", "For the Essential package, payment is made in full when you confirm.", "No Essencial, o pagamento é feito na adjudicação.", "p", ' class="ps-cartao__nota"')}</li>
-      <li class="ps-cartao">{t("ps.pag.2.t", "Monthly", "Mensal", "h3")}{t("ps.pag.2.p", "€99 setup + €59/month, by automatic direct debit.", "99 € de ativação + 59 €/mês, por débito direto automático.", "p")}{t("ps.pag.2.n", "12-month commitment.", "Fidelização de 12 meses.", "p", ' class="ps-cartao__nota"')}</li>
+      <li class="ps-cartao">{t("ps.pag.2.t", "Monthly", "Mensal", "h3")}{t("ps.pag.2.p", "€99 setup + €59/month, by automatic direct debit.", "99 € de ativação + 59 €/mês, por débito direto automático.", "p")}{t("ps.pag.2.n", "12-month commitment.", "Fidelização de 12 meses.", "p", ' class="ps-cartao__nota"')}{pagar("mensal", "ps.pag.2.pagar", "Start the monthly plan", "Ativar o plano mensal")}</li>
       <li class="ps-cartao">{t("ps.pag.3.t", "Yearly", "Anual", "h3")}{t("ps.pag.3.p", "12 months at once with a 10% discount: €637 instead of €708.", "12 meses de uma vez com 10% de desconto: 637 € em vez de 708 €.", "p")}{t("ps.pag.3.n", "No monthly payments during the year.", "Sem mensalidades durante o ano.", "p", ' class="ps-cartao__nota"')}{pagar("anual", "ps.pag.3.pagar", "Pay the year (€637 + VAT)", "Pagar o ano (637 € + IVA)")}</li>
     </ul>
   </div>
