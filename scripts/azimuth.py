@@ -66,7 +66,26 @@ main = f'''<main id="conteudo">
   </div>
 </section>
 
-<section class="seccao ps-como" aria-labelledby="t-como">
+
+<section class="seccao ps-mensal" id="conteudo-inverno" aria-labelledby="t-extra">
+  <div class="contentor ps-mensal__grelha">
+    <div>
+      {t("az.extra.leg", "Optional", "Opcional", "p", ' class="legenda"')}
+      {t("az.extra.t", "And if you’d like, we can also look after your social media this winter.", "E, se quiser, também cuidamos das suas redes este inverno.", "h2", ' id="t-extra"')}
+      {t("az.extra.p", "This one is entirely up to you and doesn’t affect your website. Two posts a week on your feed, so your business keeps showing up during the quieter months.", "Este é à sua escolha e não tem nada a ver com o site. Duas publicações por semana no feed, para o seu negócio continuar presente nos meses mais calmos.", "p", ' class="ps-mensal__texto"')}
+    </div>
+    <div class="ps-pacote ps-pacote--destaque">
+      {t("az.c.leg", "Winter · 4 months", "Inverno · 4 meses", "p", ' class="ps-pacote__leg"')}
+      {t("az.c.nome", "Winter content", "Conteúdo de inverno", "h3", ' class="ps-pacote__nome"')}
+      <p class="ps-pacote__preco">{t("az.c.preco", "€65", "65 €")} <small>{t("az.mes.iva", "/month + VAT", "/mês + IVA")}</small></p>
+      {t("az.c.total", "€79.95/month with VAT · 4 payments", "79,95 €/mês com IVA · 4 pagamentos", "p", ' class="ps-pacote__extra"')}
+      {lista("az.c.i", [("2 posts a week on your feed", "2 publicações por semana no feed"), ("About 8 posts a month, for 4 months", "Cerca de 8 publicações por mês, durante 4 meses"), ("Automatic monthly payment by card", "Pagamento mensal automático com cartão")])}
+      {botao_pagar(LINK_CONTEUDO, "az.c.botao", "I’d like this too", "Quero também")}
+    </div>
+  </div>
+</section>
+
+<section class="seccao catalogo--nevoa ps-como" aria-labelledby="t-como">
   <div class="contentor">
     <header class="cabeca-seccao">
       {t("az.como.leg", "How to activate", "Como ativar", "p", ' class="legenda"')}
@@ -77,24 +96,6 @@ main = f'''<main id="conteudo">
       <li class="passo">{t("az.como.2.t", "Enter your card", "Indique o cartão", "h3")}{t("az.como.2.p", "Add your company name and VAT number if you want them on the invoice.", "Pode indicar o nome da empresa e o NIF para a fatura.", "p")}</li>
       <li class="passo">{t("az.como.3.t", "All set", "Está feito", "h3")}{t("az.como.3.p", "Your website stays online and you receive the receipt by email.", "O site continua online e recebe o recibo por e-mail.", "p")}</li>
     </ol>
-  </div>
-</section>
-
-<section class="seccao catalogo--nevoa ps-mensal" id="conteudo-inverno" aria-labelledby="t-extra">
-  <div class="contentor ps-mensal__grelha">
-    <div>
-      {t("az.extra.leg", "Optional", "Opcional", "p", ' class="legenda"')}
-      {t("az.extra.t", "And if you’d like, we can also look after your social media this winter.", "E, se quiser, também cuidamos das suas redes este inverno.", "h2", ' id="t-extra"')}
-      {t("az.extra.p", "This one is entirely up to you and doesn’t affect your website. Two posts a week on your feed, so your business keeps showing up during the quieter months.", "Este é à sua escolha e não tem nada a ver com o site. Duas publicações por semana no feed, para o seu negócio continuar presente nos meses mais calmos.", "p", ' class="ps-mensal__texto"')}
-    </div>
-    <div class="ps-pacote">
-      {t("az.c.leg", "Winter · 4 months", "Inverno · 4 meses", "p", ' class="ps-pacote__leg"')}
-      {t("az.c.nome", "Winter content", "Conteúdo de inverno", "h3", ' class="ps-pacote__nome"')}
-      <p class="ps-pacote__preco">{t("az.c.preco", "€65", "65 €")} <small>{t("az.mes.iva", "/month + VAT", "/mês + IVA")}</small></p>
-      {t("az.c.total", "€79.95/month with VAT · 4 payments", "79,95 €/mês com IVA · 4 pagamentos", "p", ' class="ps-pacote__extra"')}
-      {lista("az.c.i", [("2 posts a week on your feed", "2 publicações por semana no feed"), ("About 8 posts a month, for 4 months", "Cerca de 8 publicações por mês, durante 4 meses"), ("Automatic monthly payment by card", "Pagamento mensal automático com cartão")])}
-      {botao_pagar(LINK_CONTEUDO, "az.c.botao", "I’d like this too", "Quero também", secundario=True)}
-    </div>
   </div>
 </section>
 
