@@ -16,6 +16,7 @@ import { CABECA, CABECALHO, RODAPE } from "./modelo.js";
 import { ESQUEMA_FINANCAS, apiFinancas, migrarFinancas } from "./financas.js";
 import { ESQUEMA_TAREFAS, apiTarefas } from "./tarefas.js";
 import { ESQUEMA_NEWSLETTER, apiNewsletter } from "./newsletter.js";
+import { ESQUEMA_LEADS, apiProspecao } from "./prospecao.js";
 
 const DOMINIO = "heyimplement.com";
 const SESSAO_DIAS = 30;
@@ -42,6 +43,7 @@ const ESQUEMA = [
   ...ESQUEMA_FINANCAS,
   ...ESQUEMA_TAREFAS,
   ...ESQUEMA_NEWSLETTER,
+  ...ESQUEMA_LEADS,
 ].join("\n");
 
 let esquemaPronto = false;
@@ -377,6 +379,11 @@ async function api(request, env, ctx, url, rota) {
       .bind(nome, String(c.cargo || "").trim().slice(0, 80), String(c.bio || "").trim().slice(0, 600), foto, m[1]).run();
     if (!r.meta || r.meta.changes === 0) { const e = await env.DB.prepare("SELECT id FROM autoras WHERE id = ?").bind(m[1]).first(); if (!e) throw new ErroPedido(404, "Autora não encontrada."); }
     return json({ ok: true });
+  }
+
+  if (rota.startsWith("prospecao") || rota === "leads" || rota.startsWith("leads/")) {
+    const r = await apiProspecao(rota, metodo, request, env, { json, lerJson, ErroPedido, idCurto });
+    if (r) return r;
   }
 
   if (rota === "newsletter" || rota.startsWith("newsletter/")) {

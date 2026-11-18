@@ -35,6 +35,22 @@ const ASSETS = {
 };
 const EMAIL = { async send(m) { await appendFile("/tmp/implement-emails.jsonl", JSON.stringify(m) + "\n"); return { messageId: "local" }; } };
 const env = { DB, ASSETS, EMAIL, EMAIL_DESTINO: "info@heyimplement.com", EMAIL_REMETENTE: "site@heyimplement.com" };
+// PLACES_FALSO=1: simula o Google Maps (para testar a prospeção sem chave)
+if (process.env.PLACES_FALSO) {
+  env.GOOGLE_PLACES_KEY = "falsa";
+  const original = globalThis.fetch;
+  globalThis.fetch = async (u, o) => {
+    if (!String(u).startsWith("https://places.googleapis.com/")) return original(u, o);
+    const q = JSON.parse(o.body).textQuery;
+    const places = Array.from({ length: 8 }, (_, i) => ({
+      id: "place" + i, displayName: { text: `${q.split(" em ")[0]} ${["Aurora", "Mar Azul", "Bella", "Sol", "Zen", "Rosa", "Atlântico", "Lua"][i]}` },
+      primaryTypeDisplayName: { text: "Clínica de estética" }, formattedAddress: `Rua ${i + 1}, 8000-000 Faro`,
+      internationalPhoneNumber: i % 3 === 2 ? "+351 289 000 00" + i : "+351 91" + i + " 000 00" + i, websiteUri: i % 2 ? "https://exemplo" + i + ".pt" : undefined,
+      rating: 4 + i / 10, userRatingCount: 10 * (i + 1), googleMapsUri: "https://maps.google.com/?cid=" + i, businessStatus: "OPERATIONAL",
+    }));
+    return new Response(JSON.stringify({ places, nextPageToken: "pg2" }), { status: 200, headers: { "Content-Type": "application/json" } });
+  };
+}
 
 http.createServer(async (req, res) => {
   const partes = [];

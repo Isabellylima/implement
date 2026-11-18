@@ -151,3 +151,9 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 ## Pacotes de sites
 
 - `heyimplement.com/pacotes-sites` — página não ligada (noindex) com os pacotes de sites para pequenos negócios de todos os tipos (Essencial, Profissional, Premium, plano mensal, manutenção, formas de pagamento e extras). Gerada por `scripts/pacotes_sites.py` (EN no HTML, PT em `i18n-pacotes-sites.js`). Link e «Copiar link» no menu Financeiro da área da equipa.
+
+## Prospeção
+
+- `/admin/#/prospecao` (menu Tarefas → Prospeção): procura empresas no Google Maps por área e zona (Places API (New), chave no segredo do Worker `GOOGLE_PLACES_KEY`), destaca as que não têm site e abre o WhatsApp com uma mensagem pronta (editável). O envio é sempre feito por uma pessoa — nada é automático.
+- «A minha lista» (tabela D1 `leads`): só guarda as empresas que a equipa contactou ou guardou, com estado (por contactar, contactado, respondeu, interessado, cliente, não quer) e notas. Quem diz «não quer» deixa de ter o botão de WhatsApp.
+- Teste local sem chave: `PLACES_FALSO=1 node test/servidor-local.mjs`.
