@@ -475,7 +475,9 @@ def pagina(modo, base):
     assert "contacto.js" not in cabeca
     cabeca = cabeca.replace('<meta charset="utf-8">\n', '<meta charset="utf-8">\n' + "<!-- Gerado por scripts/servicos.py: altere o conteúdo lá e volte a gerar. -->\n", 1)
     cabeca = cabeca.replace('<meta name="viewport"', meta + '\n<meta name="viewport"', 1)
-    cabeca = cabeca.replace('<script src="assets/js/i18n.js" defer></script>', '<script src="assets/js/i18n.js" defer></script>\n' + scripts)
+    # (o i18n.js pode já ter ?v=… da versão; os scripts da página entram logo a seguir)
+    cabeca, n = re.subn(r'(<script src="assets/js/i18n\.js[^"]*" defer></script>)', lambda m: m.group(1) + "\n" + scripts, cabeca, count=1)
+    assert n == 1, "i18n.js não encontrado no cabeçalho"
 
     topo = base[base.index('<a class="saltar"'):base.index("<main")]
     topo = topo.replace(' aria-current="page"', "")

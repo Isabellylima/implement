@@ -147,3 +147,7 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 
 - **Newsletter:** faixa antes do rodapé em todas as páginas (menos formulários e preçário) e um convite (pop-up) que aparece uma vez — depois de 25 s ou de meia página; «Agora não» pausa 30 dias. `POST /api/newsletter` guarda na D1 (tabela `newsletter`). Lista e exportação CSV em `/admin/#/newsletter` (menu Site).
 - **HubSpot:** `src/hubspot.js` envia pela Forms API v3 (sem chave secreta). Preencher em `wrangler.jsonc → vars`: `HUBSPOT_PORTAL` (Hub ID), `HUBSPOT_FORM_CONTACTO` (recebe Contacto e Começar um projeto, com o pedido no campo `message`), `HUBSPOT_FORM_NEWSLETTER` `HUBSPOT_FORM_PROJETO` (opcional: formulário só para Começar um projeto, para um workflow de acompanhamento) e, opcional, `HUBSPOT_SUBSCRICAO` (ID do tipo de subscrição de marketing). Sem estas variáveis, nada é enviado e o resto funciona igual. `/api/saude` mostra se está ligado.
+
+## Pacotes de sites
+
+- `heyimplement.com/pacotes-sites` — página não ligada (noindex) com os pacotes de sites para profissionais de obras e serviços (Essencial, Profissional, Premium, plano mensal, manutenção, formas de pagamento e extras). Gerada por `scripts/pacotes_sites.py` (EN no HTML, PT em `i18n-pacotes-sites.js`). Link e «Copiar link» no menu Financeiro da área da equipa.

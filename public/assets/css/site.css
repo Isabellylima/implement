@@ -1125,3 +1125,46 @@ html[lang^="pt"] .so-en, html:not([lang^="pt"]) .so-pt { display: none; }
   .nl-pop__depois { margin-top: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { .nl-pop { transition: none; } }
+
+/* ---------- Pacotes de sites (pacotes-sites.html) ---------- */
+.ps-heroi .selo-iva { display: table; }
+.catalogo--nevoa.ps-como, .catalogo--nevoa.ps-mensal, .catalogo--nevoa.ps-pagamento { background: var(--nevoa); }
+.ps-cartoes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); }
+.ps-cartao { background: var(--branco); border: 1px solid var(--linha); border-radius: var(--raio); padding: clamp(22px, 3vw, 32px); }
+.ps-problema .ps-cartao { background: var(--nevoa); border-color: transparent; }
+.ps-cartao h3 { font-size: 1.3rem; margin-bottom: 10px; }
+.ps-cartao p { color: #4a4357; margin: 0; }
+.ps-cartao__nota { margin-top: 12px !important; font-size: .9375rem; color: var(--cinza) !important; }
+.ps-passos { grid-template-columns: repeat(3, 1fr); }
+.ps-pacotes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 24px); align-items: stretch; }
+.ps-pacotes--duas { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 880px; }
+.ps-pacote { position: relative; display: flex; flex-direction: column; background: var(--branco); border: 1px solid var(--linha); border-radius: var(--raio); padding: clamp(26px, 3vw, 36px); box-shadow: var(--sombra); }
+.ps-pacote--destaque { background: var(--noite); border-color: var(--noite); color: var(--branco); box-shadow: var(--sombra-forte); }
+.ps-pacote__leg { margin: 0 0 6px; font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--roxo-profundo); }
+.ps-pacote--destaque .ps-pacote__leg { color: var(--noite); background: var(--mel); align-self: flex-start; padding: 5px 12px; border-radius: 999px; letter-spacing: .1em; }
+.ps-pacote__nome { font-size: 1.6rem; margin: 6px 0 0; }
+.ps-pacote__preco { font: 800 clamp(2.4rem, 4.5vw, 3.1rem)/1 var(--serifa); color: var(--roxo); margin: 18px 0 0; font-variant-numeric: tabular-nums; }
+.ps-pacote__preco small { font: 500 1rem/1 var(--sans); color: var(--cinza); }
+.ps-pacote--destaque .ps-pacote__preco { color: var(--lilas); }
+.ps-pacote__extra { margin: 8px 0 0; font-weight: 700; color: var(--roxo-profundo); }
+.ps-lista { list-style: none; margin: 24px 0 0; padding: 22px 0 0; border-top: 1px solid var(--linha); display: grid; gap: 12px; flex: 1; align-content: start; }
+.ps-pacote--destaque .ps-lista { border-top-color: rgba(205, 184, 247, .25); }
+.ps-lista li { position: relative; padding-left: 28px; line-height: 1.45; }
+.ps-lista li::before { content: ""; position: absolute; left: 0; top: .2em; width: 18px; height: 18px; border-radius: 50%; background: var(--nevoa) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.3l2.6 2.5L13 6.5' fill='none' stroke='%235B2BB5' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 18px no-repeat; }
+.ps-pacote--destaque .ps-lista li::before { background-color: rgba(205, 184, 247, .18); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.3l2.6 2.5L13 6.5' fill='none' stroke='%23CDB8F7' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.ps-pacote__nota { margin: 18px 0 0; font-size: .875rem; color: var(--cinza); }
+.ps-pacote__botao { margin-top: 26px; justify-content: center; }
+.ps-pacote--destaque .botao { --fundo: var(--roxo); }
+.ps-nota-iva { margin: 20px 0 0; font-size: .875rem; color: var(--cinza); }
+.ps-mensal__grelha { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: clamp(32px, 6vw, 80px); align-items: center; }
+.ps-mensal h2 { margin: 14px 0 18px; }
+.ps-mensal__texto { font-size: 1.125rem; color: #3b3448; max-width: 34rem; }
+.ps-extras__grelha { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: clamp(32px, 6vw, 80px); align-items: start; }
+.ps-extras .cabeca-seccao { margin-bottom: 0; }
+.ps-cta__contactos { font-size: .9375rem !important; margin-top: 28px !important; }
+.ps-cta__contactos a { color: var(--branco); }
+@media (max-width: 900px) {
+  .ps-cartoes, .ps-pacotes, .ps-pacotes--duas, .ps-passos { grid-template-columns: 1fr; }
+  .ps-mensal__grelha, .ps-extras__grelha { grid-template-columns: 1fr; }
+  .ps-pacotes { max-width: 520px; }
+}
