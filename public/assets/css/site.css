@@ -1171,3 +1171,8 @@ html[lang^="pt"] .so-en, html:not([lang^="pt"]) .so-pt { display: none; }
 
 .az-em-breve { cursor: default; opacity: .7; justify-content: center; }
 .ps-pacote--destaque .ps-pacote__extra { color: var(--lilas); }
+.ps-pagar { display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; font-size: .875rem; font-weight: 700; color: var(--roxo-profundo); text-decoration: underline; text-underline-offset: 3px; text-align: center; }
+.ps-pagar .seta { width: 14px; height: 14px; }
+.ps-pacote--destaque .ps-pagar { color: var(--lilas); }
+.ps-pacote > .ps-pagar { align-self: center; }
+.ps-cartao .ps-pagar { margin-top: 16px; }

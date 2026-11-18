@@ -25,22 +25,42 @@ def lista(prefixo, itens):
     return "<ul class=\"ps-lista\">" + "".join(t(f"{prefixo}.{i}", en, pt, "li") for i, (en, pt) in enumerate(itens)) + "</ul>"
 
 
+# Links de pagamento do Stripe (valores + IVA 23%). Vazio = o botão de pagamento não aparece.
+STRIPE = {
+    "essencial": "",      # 349 € + IVA, pago na adjudicação
+    "profissional": "",   # 50% de 690 € = 345 € + IVA
+    "premium": "",        # 50% de 1.190 € = 595 € + IVA
+    "mensal": "",         # 99 € de ativação + 59 €/mês, + IVA
+    "anual": "",          # 637 € + IVA, 12 meses de uma vez
+    "manutencao": "",     # 29 €/mês + IVA
+    "crescimento": "",    # 69 €/mês + IVA
+}
+
+
+def pagar(chave_link, chave, en, pt):
+    link = STRIPE.get(chave_link)
+    if not link:
+        return ""
+    return (f'<a class="ps-pagar" href="{html.escape(link)}" rel="noopener">' + t(chave, en, pt)
+            + '<svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>')
+
+
 WA = "https://wa.me/351962951161?text=" + "Ol%C3%A1%21%20Gostava%20de%20pedir%20a%20pr%C3%A9via%20gratuita%20do%20meu%20site."
 SETA = '<svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg>'
 
 PACOTES = [
-    dict(id="essencial", leg=("To get started", "Para começar"), nome=("Essential", "Essencial"), preco=("€349", "349 €"),
+    dict(id="essencial", pagar=("Already approved the preview? Pay and confirm", "Já aprovou a prévia? Pagar e adjudicar"), leg=("To get started", "Para começar"), nome=("Essential", "Essencial"), preco=("€349", "349 €"),
          itens=[("Complete one-page website", "Site de 1 página completa"),
                 ("WhatsApp button and quote request", "Botão de WhatsApp e pedido de orçamento"),
                 ("Google Maps link", "Ligação ao Google Maps"),
                 ("Ready in 7 days", "Pronto em 7 dias")]),
-    dict(id="profissional", leg=("Most chosen", "Mais escolhido"), nome=("Professional", "Profissional"), preco=("€690", "690 €"), destaque=True,
+    dict(id="profissional", pagar=("Already approved the preview? Pay the 50% deposit", "Já aprovou a prévia? Pagar os 50% de adjudicação"), leg=("Most chosen", "Mais escolhido"), nome=("Professional", "Profissional"), preco=("€690", "690 €"), destaque=True,
          itens=[("Up to 5 pages, one per service", "Até 5 páginas, uma por serviço"),
                 ("Local SEO for your area", "SEO local para a sua zona"),
                 ("Optimised Google Business Profile", "Google Business Profile otimizado"),
                 ("Reviews on the website", "Avaliações no site"),
                 ("Ready in 10 days", "Pronto em 10 dias")]),
-    dict(id="premium", leg=("Complete presence", "Presença completa"), nome=("Premium", "Premium"), preco=("€1,190", "1.190 €"),
+    dict(id="premium", pagar=("Already approved the preview? Pay the 50% deposit", "Já aprovou a prévia? Pagar os 50% de adjudicação"), leg=("Complete presence", "Presença completa"), nome=("Premium", "Premium"), preco=("€1,190", "1.190 €"),
          itens=[("Everything in Professional", "Tudo do Profissional"),
                 ("Simple logo", "Logótipo simples"),
                 ("Pages per city or area", "Páginas por cidade ou zona"),
@@ -58,7 +78,8 @@ def cartao_pacote(p):
             + t(f"{k}.preco", *p["preco"], "p", ' class="ps-pacote__preco"')
             + lista(f"{k}.i", p["itens"])
             + f'<a class="botao{"" if p.get("destaque") else " botao--secundario"} ps-pacote__botao" href="{WA}" rel="noopener" data-whatsapp>'
-            + t("ps.previa.curto", "Ask for a free preview", "Pedir prévia gratuita") + "</a></li>")
+            + t("ps.previa.curto", "Ask for a free preview", "Pedir prévia gratuita") + "</a>"
+            + pagar(p["id"], f"{k}.pagar", *p["pagar"]) + "</li>")
 
 
 SEM_IVA = t("ps.iva", "Prices in euros, before VAT", "Valores em euros, sem IVA")
@@ -130,6 +151,7 @@ main = f'''<main id="conteudo">
       {lista("ps.men.i", [("Complete one-page website", "Site de 1 página completa"), ("WhatsApp button and quote request", "Botão de WhatsApp e pedido de orçamento"), ("Google Maps link", "Ligação ao Google Maps"), ("Hosting, domain and text changes", "Alojamento, domínio e alterações de texto"), ("Ready in 7 days", "Pronto em 7 dias")])}
       {t("ps.men.fid", "12-month commitment. After that, you continue with maintenance only, at €29/month.", "Fidelização de 12 meses. Depois, continua só com a manutenção a 29 €/mês.", "p", ' class="ps-pacote__nota"')}
       <a class="botao ps-pacote__botao" href="{WA}" rel="noopener" data-whatsapp>{t("ps.previa.curto", "Ask for a free preview", "Pedir prévia gratuita")}</a>
+      {pagar("mensal", "ps.men.pagar", "Already approved the preview? Start the monthly plan", "Já aprovou a prévia? Ativar o plano mensal")}
     </div>
   </div>
 </section>
@@ -141,8 +163,8 @@ main = f'''<main id="conteudo">
       {t("ps.dep.t", "We look after your website while you work.", "Cuidamos do site enquanto trabalha.", "h2", ' id="t-depois"')}
     </header>
     <ul class="ps-pacotes ps-pacotes--duas">
-      <li class="ps-pacote">{t("ps.dep.m.n", "Maintenance", "Manutenção", "h3", ' class="ps-pacote__nome"')}<p class="ps-pacote__preco">{t("ps.dep.m.p", "€29", "29 €")} <small>{t("ps.mes", "/month", "/mês")}</small></p>{lista("ps.dep.m.i", [("Hosting and domain", "Alojamento e domínio"), ("Security and backups", "Segurança e cópias de segurança"), ("Small text changes", "Pequenas alterações de texto")])}</li>
-      <li class="ps-pacote">{t("ps.dep.c.n", "Growth", "Crescimento", "h3", ' class="ps-pacote__nome"')}<p class="ps-pacote__preco">{t("ps.dep.c.p", "€69", "69 €")} <small>{t("ps.mes", "/month", "/mês")}</small></p>{lista("ps.dep.c.i", [("Everything in Maintenance", "Tudo da Manutenção"), ("New photos and updates from your business on the website and on Google", "Fotos e novidades do seu negócio no site e no Google"), ("Review management", "Gestão de avaliações"), ("Simple monthly report", "Relatório mensal simples")])}</li>
+      <li class="ps-pacote">{t("ps.dep.m.n", "Maintenance", "Manutenção", "h3", ' class="ps-pacote__nome"')}<p class="ps-pacote__preco">{t("ps.dep.m.p", "€29", "29 €")} <small>{t("ps.mes", "/month", "/mês")}</small></p>{lista("ps.dep.m.i", [("Hosting and domain", "Alojamento e domínio"), ("Security and backups", "Segurança e cópias de segurança"), ("Small text changes", "Pequenas alterações de texto")])}{pagar("manutencao", "ps.dep.m.pagar", "Subscribe to Maintenance", "Subscrever a Manutenção")}</li>
+      <li class="ps-pacote">{t("ps.dep.c.n", "Growth", "Crescimento", "h3", ' class="ps-pacote__nome"')}<p class="ps-pacote__preco">{t("ps.dep.c.p", "€69", "69 €")} <small>{t("ps.mes", "/month", "/mês")}</small></p>{lista("ps.dep.c.i", [("Everything in Maintenance", "Tudo da Manutenção"), ("New photos and updates from your business on the website and on Google", "Fotos e novidades do seu negócio no site e no Google"), ("Review management", "Gestão de avaliações"), ("Simple monthly report", "Relatório mensal simples")])}{pagar("crescimento", "ps.dep.c.pagar", "Subscribe to Growth", "Subscrever o Crescimento")}</li>
     </ul>
   </div>
 </section>
@@ -156,7 +178,7 @@ main = f'''<main id="conteudo">
     <ul class="ps-cartoes">
       <li class="ps-cartao">{t("ps.pag.1.t", "One-off payment", "Pagamento único", "h3")}{t("ps.pag.1.p", "50% when you confirm and 50% on delivery.", "50% na adjudicação e 50% na entrega.", "p")}{t("ps.pag.1.n", "For the Essential package, payment is made in full when you confirm.", "No Essencial, o pagamento é feito na adjudicação.", "p", ' class="ps-cartao__nota"')}</li>
       <li class="ps-cartao">{t("ps.pag.2.t", "Monthly", "Mensal", "h3")}{t("ps.pag.2.p", "€99 setup + €59/month, by automatic direct debit.", "99 € de ativação + 59 €/mês, por débito direto automático.", "p")}{t("ps.pag.2.n", "12-month commitment.", "Fidelização de 12 meses.", "p", ' class="ps-cartao__nota"')}</li>
-      <li class="ps-cartao">{t("ps.pag.3.t", "Yearly", "Anual", "h3")}{t("ps.pag.3.p", "12 months at once with a 10% discount: €637 instead of €708.", "12 meses de uma vez com 10% de desconto: 637 € em vez de 708 €.", "p")}{t("ps.pag.3.n", "No monthly payments during the year.", "Sem mensalidades durante o ano.", "p", ' class="ps-cartao__nota"')}</li>
+      <li class="ps-cartao">{t("ps.pag.3.t", "Yearly", "Anual", "h3")}{t("ps.pag.3.p", "12 months at once with a 10% discount: €637 instead of €708.", "12 meses de uma vez com 10% de desconto: 637 € em vez de 708 €.", "p")}{t("ps.pag.3.n", "No monthly payments during the year.", "Sem mensalidades durante o ano.", "p", ' class="ps-cartao__nota"')}{pagar("anual", "ps.pag.3.pagar", "Pay the year (€637 + VAT)", "Pagar o ano (637 € + IVA)")}</li>
     </ul>
   </div>
 </section>
