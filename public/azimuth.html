@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <!-- Gerado por scripts/azimuth.py: altere o conteúdo lá e volte a gerar. -->
-<title>Azimuth subscriptions — Implement</title>
-<meta name="titulo-pt" content="Assinaturas Azimuth — Implement">
+<title>Azimuth website — Implement</title>
+<meta name="titulo-pt" content="O seu site — Azimuth · Implement">
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Website hosting and winter content subscriptions for Azimuth.">
+<meta name="description" content="Activate the hosting plan for the Azimuth website.">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#1C0F3A">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
 <link rel="stylesheet" href="assets/css/site.css?v=79f07820bd">
 <script src="assets/js/i18n.js?v=41291dd6f4" defer></script>
-<script src="assets/js/i18n-azimuth.js?v=833ca054a5" defer></script>
+<script src="assets/js/i18n-azimuth.js?v=eab84b202c" defer></script>
 <script src="assets/js/site.js?v=0a1264b099" defer></script>
 <script src="assets/js/metricool.js?v=ae9ca1d97d" defer></script>
 <script src="assets/js/newsletter.js?v=8ebb1080f5" defer></script>
@@ -64,51 +64,62 @@
 <main id="conteudo">
 <section class="heroi heroi-servicos heroi-servicos--precos ps-heroi">
   <div class="contentor">
-    <p class="legenda" data-i18n="az.legenda">Azimuth · Subscriptions</p>
-    <h1 data-i18n-html="az.titulo">Your website and content, <span class="destaque">on autopilot.</span></h1>
-    <p class="heroi-servicos__intro" data-i18n="az.intro">Choose what you want to activate. Payment is made securely with Stripe, by card, and is charged automatically every month until the end of the plan.</p>
-    <p class="selo-iva"><span data-i18n="az.iva">Prices before VAT (23%)</span></p>
+    <p class="legenda" data-i18n="az.legenda">Azimuth · Your website</p>
+    <h1 data-i18n-html="az.titulo">Your website is ready. <span class="destaque">Just one step left.</span></h1>
+    <p class="heroi-servicos__intro" data-i18n="az.intro">To keep your website online, all that’s left is to activate the hosting plan we agreed on. It takes two minutes and payment is made securely with Stripe.</p>
+    <div class="heroi__acoes">
+      <a class="botao" href="#plano"><span data-i18n="az.ver">See my plan</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+    </div>
   </div>
 </section>
 
-<section class="seccao ps-precos" id="assinaturas" aria-labelledby="t-assinaturas">
-  <div class="contentor">
-    <header class="cabeca-seccao">
-      <p class="legenda" data-i18n="az.ass.leg">Subscriptions</p>
-      <h2 id="t-assinaturas" data-i18n="az.ass.t">Two plans, one monthly payment each.</h2>
-    </header>
-    <ul class="ps-pacotes ps-pacotes--duas">
-      <li class="ps-pacote">
-        <p class="ps-pacote__leg" data-i18n="az.h.leg">12 months</p>
-        <h3 class="ps-pacote__nome" data-i18n="az.h.nome">Website hosting and changes</h3>
-        <p class="ps-pacote__preco"><span data-i18n="az.h.preco">€35</span> <small><span data-i18n="az.mes.iva">/month + VAT</span></small></p>
-        <p class="ps-pacote__extra" data-i18n="az.h.total">€43.05/month with VAT · 12 payments</p>
-        <ul class="ps-lista"><li data-i18n="az.h.i.0">Your website online for a full year</li><li data-i18n="az.h.i.1">Changes to your website included</li><li data-i18n="az.h.i.2">Automatic monthly payment by card</li><li data-i18n="az.h.i.3">12-month plan, then it ends</li></ul>
-        <a class="botao ps-pacote__botao" href="https://buy.stripe.com/dRm4gz5njafO3Xp1246Ri01" rel="noopener"><span data-i18n="az.h.botao">Subscribe</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
-      </li>
-      <li class="ps-pacote ps-pacote--destaque">
-        <p class="ps-pacote__leg" data-i18n="az.c.leg">Winter · 4 months</p>
-        <h3 class="ps-pacote__nome" data-i18n="az.c.nome">Winter content</h3>
-        <p class="ps-pacote__preco"><span data-i18n="az.c.preco">€65</span> <small><span data-i18n="az.mes.iva">/month + VAT</span></small></p>
-        <p class="ps-pacote__extra" data-i18n="az.c.total">€79.95/month with VAT · 4 payments</p>
-        <ul class="ps-lista"><li data-i18n="az.c.i.0">2 posts a week on your feed</li><li data-i18n="az.c.i.1">About 8 posts a month, 4 months of content</li><li data-i18n="az.c.i.2">Automatic monthly payment by card</li><li data-i18n="az.c.i.3">4-month plan, then it ends</li></ul>
-        <a class="botao ps-pacote__botao" href="https://buy.stripe.com/bJe28r5njcnWctVbGI6Ri02" rel="noopener"><span data-i18n="az.c.botao">Subscribe</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
-      </li>
-    </ul>
+<section class="seccao catalogo--nevoa ps-mensal" id="plano" aria-labelledby="t-plano">
+  <div class="contentor ps-mensal__grelha">
+    <div>
+      <p class="legenda" data-i18n="az.plano.leg">Your plan</p>
+      <h2 id="t-plano" data-i18n="az.plano.t">Hosting and changes to your website.</h2>
+      <p class="ps-mensal__texto" data-i18n="az.plano.p">This is the plan you joined. Hosting is what keeps your website online, and it also covers the changes you need along the way. Once it’s active, you don’t need to do anything else: the following months are charged automatically.</p>
+    </div>
+    <div class="ps-pacote ps-pacote--mensal">
+      <p class="ps-pacote__leg" data-i18n="az.h.leg">12 months</p>
+      <h3 class="ps-pacote__nome" data-i18n="az.h.nome">Website hosting and changes</h3>
+      <p class="ps-pacote__preco"><span data-i18n="az.h.preco">€35</span> <small><span data-i18n="az.mes.iva">/month + VAT</span></small></p>
+      <p class="ps-pacote__extra" data-i18n="az.h.total">€43.05/month with VAT · 12 payments</p>
+      <ul class="ps-lista"><li data-i18n="az.h.i.0">Your website online for a full year</li><li data-i18n="az.h.i.1">Changes to your website included</li><li data-i18n="az.h.i.2">Automatic monthly payment by card</li></ul>
+      <a class="botao ps-pacote__botao" href="https://buy.stripe.com/dRm4gz5njafO3Xp1246Ri01" rel="noopener"><span data-i18n="az.h.botao">Activate my plan</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+    </div>
   </div>
 </section>
 
-<section class="seccao catalogo--nevoa ps-como" aria-labelledby="t-como">
+<section class="seccao ps-como" aria-labelledby="t-como">
   <div class="contentor">
     <header class="cabeca-seccao">
-      <p class="legenda" data-i18n="az.como.leg">How it works</p>
-      <h2 id="t-como" data-i18n="az.como.t">Subscribe in a couple of minutes.</h2>
+      <p class="legenda" data-i18n="az.como.leg">How to activate</p>
+      <h2 id="t-como" data-i18n="az.como.t">Three quick steps.</h2>
     </header>
     <ol class="passos ps-passos">
-      <li class="passo"><h3 data-i18n="az.como.1.t">Choose the plan</h3><p data-i18n="az.como.1.p">Click “Subscribe” on the plan you want. You can activate one or both.</p></li>
-      <li class="passo"><h3 data-i18n="az.como.2.t">Pay by card</h3><p data-i18n="az.como.2.p">The secure Stripe page opens. The first month is charged today.</p></li>
-      <li class="passo"><h3 data-i18n="az.como.3.t">We take it from there</h3><p data-i18n="az.como.3.p">You receive the receipt by email and the following months are charged automatically.</p></li>
+      <li class="passo"><h3 data-i18n="az.como.1.t">Click “Activate my plan”</h3><p data-i18n="az.como.1.p">The secure Stripe page opens with your plan already filled in.</p></li>
+      <li class="passo"><h3 data-i18n="az.como.2.t">Enter your card</h3><p data-i18n="az.como.2.p">Add your company name and VAT number if you want them on the invoice.</p></li>
+      <li class="passo"><h3 data-i18n="az.como.3.t">All set</h3><p data-i18n="az.como.3.p">Your website stays online and you receive the receipt by email.</p></li>
     </ol>
+  </div>
+</section>
+
+<section class="seccao catalogo--nevoa ps-mensal" id="conteudo-inverno" aria-labelledby="t-extra">
+  <div class="contentor ps-mensal__grelha">
+    <div>
+      <p class="legenda" data-i18n="az.extra.leg">Optional</p>
+      <h2 id="t-extra" data-i18n="az.extra.t">And if you’d like, we can also look after your social media this winter.</h2>
+      <p class="ps-mensal__texto" data-i18n="az.extra.p">This one is entirely up to you and doesn’t affect your website. Two posts a week on your feed, so your business keeps showing up during the quieter months.</p>
+    </div>
+    <div class="ps-pacote">
+      <p class="ps-pacote__leg" data-i18n="az.c.leg">Winter · 4 months</p>
+      <h3 class="ps-pacote__nome" data-i18n="az.c.nome">Winter content</h3>
+      <p class="ps-pacote__preco"><span data-i18n="az.c.preco">€65</span> <small><span data-i18n="az.mes.iva">/month + VAT</span></small></p>
+      <p class="ps-pacote__extra" data-i18n="az.c.total">€79.95/month with VAT · 4 payments</p>
+      <ul class="ps-lista"><li data-i18n="az.c.i.0">2 posts a week on your feed</li><li data-i18n="az.c.i.1">About 8 posts a month, for 4 months</li><li data-i18n="az.c.i.2">Automatic monthly payment by card</li></ul>
+      <a class="botao botao--secundario ps-pacote__botao" href="https://buy.stripe.com/bJe28r5njcnWctVbGI6Ri02" rel="noopener"><span data-i18n="az.c.botao">I’d like this too</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+    </div>
   </div>
 </section>
 
@@ -116,10 +127,10 @@
   <svg class="chamada__abelha chamada__abelha--1 abelha--branca" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
   <svg class="chamada__abelha chamada__abelha--2 abelha--branca" aria-hidden="true"><use href="assets/img/sprite.svg#abelha"/></svg>
   <div class="contentor">
-    <h2 id="t-chamada" data-i18n="az.cta.t">Any questions before subscribing?</h2>
-    <p data-i18n="az.cta.p">Talk to us. We’ll reply quickly.</p>
+    <h2 id="t-chamada" data-i18n="az.cta.t">Thank you for trusting us with your website.</h2>
+    <p data-i18n="az.cta.p">If you have any questions before activating, just talk to us.</p>
     <div class="chamada__acoes">
-      <a class="botao botao--claro" href="https://wa.me/351962951161?text=Ol%C3%A1%21%20Tenho%20uma%20d%C3%BAvida%20sobre%20as%20assinaturas%20da%20Azimuth." rel="noopener" data-whatsapp><span data-i18n="az.cta.wa">Talk on WhatsApp</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
+      <a class="botao botao--claro" href="https://wa.me/351962951161?text=Ol%C3%A1%21%20Tenho%20uma%20d%C3%BAvida%20sobre%20o%20plano%20do%20site%20da%20Azimuth." rel="noopener" data-whatsapp><span data-i18n="az.cta.wa">Talk on WhatsApp</span><svg class="seta" aria-hidden="true"><use href="assets/img/sprite.svg#seta"/></svg></a>
       <a class="botao botao--secundario" href="mailto:info@heyimplement.com">info@heyimplement.com</a>
     </div>
   </div>
