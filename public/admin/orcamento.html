@@ -10,9 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
 <link rel="stylesheet" href="/assets/css/site.css?v=3256df2e3d">
-<link rel="stylesheet" href="/assets/css/admin.css?v=e5a7f07a04">
+<link rel="stylesheet" href="/assets/css/admin.css?v=f92cb526ca">
 <title>Orçamentos · Implement</title>
-<script src="/assets/js/admin-menu.js?v=c5c5feec85" type="module"></script>
+<script src="/assets/js/admin-menu.js?v=aca76857be" type="module"></script>
 <script src="/assets/js/admin-conta.js?v=1a9a325186" type="module"></script>
 <script src="/assets/js/orcamento.js?v=379906fadd" type="module"></script>
 </head>
@@ -51,22 +51,21 @@
         <a href="/admin/#/financas" data-rota="financas">Finanças</a>
         <a href="/admin/orcamento" data-rota="orcamento" aria-current="page">Orçamentos</a>
         <div class="admin-grupo__linha">
-          <a href="/precario" target="_blank" rel="noopener">Preçário ↗</a>
+          <a href="/precario" target="_blank" rel="noopener">Preçário ↗︎</a>
           <button type="button" class="admin-grupo__copiar" data-copiar="/precario" title="Copiar o link do preçário para enviar a um cliente">Copiar link</button>
         </div>
         <div class="admin-grupo__linha">
-          <a href="/pacotes-sites" target="_blank" rel="noopener">Pacotes de sites ↗</a>
+          <a href="/pacotes-sites" target="_blank" rel="noopener">Pacotes de sites ↗︎</a>
           <button type="button" class="admin-grupo__copiar" data-copiar="/pacotes-sites" title="Copiar o link dos pacotes de sites para enviar a um cliente">Copiar link</button>
         </div>
         <div class="admin-grupo__linha">
-          <a href="/azimuth" target="_blank" rel="noopener">Assinaturas Azimuth ↗</a>
+          <a href="/azimuth" target="_blank" rel="noopener">Assinaturas Azimuth ↗︎</a>
           <button type="button" class="admin-grupo__copiar" data-copiar="/azimuth" title="Copiar o link da página de assinaturas da Azimuth">Copiar link</button>
         </div>
       </div>
     </div>
-    <a class="admin-topo__ver" href="/" target="_blank" rel="noopener">Ver site ↗</a>
   </nav>
-  <div class="admin-topo__conta"><span id="conta"></span><button type="button" id="sair">Sair</button></div>
+  <div class="admin-topo__conta"><a class="admin-topo__ver" href="/" target="_blank" rel="noopener">Ver site ↗︎</a><span id="conta"></span><button type="button" id="sair">Sair</button></div>
 </header>
 <main id="conteudo" class="admin-orcamento">
 <section class="seccao orcamento" id="orcamento" aria-labelledby="t-orcamento" lang="pt">

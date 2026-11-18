@@ -44,13 +44,23 @@
 .admin-topo__conta { margin-left: auto; display: flex; align-items: center; gap: 14px; font-size: .875rem; color: var(--lilas); }
 .admin-topo__conta button { font: inherit; color: var(--branco); background: none; border: 1px solid rgba(205, 184, 247, .4); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
 .admin-topo__conta button:hover { border-color: var(--lilas); }
+.admin-topo__conta .admin-topo__ver { margin: 0; padding: 6px 4px; font-size: .875rem; }
 @media (max-width: 760px) {
-  .admin-topo { flex-wrap: wrap; gap: 10px 16px; }
-  .admin-topo__nav { order: 3; width: 100%; margin-left: 0; flex-wrap: wrap; }
-  .admin-grupo__menu { min-width: 200px; }
-  .admin-grupo:last-of-type .admin-grupo__menu { left: auto; right: 0; }
+  /* Telemóvel: 1.ª linha marca + Ver site + Sair; 2.ª linha os 4 menus lado a lado; os submenus abrem a toda a largura */
+  .admin-topo { flex-wrap: wrap; gap: 10px 12px; padding: 12px var(--margem) 10px; }
+  .admin-topo .marca__nome { font-size: 1.2rem; }
+  .admin-topo__conta { gap: 10px; }
   .admin-topo__conta #conta { display: none; }
+  .admin-topo__nav { order: 3; width: 100%; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+  .admin-grupo { position: static; }
+  .admin-grupo__botao { width: 100%; justify-content: center; padding: 9px 4px; font-size: .875rem; gap: 4px; }
+  .admin-grupo__menu { left: var(--margem); right: var(--margem); top: calc(100% + 6px); min-width: 0; padding: 10px; max-height: calc(100vh - 140px); overflow-y: auto; }
+  .admin-grupo__menu a { padding: 12px 12px; font-size: 1rem; }
+  .admin-grupo__linha { gap: 10px; }
+  .admin-grupo__linha a { white-space: normal; }
+  .admin-grupo__copiar { padding: 10px 14px; }
 }
+@media (max-width: 360px) { .admin-grupo__seta { display: none; } }
 
 .admin-app { max-width: calc(1280px + 2 * var(--margem)); margin: 0 auto; padding: clamp(28px, 4vw, 56px) var(--margem) 96px; outline: none; }
 .admin-carregar { color: var(--cinza); }

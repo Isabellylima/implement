@@ -18,6 +18,7 @@ for (const g of grupos) {
   menu.addEventListener("click", (ev) => { if (ev.target.closest("a")) fechar(); });
 }
 document.addEventListener("click", (ev) => { if (!ev.target.closest(".admin-grupo")) fechar(); });
+addEventListener("hashchange", () => fechar());
 document.addEventListener("keydown", (ev) => {
   if (ev.key !== "Escape") return;
   const aberto = grupos.find((g) => !g.querySelector(".admin-grupo__menu").hidden);

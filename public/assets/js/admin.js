@@ -510,7 +510,7 @@ const CFG_ARTIGO = {
     if (d.capa && !d.capa_alt.trim()) return "Escreva a descrição da imagem de capa antes de publicar.";
     return "";
   },
-  mensagens: { publicado: "Artigo publicado.", rascunho: "Rascunho guardado.", atualizar: "Atualizar artigo", apagado: "Artigo apagado.", ver: "Ver artigo ↗" },
+  mensagens: { publicado: "Artigo publicado.", rascunho: "Rascunho guardado.", atualizar: "Atualizar artigo", apagado: "Artigo apagado.", ver: "Ver artigo ↗︎" },
 };
 
 const CFG_TRABALHO = {
@@ -555,7 +555,7 @@ const CFG_TRABALHO = {
     return "";
   },
   aoCarregarCapa: (r) => { $("#formato").value = formatoDe(r.largura, r.altura); },
-  mensagens: { publicado: "Trabalho publicado no portfólio.", rascunho: "Rascunho guardado.", atualizar: "Atualizar trabalho", apagado: "Trabalho apagado.", ver: "Ver no portfólio ↗" },
+  mensagens: { publicado: "Trabalho publicado no portfólio.", rascunho: "Rascunho guardado.", atualizar: "Atualizar trabalho", apagado: "Trabalho apagado.", ver: "Ver no portfólio ↗︎" },
 };
 
 function ladoComum(prefixo, nome) {
@@ -606,7 +606,7 @@ async function editor(cfg, id, tipoNovo) {
           <p class="ed__estado">Estado: <span class="selo" id="selo"></span></p>
           <button type="button" class="botao ed__publicar" id="publicar"><span>Publicar</span></button>
           <button type="button" class="botao botao--secundario botao--pequeno" id="rascunho"><span>Guardar rascunho</span></button>
-          <a class="ed__ver" id="ver" target="_blank" rel="noopener" hidden>Pré-visualizar ↗</a>
+          <a class="ed__ver" id="ver" target="_blank" rel="noopener" hidden>Pré-visualizar ↗︎</a>
           <p class="ed__erro" id="erro" role="alert"></p>
         </div>
         ${cfg.lado()}
@@ -783,7 +783,7 @@ async function editor(cfg, id, tipoNovo) {
     $("#rascunho span").textContent = a.estado === "publicado" ? "Passar a rascunho" : "Guardar rascunho";
     const ver = $("#ver");
     ver.hidden = !a.id;
-    if (a.id) { ver.href = cfg.publico + a.slug + (e.k === "publicado" ? "" : "?preview=1"); ver.textContent = e.k === "publicado" ? cfg.mensagens.ver : "Pré-visualizar ↗"; }
+    if (a.id) { ver.href = cfg.publico + a.slug + (e.k === "publicado" ? "" : "?preview=1"); ver.textContent = e.k === "publicado" ? cfg.mensagens.ver : "Pré-visualizar ↗︎"; }
   }
   const ajustar = (t) => { t.style.height = "auto"; t.style.height = t.scrollHeight + "px"; };
 
