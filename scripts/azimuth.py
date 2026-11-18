@@ -55,10 +55,10 @@ main = f'''<main id="conteudo">
     <ul class="ps-pacotes ps-pacotes--duas">
       <li class="ps-pacote">
         {t("az.h.leg", "12 months", "12 meses", "p", ' class="ps-pacote__leg"')}
-        {t("az.h.nome", "Website hosting", "Alojamento do site", "h3", ' class="ps-pacote__nome"')}
+        {t("az.h.nome", "Website hosting and changes", "Alojamento e alterações do site", "h3", ' class="ps-pacote__nome"')}
         <p class="ps-pacote__preco">{t("az.h.preco", "€35", "35 €")} <small>{t("az.mes.iva", "/month + VAT", "/mês + IVA")}</small></p>
         {t("az.h.total", "€43.05/month with VAT · 12 payments", "43,05 €/mês com IVA · 12 pagamentos", "p", ' class="ps-pacote__extra"')}
-        {lista("az.h.i", [("Your website online for a full year", "O seu site online durante um ano inteiro"), ("Automatic monthly payment by card", "Pagamento mensal automático com cartão"), ("12-month plan, then it ends", "Plano de 12 meses, termina no fim")])}
+        {lista("az.h.i", [("Your website online for a full year", "O seu site online durante um ano inteiro"), ("Changes to your website included", "Alterações ao site incluídas"), ("Automatic monthly payment by card", "Pagamento mensal automático com cartão"), ("12-month plan, then it ends", "Plano de 12 meses, termina no fim")])}
         {botao_pagar(LINK_HOSPEDAGEM, "az.h.botao")}
       </li>
       <li class="ps-pacote ps-pacote--destaque">
