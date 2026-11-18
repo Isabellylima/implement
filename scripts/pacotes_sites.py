@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gera public/pacotes-sites.html (página não ligada, noindex) com os pacotes de sites para profissionais de obras e serviços,
+"""Gera public/pacotes-sites.html (página não ligada, noindex) com os pacotes de sites para pequenos negócios de todos os tipos,
 e public/assets/js/i18n-pacotes-sites.js (textos em português).
 
 Base: o PDF «Implement — Pacotes de Sites». Altere os textos/valores aqui e volte a gerar:  sh scripts/gerar.sh"""
@@ -66,9 +66,9 @@ SEM_IVA = t("ps.iva", "Prices in euros, before VAT", "Valores em euros, sem IVA"
 main = f'''<main id="conteudo">
 <section class="heroi heroi-servicos heroi-servicos--precos ps-heroi">
   <div class="contentor">
-    {t("ps.legenda", "Websites for trades and service professionals", "Sites para profissionais de obras e serviços", "p", ' class="legenda"')}
+    {t("ps.legenda", "Websites for small businesses", "Sites para pequenos negócios", "p", ' class="legenda"')}
     {t("ps.titulo", 'Your professional website, <span class="destaque">ready in 7 days.</span>', 'O seu site profissional, <span class="destaque">pronto em 7 dias.</span>', "h1", html_=True)}
-    {t("ps.intro", "Fixed-price packages or a monthly plan, for plumbers, electricians, painters and renovation companies.", "Pacotes de preço fixo ou plano mensal, para canalizadores, eletricistas, pintores e remodelações.", "p", ' class="heroi-servicos__intro"')}
+    {t("ps.intro", "Fixed-price packages or a monthly plan, for every kind of business: services, shops, restaurants, health and wellbeing, and much more.", "Pacotes de preço fixo ou plano mensal, para negócios de todos os tipos: serviços, lojas, restauração, saúde e bem-estar, e muito mais.", "p", ' class="heroi-servicos__intro"')}
     <div class="heroi__acoes">
       <a class="botao" href="{WA}" rel="noopener" data-whatsapp>{t("ps.previa", "Ask for your free preview", "Pedir a prévia gratuita")}{SETA}</a>
       <a class="botao botao--secundario" href="#pacotes">{t("ps.ver", "See the packages", "Ver os pacotes")}</a>
@@ -81,12 +81,12 @@ main = f'''<main id="conteudo">
   <div class="contentor">
     <header class="cabeca-seccao">
       {t("ps.prob.leg", "The problem", "O problema", "p", ' class="legenda"')}
-      {t("ps.prob.t", "Whoever searches “plumber in Almada” calls the first one they see.", "Quem pesquisa “canalizador em Almada” liga para quem aparece primeiro.", "h2", ' id="t-problema"')}
+      {t("ps.prob.t", "When people look for a business near them, they choose whoever shows up first.", "Quem procura um negócio na sua zona escolhe quem aparece primeiro.", "h2", ' id="t-problema"')}
     </header>
     <ul class="ps-cartoes">
       <li class="ps-cartao">{t("ps.prob.1.t", "Without a website, you’re invisible", "Sem site, fica invisível", "h3")}{t("ps.prob.1.p", "Businesses without a website lose Google searches to the competition.", "Quem não tem site perde as pesquisas no Google para a concorrência.", "p")}</li>
-      <li class="ps-cartao">{t("ps.prob.2.t", "A Google listing isn’t enough", "A ficha do Google não chega", "h3")}{t("ps.prob.2.p", "A few photos and no list of services won’t convince a new customer.", "Poucas fotos e nenhuma lista de serviços não convencem um cliente novo.", "p")}</li>
-      <li class="ps-cartao">{t("ps.prob.3.t", "Word of mouth has its limits", "O passa-a-palavra tem limite", "h3")}{t("ps.prob.3.p", "It works, but it doesn’t bring in quote requests every week.", "Funciona, mas não traz pedidos de orçamento todas as semanas.", "p")}</li>
+      <li class="ps-cartao">{t("ps.prob.2.t", "A Google listing isn’t enough", "A ficha do Google não chega", "h3")}{t("ps.prob.2.p", "A few photos and little information about what you do won’t convince a new customer.", "Poucas fotos e pouca informação sobre o que faz não convencem um cliente novo.", "p")}</li>
+      <li class="ps-cartao">{t("ps.prob.3.t", "Word of mouth has its limits", "O passa-a-palavra tem limite", "h3")}{t("ps.prob.3.p", "It works, but it doesn’t bring in new customers every week.", "Funciona, mas não traz clientes novos todas as semanas.", "p")}</li>
     </ul>
   </div>
 </section>
@@ -142,7 +142,7 @@ main = f'''<main id="conteudo">
     </header>
     <ul class="ps-pacotes ps-pacotes--duas">
       <li class="ps-pacote">{t("ps.dep.m.n", "Maintenance", "Manutenção", "h3", ' class="ps-pacote__nome"')}<p class="ps-pacote__preco">{t("ps.dep.m.p", "€29", "29 €")} <small>{t("ps.mes", "/month", "/mês")}</small></p>{lista("ps.dep.m.i", [("Hosting and domain", "Alojamento e domínio"), ("Security and backups", "Segurança e cópias de segurança"), ("Small text changes", "Pequenas alterações de texto")])}</li>
-      <li class="ps-pacote">{t("ps.dep.c.n", "Growth", "Crescimento", "h3", ' class="ps-pacote__nome"')}<p class="ps-pacote__preco">{t("ps.dep.c.p", "€69", "69 €")} <small>{t("ps.mes", "/month", "/mês")}</small></p>{lista("ps.dep.c.i", [("Everything in Maintenance", "Tudo da Manutenção"), ("Photos of new jobs on the website and on Google", "Fotos de obras novas no site e no Google"), ("Review management", "Gestão de avaliações"), ("Simple monthly report", "Relatório mensal simples")])}</li>
+      <li class="ps-pacote">{t("ps.dep.c.n", "Growth", "Crescimento", "h3", ' class="ps-pacote__nome"')}<p class="ps-pacote__preco">{t("ps.dep.c.p", "€69", "69 €")} <small>{t("ps.mes", "/month", "/mês")}</small></p>{lista("ps.dep.c.i", [("Everything in Maintenance", "Tudo da Manutenção"), ("New photos and updates from your business on the website and on Google", "Fotos e novidades do seu negócio no site e no Google"), ("Review management", "Gestão de avaliações"), ("Simple monthly report", "Relatório mensal simples")])}</li>
     </ul>
   </div>
 </section>
@@ -201,7 +201,7 @@ assert "contacto.js" not in cabeca
 meta = '''<title>Website packages — Implement</title>
 <meta name="titulo-pt" content="Pacotes de sites — Implement">
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Professional websites for trades and service professionals, ready in 7 days. Fixed-price packages or a monthly plan.">'''
+<meta name="description" content="Professional websites for small businesses of every kind, ready in 7 days. Fixed-price packages or a monthly plan.">'''
 cabeca = cabeca.replace('<meta charset="utf-8">\n', '<meta charset="utf-8">\n<!-- Gerado por scripts/pacotes_sites.py: altere o conteúdo lá e volte a gerar. -->\n', 1)
 cabeca = cabeca.replace('<meta name="viewport"', meta + '\n<meta name="viewport"', 1)
 cabeca, n = re.subn(r'(<script src="assets/js/i18n\.js[^"]*" defer></script>)', lambda m: m.group(1) + '\n<script src="assets/js/i18n-pacotes-sites.js" defer></script>', cabeca, count=1)

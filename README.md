@@ -150,4 +150,4 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 
 ## Pacotes de sites
 
-- `heyimplement.com/pacotes-sites` — página não ligada (noindex) com os pacotes de sites para profissionais de obras e serviços (Essencial, Profissional, Premium, plano mensal, manutenção, formas de pagamento e extras). Gerada por `scripts/pacotes_sites.py` (EN no HTML, PT em `i18n-pacotes-sites.js`). Link e «Copiar link» no menu Financeiro da área da equipa.
+- `heyimplement.com/pacotes-sites` — página não ligada (noindex) com os pacotes de sites para pequenos negócios de todos os tipos (Essencial, Profissional, Premium, plano mensal, manutenção, formas de pagamento e extras). Gerada por `scripts/pacotes_sites.py` (EN no HTML, PT em `i18n-pacotes-sites.js`). Link e «Copiar link» no menu Financeiro da área da equipa.
