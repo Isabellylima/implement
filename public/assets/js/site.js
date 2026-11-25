@@ -11,6 +11,9 @@
   function lerPreferencia() {
     const q = new URLSearchParams(location.search).get("lang");
     if (q === "pt" || q === "en") return q;
+    // Páginas com idioma fixo (ex.: propostas para clientes estrangeiros) abrem sempre nesse idioma
+    const fixo = doc.dataset.idiomaFixo;
+    if (fixo === "pt" || fixo === "en") return fixo;
     try { const v = localStorage.getItem(CHAVE); if (v === "pt" || v === "en") return v; } catch (_) {}
     return (navigator.language || "").toLowerCase().startsWith("pt") ? "pt" : "en";
   }

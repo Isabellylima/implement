@@ -160,4 +160,4 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 
 ## Proposta Carvoeiro Bar
 
-`/carvoeiro-bar` (noindex, não ligada no menu; link no admin em Financeiro). Mostra os pacotes mínimos de site e de redes sociais e um questionário em inglês para o Bob escolher os serviços e indicar o valor mensal que quer investir. Fonte: `scripts/carvoeiro_bar.py` (gera a página e `i18n-carvoeiro-bar.js`). As respostas vão por `assets/js/carvoeiro-bar.js` para `/api/contacto`: ficam na base de dados, chegam por e-mail a info@ e entram no HubSpot.
+`/carvoeiro-bar` (noindex, não ligada no menu; link no admin em Financeiro). Perguntas passo a passo em inglês (barra com a abelha, como «Start a project») para o Bob escolher site e/ou redes e indicar o valor mensal que quer investir; no fim só pede o e-mail. A página abre sempre em inglês (`data-idioma-fixo="en"` no `<html>`). Fonte: `scripts/carvoeiro_bar.py` (gera a página e `i18n-carvoeiro-bar.js`). As respostas vão por `assets/js/carvoeiro-bar.js` para `/api/contacto`: ficam na base de dados, chegam por e-mail a info@ e entram no HubSpot.

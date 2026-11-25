@@ -1177,8 +1177,74 @@ html[lang^="pt"] .so-en, html:not([lang^="pt"]) .so-pt { display: none; }
 .ps-pacote > .ps-pagar { align-self: center; }
 .ps-cartao .ps-pagar { margin-top: 16px; }
 
-/* Questionário Carvoeiro Bar */
-.cb-contentor { max-width: 920px; }
-.cb-bloco + .cb-bloco { margin-top: 40px; padding-top: 34px; border-top: 1px solid var(--linha); }
-.cb-bloco__titulo { font: 700 clamp(1.35rem, 2.4vw, 1.7rem)/1.15 var(--serifa); margin: 0 0 22px; }
-#cb-sucesso:focus { outline: none; }
+/* Linha do tempo Carvoeiro Bar */
+.cb-pagina { padding-top: clamp(40px, 6vw, 72px); }
+.cb-grelha { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: clamp(28px, 4vw, 56px); align-items: start; }
+.cb-topo h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); margin: 10px 0 clamp(28px, 4vw, 44px); }
+.cb-linha { list-style: none; margin: 0; padding: 0; position: relative; }
+.cb-passo { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 18px; padding-bottom: 36px; transition: opacity .35s; }
+.cb-passo[hidden] { display: none; }
+.cb-passo::before { content: ""; position: absolute; left: 21px; top: 46px; bottom: 4px; width: 2px; background: var(--linha); }
+.cb-passo[data-estado="feito"]::before { background: var(--roxo); }
+.cb-passo:last-child::before { display: none; }
+.cb-passo__ponto { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--branco); border: 2px solid var(--linha); color: var(--cinza); transition: all .3s var(--mola); position: relative; z-index: 1; }
+.cb-passo[data-estado="ativo"] .cb-passo__ponto { border-color: var(--roxo); color: var(--roxo-profundo); box-shadow: 0 0 0 6px rgba(139, 82, 232, .14); }
+.cb-passo[data-estado="feito"] .cb-passo__ponto { background: var(--roxo); border-color: var(--roxo); color: var(--branco); }
+.cb-passo[data-estado="bloqueado"] { opacity: .38; }
+.cb-passo[data-estado="bloqueado"] .cb-passo__conteudo { pointer-events: none; }
+.cb-passo__titulo { font: 700 clamp(1.3rem, 2.4vw, 1.65rem)/1.2 var(--serifa); margin: 8px 0 6px; }
+.cb-passo__ajuda { color: var(--cinza); font-size: .9375rem; margin: 0 0 16px; }
+.cb-passo__conteudo { margin-top: 14px; }
+.cb-ops { display: grid; gap: 12px; }
+.cb-ops--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cb-ops--pilulas { display: flex; flex-wrap: wrap; gap: 10px; }
+.cb-op { position: relative; display: block; }
+.cb-op input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.cb-op__caixa { display: grid; gap: 6px; align-content: start; height: 100%; padding: 18px; border: 1.5px solid #DCD3EC; border-radius: var(--raio-pequeno); background: var(--branco); cursor: pointer; transition: border-color .2s, background-color .2s, transform .3s var(--mola); }
+.cb-op:hover .cb-op__caixa { border-color: var(--roxo); }
+.cb-op input:checked + .cb-op__caixa { border-color: var(--roxo); background: var(--nevoa); box-shadow: inset 0 0 0 1px var(--roxo); transform: translateY(-2px); }
+.cb-op input:focus-visible + .cb-op__caixa { outline: 3px solid var(--roxo); outline-offset: 2px; }
+.cb-op__nome { font-size: 1.05rem; }
+.cb-op__preco { font: 800 1.15rem/1.2 var(--serifa); color: var(--roxo); }
+.cb-op__itens { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 5px; font-size: .875rem; color: #4a4357; }
+.cb-op__itens li { padding-left: 16px; position: relative; line-height: 1.35; }
+.cb-op__itens li::before { content: ""; position: absolute; left: 0; top: .5em; width: 7px; height: 7px; border-radius: 50%; background: var(--lilas); }
+.cb-op--pilula .cb-op__caixa { border-radius: 999px; padding: 10px 18px; }
+.cb-op--pilula .cb-op__nome { font-size: .9375rem; font-weight: 500; }
+.cb-sub { font-weight: 700; font-size: .9375rem; margin: 20px 0 10px; }
+.cb-chip { min-height: 44px; padding: 10px 18px; border-radius: 999px; border: 1.5px solid #DCD3EC; background: var(--branco); font: inherit; font-weight: 600; cursor: pointer; }
+.cb-chip:hover { border-color: var(--roxo); }
+.cb-chip--ativo { background: var(--roxo); border-color: var(--roxo); color: var(--branco); }
+.cb-valor { display: flex; align-items: center; gap: 12px; margin-top: 14px; max-width: 320px; }
+.cb-valor .entrada { font: 800 1.5rem/1 var(--serifa); }
+.cb-valor__suf { color: var(--cinza); white-space: nowrap; font-weight: 600; }
+.cb-email { display: flex; gap: 10px; max-width: 520px; }
+.cb-email .entrada { flex: 1; min-width: 0; }
+.cb-privado { font-size: .8125rem; color: var(--cinza); margin-top: 12px; }
+.cb-privado a { color: var(--roxo-profundo); }
+.cb-resumo { position: sticky; top: 100px; background: var(--noite); color: var(--branco); border-radius: var(--raio); padding: 26px; box-shadow: var(--sombra-forte); }
+.cb-resumo__titulo { font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--mel); margin: 0 0 16px; }
+.cb-resumo__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.cb-resumo__lista li { display: grid; gap: 2px; animation: abrir .45s var(--suave); }
+.cb-resumo__lista span { font-size: .75rem; color: var(--lilas); text-transform: uppercase; letter-spacing: .08em; }
+.cb-resumo__lista strong { font-weight: 600; line-height: 1.35; }
+.cb-resumo__forte { padding-top: 14px; border-top: 1px solid rgba(205, 184, 247, .25); }
+.cb-resumo__forte strong { font: 800 1.6rem/1.1 var(--serifa); color: var(--mel); }
+.cb-resumo__vazio { color: var(--lilas); font-size: .9375rem; margin: 0; }
+.cb-sucesso { text-align: center; padding: clamp(40px, 6vw, 64px) 24px; background: var(--branco); border-radius: 24px; box-shadow: var(--sombra-forte); }
+.cb-sucesso:focus { outline: none; }
+.cb-sucesso .abelha-grande { width: 140px; height: 78px; margin: 0 auto 24px; animation: pairar 1.8s ease-in-out infinite; }
+.cb-sucesso p { max-width: 30rem; margin: 14px auto 0; color: #3b3448; }
+@media (max-width: 900px) {
+  .cb-grelha { grid-template-columns: 1fr; }
+  .cb-resumo { position: static; padding: 18px 20px; }
+  .cb-resumo__lista { gap: 8px; }
+  .cb-resumo__forte strong { font-size: 1.25rem; }
+}
+@media (max-width: 640px) {
+  .cb-ops--3 { grid-template-columns: 1fr; }
+  .cb-passo { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
+  .cb-passo__ponto { width: 34px; height: 34px; font-size: .875rem; }
+  .cb-passo::before { left: 16px; top: 36px; }
+  .cb-email { flex-direction: column; }
+}
