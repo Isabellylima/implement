@@ -1176,3 +1176,9 @@ html[lang^="pt"] .so-en, html:not([lang^="pt"]) .so-pt { display: none; }
 .ps-pacote--destaque .ps-pagar { color: var(--lilas); }
 .ps-pacote > .ps-pagar { align-self: center; }
 .ps-cartao .ps-pagar { margin-top: 16px; }
+
+/* Questionário Carvoeiro Bar */
+.cb-contentor { max-width: 920px; }
+.cb-bloco + .cb-bloco { margin-top: 40px; padding-top: 34px; border-top: 1px solid var(--linha); }
+.cb-bloco__titulo { font: 700 clamp(1.35rem, 2.4vw, 1.7rem)/1.15 var(--serifa); margin: 0 0 22px; }
+#cb-sucesso:focus { outline: none; }

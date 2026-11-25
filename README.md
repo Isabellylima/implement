@@ -157,3 +157,7 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 - `/admin/#/prospecao` (menu Tarefas → Prospeção): procura empresas no Google Maps por área e zona (Places API (New), chave no segredo do Worker `GOOGLE_PLACES_KEY`), destaca as que não têm site e abre o WhatsApp com uma mensagem pronta (editável). O envio é sempre feito por uma pessoa — nada é automático.
 - «A minha lista» (tabela D1 `leads`): só guarda as empresas que a equipa contactou ou guardou, com estado (por contactar, contactado, respondeu, interessado, cliente, não quer) e notas. Quem diz «não quer» deixa de ter o botão de WhatsApp.
 - Teste local sem chave: `PLACES_FALSO=1 node test/servidor-local.mjs`.
+
+## Proposta Carvoeiro Bar
+
+`/carvoeiro-bar` (noindex, não ligada no menu; link no admin em Financeiro). Mostra os pacotes mínimos de site e de redes sociais e um questionário em inglês para o Bob escolher os serviços e indicar o valor mensal que quer investir. Fonte: `scripts/carvoeiro_bar.py` (gera a página e `i18n-carvoeiro-bar.js`). As respostas vão por `assets/js/carvoeiro-bar.js` para `/api/contacto`: ficam na base de dados, chegam por e-mail a info@ e entram no HubSpot.

@@ -27,6 +27,12 @@
 /azimuth.html
   X-Robots-Tag: noindex, nofollow
 
+/carvoeiro-bar
+  X-Robots-Tag: noindex, nofollow
+
+/carvoeiro-bar.html
+  X-Robots-Tag: noindex, nofollow
+
 /admin/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
