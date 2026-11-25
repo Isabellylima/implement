@@ -15,8 +15,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
-<link rel="stylesheet" href="assets/css/site.css?v=db46d9f03e">
-<script src="assets/js/i18n.js?v=41291dd6f4" defer></script>
+<link rel="stylesheet" href="assets/css/site.css?v=2720c0ec4e">
+<script src="assets/js/i18n.js?v=385d4576a4" defer></script>
 <script src="assets/js/site.js?v=51724dbeae" defer></script>
 <script src="assets/js/metricool.js?v=ae9ca1d97d" defer></script>
 <script src="assets/js/newsletter.js?v=8161e76032" defer></script>
@@ -98,7 +98,41 @@
     </div>
   </section>
 
-  <!-- 4. Fecho com vídeo de fundo (assets/video/sobre.webm/.mp4, sem som; quem pede menos movimento vê só a imagem) -->
+  <!-- 4. Equipa -->
+  <section class="seccao seccao--nevoa equipa" aria-labelledby="t-equipa">
+    <div class="contentor">
+      <div class="equipa__topo">
+        <div class="cabeca-seccao revelar">
+          <p class="legenda" data-i18n="so.eq.leg">The team</p>
+          <h2 id="t-equipa" data-i18n-html="so.eq.titulo">Two complementary profiles, <span class="destaque">one way of working.</span></h2>
+          <p data-i18n="so.eq.p">Creativity and technology, side by side. We get to know each business up close and take care of its digital presence as if it were our own.</p>
+        </div>
+        <figure class="equipa__foto revelar"><img src="assets/img/equipa/equipa.jpg" width="1400" height="934" loading="lazy" decoding="async" alt="Jessica Martins and Isabelly Silva sitting together at a table"></figure>
+      </div>
+      <ul class="equipa__lista">
+        <li class="membro revelar">
+          <img class="membro__foto" src="assets/img/equipa/jessica.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Jessica Martins">
+          <div class="membro__texto">
+            <h3 class="membro__nome">Jessica Martins</h3>
+            <p class="membro__cargo" data-i18n="so.eq.j.c">Design & creative communication</p>
+            <p data-i18n="so.eq.j.p">With a background in design, Jessica brings creativity and communication to every project. She shapes brand identities, content and visuals that say clearly what a business does and make people want to know more.</p>
+            <ul class="membro__tags"><li data-i18n="so.eq.j.t0">Design</li><li data-i18n="so.eq.j.t1">Creativity</li><li data-i18n="so.eq.j.t2">Communication</li><li data-i18n="so.eq.j.t3">Brand identity</li></ul>
+          </div>
+        </li>
+        <li class="membro revelar" data-atraso="1">
+          <img class="membro__foto" src="assets/img/equipa/isabelly.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="Isabelly Silva">
+          <div class="membro__texto">
+            <h3 class="membro__nome">Isabelly Silva</h3>
+            <p class="membro__cargo" data-i18n="so.eq.i.c">Systems analyst & digital business management</p>
+            <p data-i18n="so.eq.i.p">A systems analyst specialised in managing businesses online, Isabelly organises the digital side of each company: websites, tools, automation and strategy, so that everything works together and the business can grow with less effort.</p>
+            <ul class="membro__tags"><li data-i18n="so.eq.i.t0">Digital management</li><li data-i18n="so.eq.i.t1">Websites</li><li data-i18n="so.eq.i.t2">Automation</li><li data-i18n="so.eq.i.t3">Strategy</li></ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 5. Fecho com vídeo de fundo (assets/video/sobre.webm/.mp4, sem som; quem pede menos movimento vê só a imagem) -->
   <section class="sobre-video" aria-labelledby="t-implementar">
     <video class="sobre-video__fundo" data-fundo autoplay muted loop playsinline preload="auto" poster="assets/video/sobre.jpg" aria-hidden="true" tabindex="-1">
       <source src="assets/video/sobre.webm" type="video/webm">

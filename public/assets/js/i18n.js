@@ -197,5 +197,20 @@ window.IMPLEMENT_PT = {
   "so.acr.p": "Compreendemos os desafios de empresas que procuram destacar-se num mercado cada vez mais digital e competitivo. Trata-se de conectar pessoas, processos e tecnologia para criar negócios mais organizados, eficientes e preparados para o futuro.",
   "so.fim.titulo": "Implementar é transformar ideias em <em>soluções reais.</em>",
   "so.fim.p": "E é exatamente isso que fazemos.",
-  "so.fim.wa": "Falar pelo WhatsApp"
+  "so.fim.wa": "Falar pelo WhatsApp",
+  "so.eq.leg": "A equipa",
+  "so.eq.titulo": "Dois perfis que se completam, <span class=\"destaque\">uma forma de trabalhar.</span>",
+  "so.eq.p": "Criatividade e tecnologia, lado a lado. Conhecemos cada negócio de perto e cuidamos da sua presença digital como se fosse nossa.",
+  "so.eq.j.c": "Design e comunicação criativa",
+  "so.eq.j.p": "Com formação em design, a Jessica traz criatividade e comunicação a cada projeto. Cria identidades de marca, conteúdos e peças visuais que dizem com clareza o que um negócio faz e despertam vontade de saber mais.",
+  "so.eq.j.t0": "Design",
+  "so.eq.j.t1": "Criatividade",
+  "so.eq.j.t2": "Comunicação",
+  "so.eq.j.t3": "Identidade de marca",
+  "so.eq.i.c": "Analista de sistemas e gestão digital de empresas",
+  "so.eq.i.p": "Analista de sistemas especialista na gestão digital de empresas online, a Isabelly organiza o lado digital de cada negócio: sites, ferramentas, automação e estratégia, para que tudo funcione em conjunto e o negócio cresça com menos esforço.",
+  "so.eq.i.t0": "Gestão digital",
+  "so.eq.i.t1": "Websites",
+  "so.eq.i.t2": "Automação",
+  "so.eq.i.t3": "Estratégia"
 };
