@@ -74,10 +74,10 @@ PASSOS = "".join([
     passo("redes", "cb.p2", ("How present do you want the bar to be on social media?", "Quanta presença quer que o bar tenha nas redes?"),
           ("We plan with you, film at the bar, and create and publish the posts for you.", "Planeamos consigo, filmamos no bar, e criamos e publicamos os posts por si."),
           '<div class="cb-ops cb-ops--3">'
-          + opcao("redes", "Steady: 2 posts a week", "cb.p2.a", ("Steady", "Regular"), ("Reference: around €240/month", "Referência: cerca de 240 €/mês"),
-                  [("2 posts a week on 1 network", "2 publicações por semana em 1 rede"), ("1 planning meeting a month", "1 reunião de alinhamento por mês"), ("1 content session at the bar a month", "1 sessão de captação no bar por mês"), ("We create and publish the posts", "Criamos e publicamos os posts"), ("2 reels and 8 stories a month", "2 reels e 8 stories por mês")])
-          + opcao("redes", "Stronger: 3 posts a week", "cb.p2.b", ("Stronger", "Mais forte"), ("Reference: around €390/month", "Referência: cerca de 390 €/mês"),
-                  [("3 posts a week on 2 networks", "3 publicações por semana em 2 redes"), ("1 planning meeting a month", "1 reunião de alinhamento por mês"), ("1 content session at the bar a month", "1 sessão de captação no bar por mês"), ("We create and publish the posts", "Criamos e publicamos os posts"), ("4 reels, 12 stories and replies to comments", "4 reels, 12 stories e resposta a comentários")])
+          + opcao("redes", "Plan 1: 2 posts + 1 reel per week, up to 5 stories", "cb.p2.a", ("Plan 1", "Plano 1"), ("Reference: around €240/month", "Referência: cerca de 240 €/mês"),
+                  [("2 posts + 1 reel per week", "2 publicações + 1 reel por semana"), ("Up to 5 stories per week", "Até 5 stories por semana"), ("On the networks we agree on", "Nas redes que combinarmos"), ("1 planning meeting a month", "1 reunião de alinhamento por mês"), ("1 content session at the bar a month", "1 sessão de captação no bar por mês"), ("We create and publish the posts", "Criamos e publicamos os posts")])
+          + opcao("redes", "Plan 2: 3 posts + 2 reels per week, up to 12 stories", "cb.p2.b", ("Plan 2", "Plano 2"), ("Reference: around €390/month", "Referência: cerca de 390 €/mês"),
+                  [("3 posts + 2 reels per week", "3 publicações + 2 reels por semana"), ("Up to 12 stories per week", "Até 12 stories por semana"), ("On the networks we agree on", "Nas redes que combinarmos"), ("1 planning meeting a month", "1 reunião de alinhamento por mês"), ("1 content session at the bar a month", "1 sessão de captação no bar por mês"), ("We create and publish the posts", "Criamos e publicamos os posts")])
           + opcao("redes", "Not sure yet", "cb.p2.nao", ("Not sure yet", "Ainda não sei"), None,
                   [("We’ll suggest what makes sense", "Sugerimos o que fizer sentido")])
           + "</div>"
