@@ -322,7 +322,11 @@ async function receberMensagem(request, env, ctx, url) {
 export function montarEmailMensagem(m) {
   const r = m.r;
   const assunto = textoResposta(CONTACTO.find((c) => c.id === "assunto"), r.assunto, "pt");
-  const titulo = `Mensagem do site: ${r.nome}${r.empresa ? ` (${r.empresa})` : ""} — ${assunto}`.slice(0, 200);
+  // Questionários de proposta (ex.: /carvoeiro-bar) trazem o budget no texto: vai também para o assunto do e-mail
+  const budget = /^VALOR MENSAL[^:\n]*:\s*([^\n]{1,40})$/m.exec(r.mensagem || "");
+  const titulo = (budget && /^Questionário /.test(r.mensagem)
+    ? `${r.mensagem.split("\n")[0].replace(/^Questionário /, "Pedido ")} — budget ${budget[1].trim()}/mês`
+    : `Mensagem do site: ${r.nome}${r.empresa ? ` (${r.empresa})` : ""} — ${assunto}`).slice(0, 200);
   const linhas = [["Nome", r.nome], ["E-mail", r.email], ["Telefone", r.telefone], ["Empresa", r.empresa], ["Assunto", assunto]].filter(([, v]) => v);
   const texto = `${linhas.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\n${r.mensagem}\n\n— ${m.id} · ${m.criado_em}\nResponder a este e-mail responde diretamente a ${r.email}.`;
   const html = `<div style="max-width:600px;margin:0 auto;padding:24px;font:15px/1.6 Arial,sans-serif;color:#17131F">
