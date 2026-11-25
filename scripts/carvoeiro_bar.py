@@ -90,7 +90,10 @@ PASSOS = "".join([
           '<div class="cb-ops cb-ops--pilulas" id="cb-sugestoes">'
           + "".join(f'<button type="button" class="cb-chip" data-valor="{v}">{v} €</button>' for v in (100, 150, 200, 300, 400))
           + '</div><label class="cb-valor"><span class="sr-only">€</span><input class="entrada" id="cb-valor" name="valor" type="number" inputmode="numeric" min="1" max="100000" step="1">'
-          + t("cb.p4.mes", "€ / month", "€ / mês", "span", ' class="cb-valor__suf"') + "</label>", curto=("Budget", "Orçamento")),
+          + t("cb.p4.mes", "€ / month", "€ / mês", "span", ' class="cb-valor__suf"') + "</label>"
+          + '<label class="cb-sub" for="cb-notas">' + t("cb.p4.notas", "Any questions or comments?", "Alguma dúvida ou observação?")
+          + ' <span class="opcional">' + t("cb.opcional", "optional", "opcional") + '</span></label>'
+          + '<textarea class="entrada cb-notas" id="cb-notas" name="notas" maxlength="1500" rows="4"></textarea>', curto=("Budget", "Orçamento")),
     passo("email", "cb.p5", ("Where should we send your proposal?", "Para onde enviamos a proposta?"), None,
           '<div class="cb-email"><label class="sr-only" for="cb-mail">Email</label>'
           '<input class="entrada" id="cb-mail" name="email" type="email" autocomplete="email" inputmode="email" placeholder="email@example.com"></div>'

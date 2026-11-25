@@ -1221,6 +1221,9 @@ html[lang^="pt"] .so-en, html:not([lang^="pt"]) .so-pt { display: none; }
 .cb-valor__suf { color: var(--cinza); white-space: nowrap; font-weight: 600; }
 .cb-email { display: flex; gap: 10px; max-width: 520px; }
 .cb-email .entrada { flex: 1; min-width: 0; }
+.cb-notas { margin-top: 0; max-width: 560px; display: block; }
+label.cb-sub { display: block; }
+label.cb-sub .opcional { font-weight: 400; color: var(--cinza); font-size: .8125rem; margin-left: 4px; }
 .cb-privado { font-size: .8125rem; color: var(--cinza); margin-top: 12px; }
 .cb-privado a { color: var(--roxo-profundo); }
 .cb-resumo { position: sticky; top: 100px; background: var(--noite); color: var(--branco); border-radius: var(--raio); padding: 26px; box-shadow: var(--sombra-forte); }

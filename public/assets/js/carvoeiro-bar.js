@@ -126,7 +126,9 @@
     add("Website payment", marcado("pagamento")?.value);
     add("Social media", marcado("redes")?.value);
     add("Networks", v("redes_lista"));
-    return ["Questionário Carvoeiro Bar (Bob van Goethem)", `VALOR MENSAL QUE ESTÁ DISPOSTO A INVESTIR: ${Number(valor.value)} €`, "", ...lin].join("\n").trim();
+    const notas = form.notas.value.trim();
+    if (notas) lin.push(`Questions / comments from Bob:\n${notas}`);
+    return ["Questionário Carvoeiro Bar (Bob van Goethem)", `VALOR MENSAL QUE ESTÁ DISPOSTO A INVESTIR: ${Number(valor.value)} €`, "", ...lin].join("\n").trim().slice(0, 2990);
   }
 
   form.addEventListener("submit", async (e) => {

@@ -59,6 +59,8 @@ Object.assign(window.IMPLEMENT_PT = window.IMPLEMENT_PT || {}, {
   "cb.p2.t": "Quanta presença quer que o bar tenha nas redes?",
   "cb.p2.a": "Planeamos consigo, filmamos no bar, e criamos e publicamos os posts por si.",
   "cb.p4.mes": "€ / mês",
+  "cb.p4.notas": "Alguma dúvida ou observação?",
+  "cb.opcional": "opcional",
   "cb.p4.curto": "Orçamento",
   "cb.p4.t": "Quanto gostaria de investir por mês?",
   "cb.p4.a": "O seu valor real. Montamos o pacote à volta dele.",
