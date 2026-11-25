@@ -30,12 +30,12 @@ def lista(prefixo, itens):
 def opcao(nome, valor, k, titulo, preco=None, itens=(), tipo="radio", mostra=None):
     """Cartão de escolha. value = texto em inglês (é o que chega à equipa)."""
     corpo = f'<strong class="cb-op__nome">{t(f"{k}.n", *titulo)}</strong>'
-    if preco:
-        corpo += f'<span class="cb-op__preco">{t(f"{k}.p", *preco)}</span>'
     if itens:
         corpo += '<ul class="cb-op__itens">' + "".join(t(f"{k}.i{i}", en, pt, "li") for i, (en, pt) in enumerate(itens)) + "</ul>"
+    if preco:
+        corpo += f'<span class="cb-op__ref">{t(f"{k}.p", *preco)}</span>'
     m = f' data-mostra="{mostra}"' if mostra else ""
-    return (f'<label class="cb-op{" cb-op--pilula" if tipo == "checkbox" else ""}"><input type="{tipo}" name="{nome}" value="{html.escape(valor)}"{m}>'
+    return (f'<label class="cb-op{" cb-op--pilula" if tipo == "checkbox" or not (itens or preco) else ""}"><input type="{tipo}" name="{nome}" value="{html.escape(valor)}"{m}>'
             f'<span class="cb-op__caixa">{corpo}</span></label>')
 
 
@@ -49,34 +49,42 @@ def passo(id_, k, titulo, ajuda, conteudo, se=None, curto=("", "")):
 
 
 PASSOS = "".join([
-    passo("foco", "cb.p1", ("What would you like to start with?", "Por onde quer começar?"), None,
+    passo("site", "cb.p1", ("What kind of website suits the bar?", "Que tipo de site faz sentido para o bar?"),
+          ("Choose what feels right. Values are only a reference: your proposal will be made for you.", "Escolha o que lhe parece melhor. Os valores são só uma referência: a proposta é feita à sua medida."),
           '<div class="cb-ops cb-ops--3">'
-          + opcao("foco", "Website", "cb.p1.site", ("A website", "Um site"), mostra="site")
-          + opcao("foco", "Social media", "cb.p1.redes", ("Social media", "Redes sociais"), mostra="redes")
-          + opcao("foco", "Website + social media", "cb.p1.ambos", ("Both", "Os dois"), mostra="site redes")
-          + "</div>", curto=("Start", "Início")),
-    passo("site", "cb.p2", ("Choose your website", "Escolha o seu site"), ("Prices + VAT. You see a preview before paying.", "Valores + IVA. Vê uma prévia antes de pagar."),
-          '<div class="cb-ops cb-ops--3">'
-          + opcao("site", "Essential website, €349 once", "cb.p2.e", ("Essential", "Essencial"), ("€349 once", "349 € pagamento único"),
-                  [("1 complete page", "1 página completa"), ("Menu, events, hours, map", "Menu, eventos, horário, mapa"), ("WhatsApp button", "Botão de WhatsApp"), ("Ready in 7 days", "Pronto em 7 dias")])
-          + opcao("site", "Essential website, €59/month + €99 activation", "cb.p2.m", ("Essential monthly", "Essencial mensal"), ("€59/month + €99", "59 €/mês + 99 €"),
-                  [("Same website", "O mesmo site"), ("Hosting included", "Alojamento incluído"), ("Spread over the year", "Pago ao longo do ano")])
-          + opcao("site", "Professional website, €690", "cb.p2.p", ("Professional", "Profissional"), ("€690 once", "690 € pagamento único"),
-                  [("Up to 5 pages", "Até 5 páginas"), ("Local SEO + Google profile", "SEO local + perfil Google"), ("Reviews on the site", "Avaliações no site")])
+          + opcao("site", "One complete page", "cb.p1.um", ("One complete page", "Uma página completa"), ("Reference: from €349, or €59/month", "Referência: desde 349 €, ou 59 €/mês"),
+                  [("Everything on one page", "Tudo numa página"), ("Menu, events, hours and map", "Menu, eventos, horário e mapa"), ("WhatsApp button", "Botão de WhatsApp"), ("Ready in 7 days", "Pronto em 7 dias")])
+          + opcao("site", "A few pages", "cb.p1.varias", ("A few pages", "Algumas páginas"), ("Reference: from €690", "Referência: desde 690 €"),
+                  [("Up to 5 pages", "Até 5 páginas"), ("Found on Google in the area", "Encontrado no Google na zona"), ("Google profile and reviews", "Perfil Google e avaliações")])
+          + opcao("site", "Not sure yet", "cb.p1.nao", ("Not sure yet", "Ainda não sei"), None,
+                  [("We’ll suggest what makes sense", "Sugerimos o que fizer sentido")])
           + "</div>"
-          + t("cb.p2.lin", "Languages", "Línguas", "p", ' class="cb-sub"')
+          + t("cb.p1.mostrar", "What should it show?", "O que deve mostrar?", "p", ' class="cb-sub"')
           + '<div class="cb-ops cb-ops--pilulas">'
-          + "".join(opcao("linguas", en, f"cb.p2.l{i}", (en, pt), tipo="checkbox") for i, (en, pt) in enumerate([("English", "Inglês"), ("Dutch", "Neerlandês"), ("Portuguese", "Português"), ("German", "Alemão")]))
-          + "</div>", se="site", curto=("Website", "Site")),
-    passo("redes", "cb.p3", ("Choose your social media plan", "Escolha o plano de redes sociais"), ("Monthly, + VAT, minimum 3 months.", "Mensal, + IVA, mínimo de 3 meses."),
+          + "".join(opcao("site_conteudo", en, f"cb.p1.c{i}", (en, pt), tipo="checkbox") for i, (en, pt) in enumerate([('Drinks & food menu', 'Menu de bebidas e comida'), ('Events', 'Eventos'), ('Photo gallery', 'Galeria de fotos'), ('Opening hours & map', 'Horário e mapa'), ('Reviews', 'Avaliações'), ('WhatsApp button', 'Botão de WhatsApp')]))
+          + "</div>"
+          + t("cb.p1.lin", "Languages", "Línguas", "p", ' class="cb-sub"')
+          + '<div class="cb-ops cb-ops--pilulas">'
+          + "".join(opcao("linguas", en, f"cb.p1.l{i}", (en, pt), tipo="checkbox") for i, (en, pt) in enumerate([('English', 'Inglês'), ('Dutch', 'Neerlandês'), ('Portuguese', 'Português'), ('German', 'Alemão')]))
+          + "</div>"
+          + t("cb.p1.pag", "For the website, you’d rather…", "Para o site, prefere…", "p", ' class="cb-sub"')
+          + '<div class="cb-ops cb-ops--pilulas">'
+          + "".join(opcao("pagamento", en, f"cb.p1.pg{i}", (en, pt)) for i, (en, pt) in enumerate([("Pay once", "Pagar de uma vez"), ("Spread it monthly", "Dividir por meses"), ("Not sure", "Ainda não sei")]))
+          + "</div>", curto=("Website", "Site")),
+    passo("redes", "cb.p2", ("How present do you want the bar to be on social media?", "Quanta presença quer que o bar tenha nas redes?"),
+          ("We plan with you, film at the bar, and create and publish the posts for you.", "Planeamos consigo, filmamos no bar, e criamos e publicamos os posts por si."),
           '<div class="cb-ops cb-ops--3">'
-          + opcao("redes", "Package 1 Essential, €240/month", "cb.p3.1", ("Package 1", "Pacote 1"), ("€240/month", "240 €/mês"),
-                  [("1 alignment meeting a month", "1 reunião de alinhamento por mês"), ("1 content session at the bar", "1 sessão de captação no bar"), ("8 posts (2 a week) + 8 stories", "8 publicações (2 por semana) + 8 stories"), ("2 reels", "2 reels")])
-          + opcao("redes", "Package 2 Growth, €390/month", "cb.p3.2", ("Package 2", "Pacote 2"), ("€390/month", "390 €/mês"),
-                  [("2 networks", "2 redes"), ("12 posts, 4 reels, 12 stories", "12 publicações, 4 reels, 12 stories"), ("Replies to comments", "Resposta a comentários")])
-          + opcao("redes", "Something smaller to begin with", "cb.p3.m", ("Something smaller", "Algo mais pequeno"), ("To begin with", "Para começar"),
-                  [("We adapt it to your budget", "Adaptamos ao seu orçamento")])
-          + "</div>", se="redes", curto=("Social media", "Redes")),
+          + opcao("redes", "Steady: 2 posts a week", "cb.p2.a", ("Steady", "Regular"), ("Reference: around €240/month", "Referência: cerca de 240 €/mês"),
+                  [("2 posts a week on 1 network", "2 publicações por semana em 1 rede"), ("1 planning meeting a month", "1 reunião de alinhamento por mês"), ("1 content session at the bar a month", "1 sessão de captação no bar por mês"), ("We create and publish the posts", "Criamos e publicamos os posts"), ("2 reels and 8 stories a month", "2 reels e 8 stories por mês")])
+          + opcao("redes", "Stronger: 3 posts a week", "cb.p2.b", ("Stronger", "Mais forte"), ("Reference: around €390/month", "Referência: cerca de 390 €/mês"),
+                  [("3 posts a week on 2 networks", "3 publicações por semana em 2 redes"), ("1 planning meeting a month", "1 reunião de alinhamento por mês"), ("1 content session at the bar a month", "1 sessão de captação no bar por mês"), ("We create and publish the posts", "Criamos e publicamos os posts"), ("4 reels, 12 stories and replies to comments", "4 reels, 12 stories e resposta a comentários")])
+          + opcao("redes", "Not sure yet", "cb.p2.nao", ("Not sure yet", "Ainda não sei"), None,
+                  [("We’ll suggest what makes sense", "Sugerimos o que fizer sentido")])
+          + "</div>"
+          + t("cb.p2.red", "Which networks?", "Que redes?", "p", ' class="cb-sub"')
+          + '<div class="cb-ops cb-ops--pilulas">'
+          + "".join(opcao("redes_lista", en, f"cb.p2.r{i}", (en, pt), tipo="checkbox") for i, (en, pt) in enumerate([('Instagram', 'Instagram'), ('Facebook', 'Facebook'), ('TikTok', 'TikTok'), ('Google', 'Google')]))
+          + "</div>", curto=("Social media", "Redes")),
     passo("valor", "cb.p4", ("How much would you like to invest per month?", "Quanto gostaria de investir por mês?"),
           ("Your honest figure. We’ll build the package around it.", "O seu valor real. Montamos o pacote à volta dele."),
           '<div class="cb-ops cb-ops--pilulas" id="cb-sugestoes">'
@@ -96,7 +104,7 @@ main = f'''<main id="conteudo">
     <div>
       <header class="cb-topo">
         {t("cb.legenda", "Carvoeiro Bar · Bob", "Carvoeiro Bar · Bob", "p", ' class="legenda"')}
-        {t("cb.titulo", 'Build your plan <span class="destaque">step by step.</span>', 'Monte o seu plano <span class="destaque">passo a passo.</span>', "h1", html_=True)}
+        {t("cb.titulo", 'Let’s shape your proposal <span class="destaque">together.</span>', 'Vamos montar a sua proposta <span class="destaque">juntos.</span>', "h1", html_=True)}
       </header>
       <div class="cartao-form" id="cb-cartao">
         <div class="progresso" aria-hidden="true">
@@ -127,7 +135,7 @@ main = f'''<main id="conteudo">
       </div>
     </div>
     <aside class="cb-resumo" aria-live="polite">
-      {t("cb.r.t", "Your plan", "O seu plano", "p", ' class="cb-resumo__titulo"')}
+      {t("cb.r.t", "Your choices", "As suas escolhas", "p", ' class="cb-resumo__titulo"')}
       <ul class="cb-resumo__lista" id="cb-resumo"></ul>
       {t("cb.r.vazio", "Your choices will appear here.", "As suas escolhas aparecem aqui.", "p", ' class="cb-resumo__vazio" id="cb-resumo-vazio"')}
     </aside>

@@ -7,8 +7,8 @@
   const inicio = Date.now();
   const idioma = () => (typeof window.implementIdioma === "function" ? window.implementIdioma() : "en");
   const TXT = {
-    en: { passo: (a, b) => `Step ${a} of ${b}`, email: "Please enter a valid email.", escolha: "Please choose an option.", valor: "Please enter a monthly amount.", erro: "Something went wrong. Please try again in a moment.", aEnviar: "Sending…", orcamento: "Budget", mes: "/month", linguas: "Languages", foco: "Start with", site: "Website", redes: "Social media" },
-    pt: { passo: (a, b) => `Passo ${a} de ${b}`, email: "Escreva um e-mail válido.", escolha: "Escolha uma opção.", valor: "Indique um valor mensal.", erro: "Não foi possível enviar. Tente outra vez daqui a pouco.", aEnviar: "A enviar…", orcamento: "Orçamento", mes: "/mês", linguas: "Línguas", foco: "Começar por", site: "Site", redes: "Redes sociais" },
+    en: { passo: (a, b) => `Step ${a} of ${b}`, email: "Please enter a valid email.", escolha: "Please choose an option.", valor: "Please enter a monthly amount.", erro: "Something went wrong. Please try again in a moment.", aEnviar: "Sending…", orcamento: "Budget", mes: "/month", linguas: "Languages", site: "Website", redes: "Social media" },
+    pt: { passo: (a, b) => `Passo ${a} de ${b}`, email: "Escreva um e-mail válido.", escolha: "Escolha uma opção.", valor: "Indique um valor mensal.", erro: "Não foi possível enviar. Tente outra vez daqui a pouco.", aEnviar: "A enviar…", orcamento: "Orçamento", mes: "/mês", linguas: "Línguas", site: "Site", redes: "Redes sociais" },
   };
   const t = (k, ...a) => { const v = (TXT[idioma()] || TXT.en)[k]; return typeof v === "function" ? v(...a) : v; };
   const $ = (id) => document.getElementById(id);
@@ -21,12 +21,10 @@
 
   const marcado = (nome) => form.querySelector(`input[name="${nome}"]:checked`);
   const rotulo = (input) => input.closest(".cb-op").querySelector(".cb-op__nome").textContent.trim();
-  const preco = (input) => input.closest(".cb-op").querySelector(".cb-op__preco")?.textContent.trim();
-  const mostra = () => (marcado("foco")?.dataset.mostra || "site redes").split(" ");
-  const visiveis = () => todas.filter((e) => !e.dataset.se || mostra().includes(e.dataset.se));
+  const visiveis = () => todas;
+  const varios = (nome) => [...form.querySelectorAll(`input[name="${nome}"]:checked`)];
 
   const valida = {
-    foco: () => (marcado("foco") ? "" : t("escolha")),
     site: () => (marcado("site") ? "" : t("escolha")),
     redes: () => (marcado("redes") ? "" : t("escolha")),
     valor: () => (Number(valor.value) > 0 ? "" : t("valor")),
@@ -81,14 +79,14 @@
   function resumo() {
     const lista = $("cb-resumo");
     const linhas = [];
-    const f = marcado("foco");
-    if (f) linhas.push([t("foco"), rotulo(f)]);
     const s = marcado("site");
-    if (s && mostra().includes("site")) linhas.push([t("site"), `${rotulo(s)} · ${preco(s)}`]);
-    const l = [...form.querySelectorAll('input[name="linguas"]:checked')];
-    if (l.length && mostra().includes("site")) linhas.push([t("linguas"), l.map(rotulo).join(", ")]);
+    const sc = varios("site_conteudo");
+    if (s || sc.length) linhas.push([t("site"), [s && rotulo(s), ...sc.map(rotulo)].filter(Boolean).join(" · ")]);
+    const l = varios("linguas");
+    if (l.length) linhas.push([t("linguas"), l.map(rotulo).join(", ")]);
     const r = marcado("redes");
-    if (r && mostra().includes("redes")) linhas.push([t("redes"), `${rotulo(r)} · ${preco(r)}`]);
+    const rl = varios("redes_lista");
+    if (r || rl.length) linhas.push([t("redes"), [r && rotulo(r), ...rl.map(rotulo)].filter(Boolean).join(" · ")]);
     if (Number(valor.value) > 0) linhas.push([t("orcamento"), `${Number(valor.value)} €${t("mes")}`, true]);
     lista.innerHTML = "";
     linhas.forEach(([k, v, forte]) => {
@@ -101,12 +99,7 @@
     $("cb-resumo-vazio").hidden = linhas.length > 0;
   }
 
-  // Escolha única: avança sozinho (menos cliques); nas outras usa «Next»
-  form.addEventListener("change", (e) => {
-    aviso.textContent = "";
-    if (e.target.name === "foco" || e.target.name === "redes") { progresso(); setTimeout(seguinte, 280); }
-    else progresso();
-  });
+  form.addEventListener("change", () => { aviso.textContent = ""; resumo(); });
   valor.addEventListener("input", () => {
     document.querySelectorAll(".cb-chip").forEach((c) => c.classList.toggle("cb-chip--ativo", c.dataset.valor === valor.value));
     aviso.textContent = "";
@@ -126,12 +119,13 @@
   function mensagem() {
     const lin = [];
     const add = (q, v) => { if (v) lin.push(`${q}\n→ ${v}`, ""); };
-    add("Start with", marcado("foco")?.value);
-    if (mostra().includes("site")) {
-      add("Website", marcado("site")?.value);
-      add("Languages", [...form.querySelectorAll('input[name="linguas"]:checked')].map((i) => i.value).join(" · "));
-    }
-    if (mostra().includes("redes")) add("Social media", marcado("redes")?.value);
+    const v = (nome) => varios(nome).map((i) => i.value).join(" · ");
+    add("Website", marcado("site")?.value);
+    add("Website should show", v("site_conteudo"));
+    add("Languages", v("linguas"));
+    add("Website payment", marcado("pagamento")?.value);
+    add("Social media", marcado("redes")?.value);
+    add("Networks", v("redes_lista"));
     return ["Questionário Carvoeiro Bar (Bob van Goethem)", `VALOR MENSAL QUE ESTÁ DISPOSTO A INVESTIR: ${Number(valor.value)} €`, "", ...lin].join("\n").trim();
   }
 
