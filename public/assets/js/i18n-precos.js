@@ -25,7 +25,6 @@ Object.assign(window.IMPLEMENT_PT = window.IMPLEMENT_PT || {}, {
   "pr.video.captacao.p": "desde 290 €",
   "pr.redes.essencial.p": "240 € / mês",
   "pr.redes.crescimento.p": "390 € / mês",
-  "pr.redes.presenca.p": "590 € / mês",
   "pr.redes.ct": "Referência local",
   "pr.redes.cp": "Um prestador no Algarve publica gestão mensal desde 395 € + IVA e um plano de 545 € + IVA com 2 h de captação. Os nossos valores de lançamento ficam abaixo dessas referências públicas; o âmbito não é diretamente equivalente.",
   "pr.digital.estrategia.p": "Sob orçamento",

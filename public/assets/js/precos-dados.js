@@ -435,12 +435,12 @@ export const DADOS = {
     "pt": "Redes sociais"
    },
    "nome": {
-    "pt": "Essencial",
-    "en": "Essential"
+    "pt": "Plano 1 · Essencial",
+    "en": "Plan 1 · Essential"
    },
    "desc": {
-    "pt": "1 rede social · 8 publicações · 2 vídeos curtos editados de material do cliente · 8 stories. Planeamento, agendamento e resumo mensal.",
-    "en": "1 social network · 8 posts · 2 short videos edited from your footage · 8 stories. Planning, scheduling and a monthly summary."
+    "pt": "2 publicações + 1 reel por semana · até 5 stories por semana, nas redes que combinarmos. 1 reunião de alinhamento e 1 sessão de captação no seu negócio por mês; criamos e publicamos os posts.",
+    "en": "2 posts + 1 reel per week · up to 5 stories per week, on the networks we agree on. 1 alignment meeting and 1 content session at your business every month; we create and publish the posts."
    },
    "valor": 240,
    "desde": false,
@@ -460,12 +460,12 @@ export const DADOS = {
     "pt": "Redes sociais"
    },
    "nome": {
-    "pt": "Crescimento",
-    "en": "Growth"
+    "pt": "Plano 2 · Crescimento",
+    "en": "Plan 2 · Growth"
    },
    "desc": {
-    "pt": "2 redes sociais · 12 publicações · 4 vídeos curtos · 12 stories. Planeamento, agendamento, resposta a comentários em dias úteis e relatório mensal.",
-    "en": "2 social networks · 12 posts · 4 short videos · 12 stories. Planning, scheduling, replies to comments on working days and a monthly report."
+    "pt": "3 publicações + 2 reels por semana · até 12 stories por semana, nas redes que combinarmos. 1 reunião de alinhamento e 1 sessão de captação no seu negócio por mês; criamos e publicamos os posts.",
+    "en": "3 posts + 2 reels per week · up to 12 stories per week, on the networks we agree on. 1 alignment meeting and 1 content session at your business every month; we create and publish the posts."
    },
    "valor": 390,
    "desde": false,
@@ -474,31 +474,6 @@ export const DADOS = {
    "rotuloPreco": {
     "pt": "390 € / mês",
     "en": "€390 / month"
-   },
-   "componentes": []
-  },
-  {
-   "id": "presenca",
-   "cat": "redes",
-   "categoria": {
-    "en": "Social media",
-    "pt": "Redes sociais"
-   },
-   "nome": {
-    "pt": "Presença+",
-    "en": "Presence+"
-   },
-   "desc": {
-    "pt": "2 redes sociais · 16 publicações · 6 vídeos curtos · 20 stories. Inclui 1 h de captação mensal no local, planeamento e relatório.",
-    "en": "2 social networks · 16 posts · 6 short videos · 20 stories. Includes 1 h of on-site filming per month, planning and a report."
-   },
-   "valor": 590,
-   "desde": false,
-   "por": "mes",
-   "min": 1,
-   "rotuloPreco": {
-    "pt": "590 € / mês",
-    "en": "€590 / month"
    },
    "componentes": []
   },
@@ -781,8 +756,8 @@ export const DADOS = {
  },
  "notasRedes": [
   {
-   "en": "Short videos use content you send us, unless filming is explicitly included.",
-   "pt": "Os vídeos curtos usam conteúdos enviados pelo cliente, salvo captação expressamente incluída."
+   "en": "Both plans include a monthly alignment meeting and a content session at your business.",
+   "pt": "Os dois planos incluem uma reunião de alinhamento e uma sessão de captação no seu negócio por mês."
   },
   {
    "en": "Does not include ad spend, replies to private messages, influencers or customer service.",
