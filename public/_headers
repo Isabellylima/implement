@@ -27,10 +27,7 @@
 /azimuth.html
   X-Robots-Tag: noindex, nofollow
 
-/carvoeiro-bar
-  X-Robots-Tag: noindex, nofollow
-
-/carvoeiro-bar.html
+/proposta-*
   X-Robots-Tag: noindex, nofollow
 
 /admin/*

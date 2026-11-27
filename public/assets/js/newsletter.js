@@ -36,8 +36,8 @@
   const ler = () => { try { return JSON.parse(localStorage.getItem(CHAVE) || "{}"); } catch { return {}; } };
   const gravar = (v) => { try { localStorage.setItem(CHAVE, JSON.stringify({ ...ler(), ...v })); } catch (_) {} };
   const caminho = location.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
-  const PAGINAS_FORMULARIO = ["/start-a-project", "/contact", "/precario", "/pacotes-sites", "/azimuth", "/carvoeiro-bar", "/privacy", "/404"];
-  if (caminho.startsWith("/admin")) return;
+  const PAGINAS_FORMULARIO = ["/start-a-project", "/contact", "/precario", "/pacotes-sites", "/azimuth", "/privacy", "/404"];
+  if (caminho.startsWith("/admin") || caminho.startsWith("/proposta-")) return;
   let n = 0;
 
   function formulario(origem) {

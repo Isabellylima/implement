@@ -1,10 +1,12 @@
-/* Implement — proposta do Carvoeiro Bar (página privada).
+/* Implement — página de proposta para um cliente (gerada por scripts/propostas.py a partir de propostas/<slug>.json).
    Uma pergunta de cada vez, com a barra da abelha (como «Start a project»); o resumo ao lado acumula as escolhas.
    No fim só se pede o e-mail; envia para /api/contacto (base de dados, e-mail para info@ e HubSpot). */
 (() => {
   const form = document.getElementById("cb-form");
   if (!form) return;
   const inicio = Date.now();
+  const CLIENTE = form.dataset.cliente || "";
+  const MARCA = form.dataset.marca || "";
   const idioma = () => (typeof window.implementIdioma === "function" ? window.implementIdioma() : "en");
   const TXT = {
     en: { passo: (a, b) => `Step ${a} of ${b}`, email: "Please enter a valid email.", escolha: "Please choose an option.", valor: "Please enter a monthly amount.", erro: "Something went wrong. Please try again in a moment.", aEnviar: "Sending…", orcamento: "Budget", mes: "/month", linguas: "Languages", site: "Website", redes: "Social media" },
@@ -127,8 +129,8 @@
     add("Social media", marcado("redes")?.value);
     add("Networks", v("redes_lista"));
     const notas = form.notas.value.trim();
-    if (notas) lin.push(`Questions / comments from Bob:\n${notas}`);
-    return ["Questionário Carvoeiro Bar (Bob van Goethem)", `VALOR MENSAL QUE ESTÁ DISPOSTO A INVESTIR: ${Number(valor.value)} €`, "", ...lin].join("\n").trim().slice(0, 2990);
+    if (notas) lin.push(`Questions / comments from ${CLIENTE.split(" ")[0]}:\n${notas}`);
+    return [`Questionário ${MARCA} (${CLIENTE})`, `VALOR MENSAL QUE ESTÁ DISPOSTO A INVESTIR: ${Number(valor.value)} €`, "", ...lin].join("\n").trim().slice(0, 2990);
   }
 
   form.addEventListener("submit", async (e) => {
@@ -143,7 +145,7 @@
       const r = await fetch("/api/contacto", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          respostas: { nome: "Bob van Goethem", email: mail.value.trim(), empresa: "Carvoeiro Bar Bob van Goethem", assunto: "projeto", mensagem: mensagem(), consentimento: true },
+          respostas: { nome: CLIENTE, email: mail.value.trim(), empresa: MARCA, assunto: "projeto", mensagem: mensagem(), consentimento: true },
           idioma: idioma(), inicio, site_empresa: form.site_empresa.value,
         }),
       });

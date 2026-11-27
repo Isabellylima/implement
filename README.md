@@ -158,6 +158,13 @@ No Cloudflare nada disto é usado: o formulário deteta que não está no claude
 - «A minha lista» (tabela D1 `leads`): só guarda as empresas que a equipa contactou ou guardou, com estado (por contactar, contactado, respondeu, interessado, cliente, não quer) e notas. Quem diz «não quer» deixa de ter o botão de WhatsApp.
 - Teste local sem chave: `PLACES_FALSO=1 node test/servidor-local.mjs`.
 
-## Proposta Carvoeiro Bar
+## Propostas para clientes (procedimento padrão)
 
-`/carvoeiro-bar` (noindex, não ligada no menu; link no admin em Financeiro). Perguntas passo a passo em inglês (barra com a abelha, como «Start a project») para o Bob escolher site e/ou redes e indicar o valor mensal que quer investir; no fim só pede o e-mail. A página abre sempre em inglês (`data-idioma-fixo="en"` no `<html>`). Fonte: `scripts/carvoeiro_bar.py` (gera a página e `i18n-carvoeiro-bar.js`). As respostas vão por `assets/js/carvoeiro-bar.js` para `/api/contacto`: ficam na base de dados, chegam por e-mail a info@ e entram no HubSpot.
+Depois da primeira reunião / orçamento, o cliente recebe uma página só dele onde escolhe, passo a passo (barra com a abelha), o tipo de site, o plano de redes sociais (Plano 1 ou 2, com valores só como referência), o orçamento mensal que quer investir, dúvidas/observações e o e-mail. No fim vê «vamos trabalhar num pacote personalizado».
+
+- **Modelo:** `propostas/_modelo.json` → `/proposta-modelo` (para ver como fica; link no admin em Financeiro).
+- **Cliente novo:** copiar o modelo para `propostas/<slug>.json` e mudar `cliente` (nome da pessoa), `marca`, `idioma` (`en` ou `pt`: a página abre sempre nesse idioma), `negocio`/`local` (ex.: `["the bar", "o bar"]`, `["at the bar", "no bar"]`), o item da página única, o que o site deve mostrar, as línguas, as redes e as sugestões de orçamento. Correr `sh scripts/gerar.sh`, fazer commit e push. Link: `heyimplement.com/proposta-<slug>`.
+- **Remover:** apagar o `.json` e voltar a gerar (a página e o i18n saem sozinhos).
+- **Valores de referência:** `PRECOS` em `scripts/propostas.py` (manter iguais ao Preçário).
+- **Respostas:** `assets/js/proposta.js` envia para `/api/contacto` → base de dados, e-mail para info@ com o budget no assunto («Pedido <marca> (<cliente>) — budget X €/mês») e HubSpot.
+- Todas as páginas `/proposta-*` são noindex e sem popup de newsletter.

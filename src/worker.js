@@ -322,7 +322,7 @@ async function receberMensagem(request, env, ctx, url) {
 export function montarEmailMensagem(m) {
   const r = m.r;
   const assunto = textoResposta(CONTACTO.find((c) => c.id === "assunto"), r.assunto, "pt");
-  // Questionários de proposta (ex.: /carvoeiro-bar) trazem o budget no texto: vai também para o assunto do e-mail
+  // Questionários de proposta (páginas /proposta-<cliente>) trazem o budget no texto: vai também para o assunto do e-mail
   const budget = /^VALOR MENSAL[^:\n]*:\s*([^\n]{1,40})$/m.exec(r.mensagem || "");
   const titulo = (budget && /^Questionário /.test(r.mensagem)
     ? `${r.mensagem.split("\n")[0].replace(/^Questionário /, "Pedido ")} — budget ${budget[1].trim()}/mês`

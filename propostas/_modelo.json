@@ -1,0 +1,30 @@
+{
+  "_ajuda": "MODELO. Para um cliente novo: copiar para propostas/<slug>.json (ex.: propostas/carvoeiro-bar.json), preencher e correr sh scripts/gerar.sh. Link: heyimplement.com/proposta-<slug>",
+  "slug": "modelo",
+  "cliente": "Client Name",
+  "marca": "Brand Name",
+  "idioma": "en",
+  "negocio": ["your business", "o seu negócio"],
+  "local": ["at your business", "no seu negócio"],
+  "pagina_unica": ["Services, contacts and map", "Serviços, contactos e mapa"],
+  "site_conteudo": [
+    ["Services or products", "Serviços ou produtos"],
+    ["About us", "Sobre nós"],
+    ["Photo gallery", "Galeria de fotos"],
+    ["Opening hours & map", "Horário e mapa"],
+    ["Reviews", "Avaliações"],
+    ["WhatsApp button", "Botão de WhatsApp"],
+    ["Bookings or contact form", "Reservas ou formulário de contacto"]
+  ],
+  "linguas": [
+    ["English", "Inglês"],
+    ["Portuguese", "Português"]
+  ],
+  "redes": [
+    ["Instagram", "Instagram"],
+    ["Facebook", "Facebook"],
+    ["TikTok", "TikTok"],
+    ["Google", "Google"]
+  ],
+  "sugestoes": [100, 150, 200, 300, 400]
+}

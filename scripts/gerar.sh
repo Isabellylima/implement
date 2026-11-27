@@ -5,6 +5,6 @@ cd "$(dirname "$0")/.."
 python3 scripts/servicos.py
 python3 scripts/pacotes_sites.py
 python3 scripts/azimuth.py
-python3 scripts/carvoeiro_bar.py
+python3 scripts/propostas.py
 python3 scripts/versao.py
 python3 scripts/modelo.py
