@@ -267,7 +267,8 @@ export async function apiClientes(rota, metodo, request, env, { json, lerJson, E
 }
 
 /* ---------- Painel do cliente ---------- */
-const MODELO = {
+// Função (e não constante): no Cloudflare a data fora de um pedido é 1970
+const modelo = () => ({
   marca: "Brand Name", nome: "Client Name", idioma: "pt", pacotes: "Plano 1 · Gestão de redes sociais\nSite Essencial com alojamento",
   redes: [{ rede: "instagram", conta: "@brandname", url: "" }, { rede: "facebook", conta: "Brand Name", url: "" }, { rede: "google", conta: "Brand Name", url: "" }],
   seguidores: {
@@ -278,7 +279,7 @@ const MODELO = {
   campanhas: [{ plataforma: "meta", nome: "Christmas menu", objetivo: "Messages on WhatsApp", estado: "ativa", inicio: hojeISO(), fim: null, orcamento: 150, investido: 62.4, alcance: 8420, cliques: 211, resultados: "38 conversas iniciadas" }],
   mes: { total: 10, feitas: 6 },
   demo: true,
-};
+});
 
 function cabecalhosPagina() {
   return { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow", "Referrer-Policy": "no-referrer" };
@@ -337,7 +338,7 @@ export async function tratarPortal(request, env, url, { json, lerJson, ErroPedid
   }
   if (rota === "painel" && metodo === "GET") {
     const slug = txt(url.searchParams.get("slug"), 50).toLowerCase();
-    if (slug === "modelo") return json({ ok: true, painel: MODELO });
+    if (slug === "modelo") return json({ ok: true, painel: modelo() });
     const cli = SLUG.test(slug) ? await db.prepare("SELECT * FROM clientes WHERE slug = ? AND ativo = 1").bind(slug).first() : null;
     const t = cookie(request, COOKIE_CLIENTE);
     const s = t && t.length > 30 ? await db.prepare("SELECT cliente_id, expira FROM cliente_sessoes WHERE hash = ?").bind(await sha256(t)).first() : null;
