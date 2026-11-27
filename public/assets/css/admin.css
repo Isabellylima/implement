@@ -667,3 +667,9 @@
 .cl-fin-lista strong { white-space: nowrap; }
 .cl-pag { display: grid; gap: 10px; padding-top: 6px; border-top: 1px dashed var(--linha); }
 .cl-cartao__recebido { font-size: .8125rem; font-weight: 600; color: #1f6b3d; }
+
+.cl-vis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+.cl-vis label { display: grid; gap: 4px; font-size: .75rem; font-weight: 600; color: var(--cinza); text-transform: capitalize; }
+.cl-vis .entrada { padding: 8px; text-align: right; }
+.cl-vis .cl-acoes { grid-column: 1 / -1; }
+@media (max-width: 640px) { .cl-vis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

@@ -19,6 +19,11 @@
       investido: "Investido", orcamento: "Orçamento", alcance: "Alcance", cliques: "Cliques", resultados: "Resultados", desde: "Desde", ate: "até",
       estados: { ativa: "Ativa", pausada: "Pausada", terminada: "Terminada" },
       mes: "Este mês", mesP: (f, t) => `${f} de ${t} tarefas concluídas`, mesVazio: "O plano do mês está a ser preparado.",
+      vis: "Visitas ao site",
+      visMes: "visitas este mês",
+      visAnt: "face ao mês anterior",
+      visAno: "Visitas por mês",
+      visTotal: "Total do período",
       plano: "O seu plano", ajuda: "Precisa de alguma coisa?", ajudaP: "Fale connosco a qualquer momento.", wa: "WhatsApp", mail: "E-mail",
       demo: "Exemplo com dados fictícios: é assim que cada cliente vê o seu painel.", rodape: "Página privada da Implement Digital Marketing. Não partilhe o link nem a palavra-passe.",
       locale: "pt-PT",
@@ -32,6 +37,11 @@
       investido: "Spent", orcamento: "Budget", alcance: "Reach", cliques: "Clicks", resultados: "Results", desde: "From", ate: "to",
       estados: { ativa: "Active", pausada: "Paused", terminada: "Finished" },
       mes: "This month", mesP: (f, t) => `${f} of ${t} tasks done`, mesVazio: "This month’s plan is being prepared.",
+      vis: "Website visits",
+      visMes: "visits this month",
+      visAnt: "vs last month",
+      visAno: "Visits per month",
+      visTotal: "Total for the period",
       plano: "Your plan", ajuda: "Need anything?", ajudaP: "Talk to us any time.", wa: "WhatsApp", mail: "Email",
       demo: "Example with sample data: this is how each client sees their dashboard.", rodape: "Private page by Implement Digital Marketing. Please don’t share the link or the password.",
       locale: "en-GB",
@@ -111,6 +121,29 @@
     </section>`;
   }
 
+  function visitas(p) {
+    const v = (p.visitas || []);
+    if (!v.some((x) => x.visitas !== null)) return "";
+    const atual = v[v.length - 1];
+    const ant = v.length > 1 ? v[v.length - 2] : null;
+    const max = Math.max(...v.map((x) => x.visitas || 0), 1);
+    const total = v.reduce((t, x) => t + (x.visitas || 0), 0);
+    const dif = atual.visitas !== null && ant && ant.visitas ? Math.round((atual.visitas - ant.visitas) / ant.visitas * 100) : null;
+    const mesCurto = (k) => new Date(k + "-15T12:00:00").toLocaleDateString(L.locale, { month: "short" }).replace(".", "");
+    return `<section class="pc-bloco" aria-labelledby="pc-t-vis">
+      <h2 id="pc-t-vis">${L.vis}</h2>
+      <div class="pc-vis__topo">
+        <p class="pc-rede__numero">${atual.visitas !== null ? n(atual.visitas) : "—"} <small>${L.visMes}</small></p>
+        ${dif !== null ? `<p class="pc-rede__var pc-rede__var--${dif > 0 ? "sobe" : dif < 0 ? "desce" : "igual"}">${dif > 0 ? "+" : ""}${dif}% ${L.visAnt}</p>` : ""}
+        ${atual.nota ? `<p class="pc-rede__data">${esc(atual.nota)}</p>` : ""}
+      </div>
+      ${v.length > 1 ? `<figure class="pc-grafico" aria-label="${L.visAno}">
+        <ol>${v.map((x) => `<li${x.mes === atual.mes ? ' class="pc-grafico--atual"' : ""}><span class="pc-grafico__valor">${x.visitas !== null ? n(x.visitas) : ""}</span><i data-alt="${x.visitas ? Math.max(3, Math.round(x.visitas / max * 72)) : 0}"></i><span class="pc-grafico__mes">${esc(mesCurto(x.mes))}</span></li>`).join("")}</ol>
+        <figcaption>${L.visTotal}: <strong>${n(total)}</strong></figcaption>
+      </figure>` : ""}
+    </section>`;
+  }
+
   function campanhas(p) {
     const c = p.campanhas || [];
     return `<section class="pc-bloco" aria-labelledby="pc-t-camp">
@@ -170,12 +203,13 @@
           <p>${L.sub}</p>
         </header>
         <div class="pc-grelha">
-          <div class="pc-principal">${redes(p)}${campanhas(p)}</div>
+          <div class="pc-principal">${redes(p)}${visitas(p)}${campanhas(p)}</div>
           ${lateral(p)}
         </div>
       </div>`;
     // Larguras das barras via JS (a CSP não permite style="" no HTML)
     app.querySelectorAll("[data-pct]").forEach((i) => { i.style.width = i.dataset.pct + "%"; });
+    app.querySelectorAll("[data-alt]").forEach((i) => { i.style.height = i.dataset.alt + "%"; });
     rodape();
   }
 

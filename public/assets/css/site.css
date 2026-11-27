@@ -1347,6 +1347,18 @@ label.cb-sub .opcional { font-weight: 400; color: var(--cinza); font-size: .8125
 .pc-ajuda { display: flex; gap: 8px; flex-wrap: wrap; }
 .pc-ajuda__wa { width: 16px; height: 16px; }
 .pc-rodape { padding: 20px 0 28px; font-size: .8125rem; color: var(--cinza); text-align: center; }
+/* gráfico de visitas */
+.pc-vis__topo { display: grid; gap: 4px; margin-bottom: 18px; }
+.pc-grafico { margin: 0; }
+.pc-grafico ol { list-style: none; margin: 0; padding: 0; display: flex; align-items: stretch; gap: clamp(4px, 1vw, 10px); height: 180px; }
+.pc-grafico li { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 6px; }
+.pc-grafico i { display: block; width: 100%; max-width: 42px; height: 0; background: var(--lilas); border-radius: 8px 8px 3px 3px; transition: height .8s var(--suave); }
+.pc-grafico--atual i { background: var(--roxo); }
+.pc-grafico__valor { font-size: .6875rem; font-weight: 700; color: var(--cinza); white-space: nowrap; }
+.pc-grafico--atual .pc-grafico__valor { color: var(--roxo-profundo); }
+.pc-grafico__mes { font-size: .75rem; color: var(--cinza); text-transform: capitalize; }
+.pc-grafico figcaption { margin-top: 14px; font-size: .875rem; color: var(--cinza); }
+@media (max-width: 520px) { .pc-grafico__valor { display: none; } .pc-grafico ol { height: 140px; } }
 @media (max-width: 900px) {
   .pc-grelha { grid-template-columns: 1fr; }
   .pc-lado { position: static; }

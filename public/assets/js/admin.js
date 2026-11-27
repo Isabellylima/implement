@@ -5,7 +5,7 @@
 import { vistaTarefas } from "./admin-tarefas.js?v=162b8de119";
 import { vistaNewsletter } from "./admin-newsletter.js?v=dbc08f48f7";
 import { vistaProspecao } from "./admin-prospecao.js?v=ef7ecd7000";
-import { vistaClientes } from "./admin-clientes.js?v=12059f80d7";
+import { vistaClientes } from "./admin-clientes.js?v=d1f5c89b44";
 import { vistaFinancas } from "./admin-financas.js?v=97760e6b26";
 
 const app = document.getElementById("app");

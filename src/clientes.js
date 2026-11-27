@@ -13,6 +13,7 @@ export const ESQUEMA_CLIENTES = [
   "CREATE TABLE IF NOT EXISTS campanhas (id TEXT PRIMARY KEY, cliente_id TEXT NOT NULL, plataforma TEXT NOT NULL DEFAULT 'meta', nome TEXT NOT NULL, objetivo TEXT NOT NULL DEFAULT '', estado TEXT NOT NULL DEFAULT 'ativa', inicio TEXT, fim TEXT, orcamento REAL, investido REAL, alcance INTEGER, cliques INTEGER, resultados TEXT NOT NULL DEFAULT '', atualizado_em TEXT NOT NULL);",
   "CREATE INDEX IF NOT EXISTS campanhas_cliente ON campanhas (cliente_id, estado);",
   "CREATE TABLE IF NOT EXISTS cliente_seguidores (cliente_id TEXT NOT NULL, rede TEXT NOT NULL, data TEXT NOT NULL, seguidores INTEGER NOT NULL, PRIMARY KEY (cliente_id, rede, data));",
+  "CREATE TABLE IF NOT EXISTS cliente_visitas (cliente_id TEXT NOT NULL, mes TEXT NOT NULL, visitas INTEGER NOT NULL, nota TEXT NOT NULL DEFAULT '', atualizado_em TEXT NOT NULL, PRIMARY KEY (cliente_id, mes));",
   "CREATE TABLE IF NOT EXISTS cliente_sessoes (hash TEXT PRIMARY KEY, cliente_id TEXT NOT NULL, expira INTEGER NOT NULL);",
 ];
 
@@ -118,6 +119,25 @@ async function seguidores(db, clienteId) {
   return out;
 }
 
+/* Visitas ao site por mês: do primeiro mês registado (até 12 meses atrás) até ao mês atual, com os meses sem registo a null */
+async function visitas(db, clienteId) {
+  const atual = mesAtual();
+  const [a, m] = atual.split("-").map(Number);
+  const inicio = new Date(Date.UTC(a, m - 12, 1)).toISOString().slice(0, 7);
+  const { results } = await db.prepare("SELECT mes, visitas, nota FROM cliente_visitas WHERE cliente_id = ? AND mes >= ? AND mes <= ? ORDER BY mes").bind(clienteId, inicio, atual).all();
+  if (!results.length) return [];
+  const por = Object.fromEntries(results.map((r) => [r.mes, r]));
+  const out = [];
+  let [y, mm] = results[0].mes.split("-").map(Number);
+  for (;;) {
+    const k = `${y}-${String(mm).padStart(2, "0")}`;
+    out.push({ mes: k, visitas: por[k] ? por[k].visitas : null, nota: por[k] ? por[k].nota : "" });
+    if (k === atual) break;
+    mm++; if (mm > 12) { mm = 1; y++; }
+  }
+  return out;
+}
+
 async function checklist(db, clienteId, mes) {
   const { results } = await db.prepare("SELECT id, titulo, feita, ordem FROM cliente_checklist WHERE cliente_id = ? AND mes = ? ORDER BY ordem, criado_em").bind(clienteId, mes).all();
   return results;
@@ -171,7 +191,7 @@ export async function apiClientes(rota, metodo, request, env, { json, lerJson, E
       ]);
       financeiro = { cliente: finClientes.find((f) => f.id === cli.fin_cliente_id) || null, avencas: rec.results, pagamentos: mov.results };
     }
-    return json({ ok: true, cliente: { ...publico, redes: JSON.parse(cli.redes || "[]"), tem_senha: Boolean(senha_hash) }, mes, checklist: await checklist(db, id, mes), campanhas: camp, seguidores: await seguidores(db, id), fin_clientes: finClientes, financeiro });
+    return json({ ok: true, cliente: { ...publico, redes: JSON.parse(cli.redes || "[]"), tem_senha: Boolean(senha_hash) }, mes, checklist: await checklist(db, id, mes), campanhas: camp, seguidores: await seguidores(db, id), visitas: await visitas(db, id), fin_clientes: finClientes, financeiro });
   }
   if (!resto && metodo === "PUT") {
     const c = limparCliente({ ...cli, redes: JSON.parse(cli.redes || "[]"), ...(await lerJson(request)) }, ErroPedido);
@@ -186,6 +206,7 @@ export async function apiClientes(rota, metodo, request, env, { json, lerJson, E
       db.prepare("DELETE FROM cliente_checklist WHERE cliente_id = ?").bind(id),
       db.prepare("DELETE FROM campanhas WHERE cliente_id = ?").bind(id),
       db.prepare("DELETE FROM cliente_seguidores WHERE cliente_id = ?").bind(id),
+      db.prepare("DELETE FROM cliente_visitas WHERE cliente_id = ?").bind(id),
       db.prepare("DELETE FROM cliente_sessoes WHERE cliente_id = ?").bind(id),
       db.prepare("DELETE FROM clientes WHERE id = ?").bind(id),
     ]);
@@ -209,6 +230,16 @@ export async function apiClientes(rota, metodo, request, env, { json, lerJson, E
     const linhas = (Array.isArray(c.valores) ? c.valores : []).filter((v) => REDES.includes(v.rede) && inteiro(v.seguidores) !== null).slice(0, 10);
     if (!linhas.length) throw new ErroPedido(400, "Escreva pelo menos um número de seguidores.");
     await db.batch(linhas.map((v) => db.prepare("INSERT INTO cliente_seguidores (cliente_id, rede, data, seguidores) VALUES (?, ?, ?, ?) ON CONFLICT (cliente_id, rede, data) DO UPDATE SET seguidores = excluded.seguidores").bind(id, v.rede, data, inteiro(v.seguidores))));
+    return json({ ok: true });
+  }
+
+  if (resto === "visitas" && metodo === "POST") {
+    const c = await lerJson(request);
+    const linhas = (Array.isArray(c.meses) ? c.meses : [c]).filter((v) => MES.test(String(v.mes || ""))).slice(0, 24);
+    if (!linhas.length) throw new ErroPedido(400, "Indique o mês.");
+    await db.batch(linhas.map((v) => inteiro(v.visitas) === null
+      ? db.prepare("DELETE FROM cliente_visitas WHERE cliente_id = ? AND mes = ?").bind(id, v.mes)
+      : db.prepare("INSERT INTO cliente_visitas (cliente_id, mes, visitas, nota, atualizado_em) VALUES (?, ?, ?, ?, ?) ON CONFLICT (cliente_id, mes) DO UPDATE SET visitas = excluded.visitas, nota = excluded.nota, atualizado_em = excluded.atualizado_em").bind(id, v.mes, inteiro(v.visitas), txt(v.nota, 80), agora)));
     return json({ ok: true });
   }
 
@@ -277,6 +308,11 @@ const modelo = () => ({
     google: { seguidores: 57, data: hojeISO(), variacao: 5, historico: [] },
   },
   campanhas: [{ plataforma: "meta", nome: "Christmas menu", objetivo: "Messages on WhatsApp", estado: "ativa", inicio: hojeISO(), fim: null, orcamento: 150, investido: 62.4, alcance: 8420, cliques: 211, resultados: "38 conversas iniciadas" }],
+  visitas: (() => {
+    const v = [310, 342, 298, 415, 467, 520, 610, 688, 540, 455, 402, 438];
+    const [a, m] = mesAtual().split("-").map(Number);
+    return v.map((x, i) => ({ mes: new Date(Date.UTC(a, m - 12 + i, 1)).toISOString().slice(0, 7), visitas: x, nota: "" }));
+  })(),
   mes: { total: 10, feitas: 6 },
   demo: true,
 });
@@ -292,6 +328,7 @@ async function painelDe(db, cli) {
   return {
     marca: cli.marca, nome: cli.nome, idioma: cli.idioma, pacotes: cli.pacotes,
     redes: JSON.parse(cli.redes || "[]"), seguidores: await seguidores(db, cli.id),
+    visitas: await visitas(db, cli.id),
     campanhas: camp, mes: { total: lista.length, feitas: lista.filter((x) => x.feita).length },
   };
 }

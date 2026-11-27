@@ -227,6 +227,22 @@ async function detalhe({ app, api, aviso, esc }, id) {
     </section>`;
   }
 
+  function blocoVisitas() {
+    const por = Object.fromEntries((d.visitas || []).map((v) => [v.mes, v]));
+    const meses = [];
+    const [a, m] = hoje().slice(0, 7).split("-").map(Number);
+    for (let i = 11; i >= 0; i--) meses.push(new Date(Date.UTC(a, m - 1 - i, 1)).toISOString().slice(0, 7));
+    const curto = (k) => new Date(k + "-15T12:00:00").toLocaleDateString("pt-PT", { month: "short", year: "2-digit" });
+    return `<section class="fin-cartao cl-bloco" aria-labelledby="cl-t-vis">
+      <h2 id="cl-t-vis">Visitas ao site</h2>
+      <p class="cl-nota">Visitas por mês (Metricool → Website, ou Cloudflare → Web Analytics). O cliente vê o mês atual e a evolução ao longo do ano. Deixe em branco os meses sem dados.</p>
+      <form id="cl-vis" class="cl-vis">
+        ${meses.map((k) => `<label><span>${esc(curto(k))}</span><input class="entrada" type="number" min="0" name="${k}" value="${por[k]?.visitas ?? ""}"></label>`).join("")}
+        <div class="cl-acoes"><button class="botao botao--pequeno" type="submit"><span>Guardar visitas</span></button></div>
+      </form>
+    </section>`;
+  }
+
   function blocoSeguidores() {
     const redes = d.cliente.redes;
     if (!redes.length) return `<section class="fin-cartao cl-bloco"><h2>Seguidores</h2><p class="cl-nota">Adicione as redes nos dados do cliente para registar os seguidores.</p></section>`;
@@ -305,7 +321,7 @@ async function detalhe({ app, api, aviso, esc }, id) {
       ${c.pacotes ? `<p class="admin-cabeca__nota">${esc(c.pacotes.split("\n").join(" · "))}</p>` : ""}</div></div>
       <div class="cl-grelha">
         <div class="cl-coluna">${blocoChecklist()}${blocoCampanhas()}</div>
-        <div class="cl-coluna">${blocoAcesso()}${blocoFinanceiro()}${blocoSeguidores()}${blocoDados()}</div>
+        <div class="cl-coluna">${blocoAcesso()}${blocoFinanceiro()}${blocoSeguidores()}${blocoVisitas()}${blocoDados()}</div>
       </div>`;
     app.querySelectorAll("[data-pct]").forEach((i) => { i.style.width = i.dataset.pct + "%"; });
     const m = app.querySelector("#cl-mes");
@@ -378,6 +394,10 @@ async function detalhe({ app, api, aviso, esc }, id) {
         const valores = d.cliente.redes.map((r) => ({ rede: r.rede, seguidores: dados[r.rede] })).filter((v) => v.seguidores !== "" && v.seguidores !== undefined);
         await api(`clientes/${id}/seguidores`, { method: "POST", body: JSON.stringify({ data: dados.data, valores }) });
         aviso("Seguidores guardados."); await recarregar();
+      } else if (f.id === "cl-vis") {
+        const meses = [...f.querySelectorAll("input")].map((i) => ({ mes: i.name, visitas: i.value, nota: (d.visitas || []).find((v) => v.mes === i.name)?.nota || "" }));
+        await api(`clientes/${id}/visitas`, { method: "POST", body: JSON.stringify({ meses }) });
+        aviso("Visitas guardadas."); await recarregar();
       } else if (f.id === "cl-ligar") {
         if (!f.fin_cliente_id.value) return aviso("Escolha o cliente.", "erro");
         await api(`clientes/${id}`, { method: "PUT", body: JSON.stringify({ fin_cliente_id: f.fin_cliente_id.value }) });
