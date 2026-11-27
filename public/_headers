@@ -30,6 +30,9 @@
 /proposta-*
   X-Robots-Tag: noindex, nofollow
 
+/painel-cliente*
+  X-Robots-Tag: noindex, nofollow
+
 /admin/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store

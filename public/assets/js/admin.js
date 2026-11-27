@@ -5,6 +5,7 @@
 import { vistaTarefas } from "./admin-tarefas.js?v=162b8de119";
 import { vistaNewsletter } from "./admin-newsletter.js?v=dbc08f48f7";
 import { vistaProspecao } from "./admin-prospecao.js?v=ef7ecd7000";
+import { vistaClientes } from "./admin-clientes.js?v=32d10e20d5";
 import { vistaFinancas } from "./admin-financas.js?v=97760e6b26";
 
 const app = document.getElementById("app");
@@ -160,12 +161,13 @@ async function rota() {
   }
   sujo = false; editorAtual = null; app.onclick = null; app.onchange = null; app.onsubmit = null;
   const h = location.hash.replace(/^#/, "") || "/";
-  const seccao = h.startsWith("/autoras") ? "autoras" : h.startsWith("/trabalhos") ? "trabalhos" : h.startsWith("/marcas") ? "marcas" : h.startsWith("/financas") ? "financas" : h.startsWith("/tarefas") ? "tarefas" : h.startsWith("/newsletter") ? "newsletter" : h.startsWith("/prospecao") ? "prospecao" : "lista";
+  const seccao = h.startsWith("/autoras") ? "autoras" : h.startsWith("/trabalhos") ? "trabalhos" : h.startsWith("/marcas") ? "marcas" : h.startsWith("/financas") ? "financas" : h.startsWith("/tarefas") ? "tarefas" : h.startsWith("/newsletter") ? "newsletter" : h.startsWith("/prospecao") ? "prospecao" : h.startsWith("/clientes") ? "clientes" : "lista";
   $$(".admin-topo__nav [data-rota]").forEach((a) => a.toggleAttribute("aria-current", a.dataset.rota === seccao));
   try {
     if (!autoras.length) autoras = (await api("autoras")).autoras;
     if (h.startsWith("/autoras")) await vistaAutoras();
     else if (h.startsWith("/marcas")) await vistaMarcas();
+    else if (h.startsWith("/clientes")) await vistaClientes(h, { app, api, aviso, esc });
     else if (h.startsWith("/prospecao")) await vistaProspecao(h, { app, api, aviso, esc });
     else if (h.startsWith("/newsletter")) await vistaNewsletter({ app, api, aviso, esc });
     else if (h.startsWith("/tarefas")) await vistaTarefas({ app, api, aviso, esc });

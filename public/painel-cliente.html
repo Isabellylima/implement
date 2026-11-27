@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<!-- Painel privado de cada cliente: servido em /cliente/<slug> (ver src/clientes.js). Os dados só chegam depois de entrar com a palavra-passe. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#1C0F3A">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
+<link rel="stylesheet" href="/assets/css/site.css?v=50de4100c2">
+<title>Implement · Client area</title>
+<script src="/assets/js/painel-cliente.js?v=1bd99ed651" defer></script>
+</head>
+<body class="pc">
+<header class="pc-topo">
+  <div class="contentor pc-topo__linha">
+    <a class="marca" href="/" aria-label="Implement">
+      <svg class="abelha abelha--lilas" aria-hidden="true"><use href="/assets/img/sprite.svg#abelha"/></svg>
+      <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Digital Marketing</span></span>
+    </a>
+    <button type="button" class="pc-sair" id="pc-sair" hidden></button>
+  </div>
+</header>
+
+<main id="pc-app" class="pc-app" tabindex="-1">
+  <div class="pc-carregar" aria-hidden="true"><svg class="abelha abelha--lilas"><use href="/assets/img/sprite.svg#abelha"/></svg></div>
+</main>
+
+<footer class="pc-rodape">
+  <div class="contentor"><p id="pc-rodape"></p></div>
+</footer>
+</body>
+</html>

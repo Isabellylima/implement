@@ -17,6 +17,7 @@ import { ESQUEMA_FINANCAS, apiFinancas, migrarFinancas } from "./financas.js";
 import { ESQUEMA_TAREFAS, apiTarefas } from "./tarefas.js";
 import { ESQUEMA_NEWSLETTER, apiNewsletter } from "./newsletter.js";
 import { ESQUEMA_LEADS, apiProspecao } from "./prospecao.js";
+import { ESQUEMA_CLIENTES, apiClientes, tratarPortal } from "./clientes.js";
 
 const DOMINIO = "heyimplement.com";
 const SESSAO_DIAS = 30;
@@ -44,6 +45,7 @@ const ESQUEMA = [
   ...ESQUEMA_TAREFAS,
   ...ESQUEMA_NEWSLETTER,
   ...ESQUEMA_LEADS,
+  ...ESQUEMA_CLIENTES,
 ].join("\n");
 
 let esquemaPronto = false;
@@ -313,6 +315,10 @@ export async function tratarBlog(request, env, ctx, url) {
     if (p.startsWith("/insights/")) return await paginaArtigo(request, env, url, decodeURIComponent(p.slice(10)).replace(/\/$/, ""));
     if (p.startsWith("/media/")) return await servirImagem(request, env, ctx, p.slice(7));
     if (p === "/api/marcas" && request.method === "GET") return await marcasPublicas(env);
+    if (p === "/cliente" || p.startsWith("/cliente/") || p.startsWith("/api/cliente/")) {
+      const r = await tratarPortal(request, env, url, { json, lerJson, ErroPedido, cookie, sha256, contarTentativa, esquema });
+      if (r) return r;
+    }
     if (p.startsWith("/api/admin/")) return await api(request, env, ctx, url, p.slice(11));
     if (p === "/admin" || p.startsWith("/admin/")) return await paginaAdmin(request, env, url);
   } catch (e) {
@@ -388,6 +394,11 @@ async function api(request, env, ctx, url, rota) {
 
   if (rota === "newsletter" || rota.startsWith("newsletter/")) {
     const r = await apiNewsletter(rota, metodo, env, { json, ErroPedido });
+    if (r) return r;
+  }
+
+  if (rota === "clientes" || rota.startsWith("clientes/")) {
+    const r = await apiClientes(rota, metodo, request, env, { json, lerJson, ErroPedido, idCurto });
     if (r) return r;
   }
 

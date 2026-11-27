@@ -168,3 +168,16 @@ Depois da primeira reunião / orçamento, o cliente recebe uma página só dele 
 - **Valores de referência:** `PRECOS` em `scripts/propostas.py` (manter iguais ao Preçário).
 - **Respostas:** `assets/js/proposta.js` envia para `/api/contacto` → base de dados, e-mail para info@ com o budget no assunto («Pedido <marca> (<cliente>) — budget X €/mês») e HubSpot.
 - Todas as páginas `/proposta-*` são noindex e sem popup de newsletter.
+
+## Clientes e painel do cliente
+
+**Admin → Clientes → Gestão de clientes** (`#/clientes`): uma ficha por cliente com
+- dados, pacotes contratados (uma linha por pacote), mensalidade, redes que gerimos e notas internas;
+- **checklist do mês** (pode copiar a do mês anterior); o cliente vê só a percentagem feita;
+- **campanhas de anúncios** (Meta, Google Ads, TikTok…): estado, orçamento, investido, alcance, cliques e resultados. A lista mostra em destaque quem tem campanha ativa e quanto está investido;
+- **seguidores** por rede, registados por data (do Metricool ou da própria rede); o painel mostra o último valor e a variação de 30 dias;
+- **acesso**: o painel fica em `heyimplement.com/cliente/<endereço>`. «Gerar palavra-passe» mostra-a uma única vez, com botões para copiar e escrever o e-mail ao cliente (PT ou EN). Gerar outra desliga a antiga; desativar o cliente bloqueia o painel.
+
+Painel do cliente: `public/painel-cliente.html` + `assets/js/painel-cliente.js`, servido pelo Worker em `/cliente/*` (noindex, sem links no site). API em `src/clientes.js` (`/api/cliente/entrar|painel|sair`, sessão de 30 dias no cookie `__Host-impc`, palavras-passe em PBKDF2, limite de tentativas). `/cliente/modelo` mostra o modelo com dados fictícios, sem palavra-passe.
+
+Para um cliente novo: criar a ficha no admin (ou pedir ao Claude), gerar a palavra-passe e enviar o e-mail.

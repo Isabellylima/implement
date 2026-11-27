@@ -21,6 +21,7 @@ const DB = {
     return mk([]);
   },
   async exec(sql) { sqlite.exec(sql); },
+  async batch(lista) { const out = []; for (const st of lista) out.push(await st.run()); return out; },
 };
 const TIPOS = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".jpg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".mp4": "video/mp4", ".webm": "video/webm" };
 const ASSETS = {

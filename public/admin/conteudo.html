@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap">
-<link rel="stylesheet" href="/assets/css/site.css?v=2720c0ec4e">
-<link rel="stylesheet" href="/assets/css/admin.css?v=9747d08ae6">
+<link rel="stylesheet" href="/assets/css/site.css?v=50de4100c2">
+<link rel="stylesheet" href="/assets/css/admin.css?v=7e00312041">
 <title>Plano de conteúdo · Implement</title>
 <link rel="stylesheet" href="/admin/conteudo.css">
 <script src="/assets/js/admin-menu.js?v=aca76857be" type="module"></script>
@@ -24,6 +24,16 @@
     <span class="marca__texto"><span class="marca__nome">implement</span><span class="marca__sub">Área da equipa</span></span>
   </a>
   <nav class="admin-topo__nav" aria-label="Área da equipa">
+    <div class="admin-grupo">
+      <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-clientes">Clientes <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="admin-grupo__menu" id="menu-clientes" hidden>
+        <a href="/admin/#/clientes" data-rota="clientes">Gestão de clientes</a>
+        <div class="admin-grupo__linha">
+          <a href="/cliente/modelo" target="_blank" rel="noopener">Modelo do painel ↗︎</a>
+          <button type="button" class="admin-grupo__copiar" data-copiar="/cliente/modelo" title="Copiar o link do modelo do painel de cliente">Copiar link</button>
+        </div>
+      </div>
+    </div>
     <div class="admin-grupo">
       <button type="button" class="admin-grupo__botao" aria-expanded="false" aria-controls="menu-tarefas">Tarefas <svg class="admin-grupo__seta" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <div class="admin-grupo__menu" id="menu-tarefas" hidden>
