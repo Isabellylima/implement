@@ -301,7 +301,8 @@ export async function tratarPortal(request, env, url, { json, lerJson, ErroPedid
   if (p === "/cliente" || p === "/cliente/") return new Response("Não encontrado", { status: 404, headers: { "X-Robots-Tag": "noindex" } });
   const mp = p.match(/^\/cliente\/([a-z0-9-]{1,50})\/?$/);
   if (mp && request.method === "GET") {
-    const r = await env.ASSETS.fetch(new Request(new URL("/painel-cliente.html", url), request));
+    // Sem ".html": o Cloudflare (html_handling) redireciona /x.html → /x, e o redirecionamento chegava vazio ao browser
+    const r = await env.ASSETS.fetch(new Request(new URL("/painel-cliente", url), { method: "GET", headers: request.headers }));
     return new Response(r.body, { status: r.status, headers: cabecalhosPagina() });
   }
   if (!p.startsWith("/api/cliente/")) return null;
