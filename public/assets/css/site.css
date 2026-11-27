@@ -282,7 +282,7 @@ p { margin: 0; }
 .fita__pista { display: inline-flex; align-items: center; gap: 40px; padding: 22px 0; animation: deslizar 32s linear infinite; }
 .fita__item { display: inline-flex; align-items: center; gap: 40px; font: 700 clamp(1.5rem, 3vw, 2.25rem)/1 var(--serifa); }
 .fita__item em { font-style: italic; font-weight: 600; color: var(--lilas); }
-.fita .abelha { width: 52px; height: 29px; }
+.fita__ponto { width: 10px; height: 10px; border-radius: 50%; background: var(--mel); flex: none; }
 
 /* ---------- Porquê a Implement ---------- */
 .cabeca-seccao { display: grid; gap: 18px; max-width: 760px; margin-bottom: clamp(40px, 6vw, 64px); }
