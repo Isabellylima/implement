@@ -657,3 +657,13 @@
 }
 
 @media (max-width: 460px) { .admin-grupo__seta { display: none; } }
+
+.cl-sub { font-weight: 700; font-size: .9375rem; margin: 4px 0 6px; }
+.cl-sub small { font-weight: 500; color: var(--cinza); }
+.cl-fin-lista { list-style: none; margin: 0; padding: 0; display: grid; }
+.cl-fin-lista li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--linha); }
+.cl-fin-lista span { display: grid; }
+.cl-fin-lista small { color: var(--cinza); font-size: .8125rem; }
+.cl-fin-lista strong { white-space: nowrap; }
+.cl-pag { display: grid; gap: 10px; padding-top: 6px; border-top: 1px dashed var(--linha); }
+.cl-cartao__recebido { font-size: .8125rem; font-weight: 600; color: #1f6b3d; }

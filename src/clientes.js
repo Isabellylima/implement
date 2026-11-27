@@ -16,6 +16,13 @@ export const ESQUEMA_CLIENTES = [
   "CREATE TABLE IF NOT EXISTS cliente_sessoes (hash TEXT PRIMARY KEY, cliente_id TEXT NOT NULL, expira INTEGER NOT NULL);",
 ];
 
+/* Colunas acrescentadas depois (o ADD COLUMN falha se já existir: ignora-se) */
+export async function migrarClientes(db) {
+  for (const sql of ["ALTER TABLE clientes ADD COLUMN fin_cliente_id TEXT"]) {
+    try { await db.prepare(sql).run(); } catch (e) { if (!/duplicate column/i.test(String(e && e.message))) throw e; }
+  }
+}
+
 const REDES = ["instagram", "facebook", "tiktok", "linkedin", "youtube", "google", "pinterest", "x"];
 const PLATAFORMAS = ["meta", "google", "tiktok", "linkedin", "outra"];
 const ESTADOS_CAMPANHA = ["planeada", "ativa", "pausada", "terminada"];
@@ -74,6 +81,7 @@ function limparCliente(c, ErroPedido) {
     redes: JSON.stringify(redes),
     notas: txt(c.notas, 4000),
     ativo: c.ativo === false || c.ativo === 0 || c.ativo === "0" ? 0 : 1,
+    fin_cliente_id: /^[a-z0-9]{6,32}$/.test(String(c.fin_cliente_id || "")) ? c.fin_cliente_id : null,
   };
 }
 
@@ -127,16 +135,17 @@ export async function apiClientes(rota, metodo, request, env, { json, lerJson, E
         (SELECT COUNT(*) FROM cliente_checklist k WHERE k.cliente_id = c.id AND k.mes = ? AND k.feita = 1) AS feitas,
         (SELECT COUNT(*) FROM campanhas g WHERE g.cliente_id = c.id AND g.estado = 'ativa') AS campanhas_ativas,
         (SELECT COALESCE(SUM(investido), 0) FROM campanhas g WHERE g.cliente_id = c.id AND g.estado = 'ativa') AS investido_ativas,
-        (SELECT GROUP_CONCAT(DISTINCT plataforma) FROM campanhas g WHERE g.cliente_id = c.id AND g.estado = 'ativa') AS plataformas_ativas
-      FROM clientes c ORDER BY c.ativo DESC, c.marca COLLATE NOCASE`).bind(mes, mes).all();
+        (SELECT GROUP_CONCAT(DISTINCT plataforma) FROM campanhas g WHERE g.cliente_id = c.id AND g.estado = 'ativa') AS plataformas_ativas,
+        (SELECT COALESCE(SUM(valor_c), 0) FROM fin_movimentos f WHERE f.cliente_id = c.fin_cliente_id AND f.tipo = 'entrada' AND f.recorrente_id IS NULL AND f.data >= ?) AS recebido_ano_c
+      FROM clientes c ORDER BY c.ativo DESC, c.marca COLLATE NOCASE`).bind(mes, mes, mes.slice(0, 4) + "-01-01").all();
     return json({ ok: true, mes, clientes: results });
   }
   if (rota === "clientes" && metodo === "POST") {
     const c = limparCliente(await lerJson(request), ErroPedido);
     if (await db.prepare("SELECT id FROM clientes WHERE slug = ?").bind(c.slug).first()) throw new ErroPedido(409, "Já existe um cliente com esse endereço.");
     const id = idCurto();
-    await db.prepare("INSERT INTO clientes (id, slug, nome, marca, email, telefone, idioma, pacotes, valor_mensal, inicio, metricool_id, redes, notas, ativo, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-      .bind(id, c.slug, c.nome, c.marca, c.email, c.telefone, c.idioma, c.pacotes, c.valor_mensal, c.inicio, c.metricool_id, c.redes, c.notas, c.ativo, agora, agora).run();
+    await db.prepare("INSERT INTO clientes (id, slug, nome, marca, email, telefone, idioma, pacotes, valor_mensal, inicio, metricool_id, redes, notas, ativo, fin_cliente_id, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+      .bind(id, c.slug, c.nome, c.marca, c.email, c.telefone, c.idioma, c.pacotes, c.valor_mensal, c.inicio, c.metricool_id, c.redes, c.notas, c.ativo, c.fin_cliente_id, agora, agora).run();
     return json({ ok: true, id });
   }
 
@@ -151,13 +160,24 @@ export async function apiClientes(rota, metodo, request, env, { json, lerJson, E
     const mes = MES.test(url.searchParams.get("mes") || "") ? url.searchParams.get("mes") : mesAtual();
     const { results: camp } = await db.prepare("SELECT * FROM campanhas WHERE cliente_id = ? ORDER BY CASE estado WHEN 'ativa' THEN 0 WHEN 'planeada' THEN 1 WHEN 'pausada' THEN 2 ELSE 3 END, inicio DESC").bind(id).all();
     const { senha_hash, senha_sal, ...publico } = cli;
-    return json({ ok: true, cliente: { ...publico, redes: JSON.parse(cli.redes || "[]"), tem_senha: Boolean(senha_hash) }, mes, checklist: await checklist(db, id, mes), campanhas: camp, seguidores: await seguidores(db, id) });
+    // Ligação ao Financeiro: cliente fiscal, avenças e pagamentos recebidos (últimos 24 meses)
+    const { results: finClientes } = await db.prepare("SELECT id, nome, contacto, nif, iva FROM fin_clientes WHERE ativo = 1 OR id = ? ORDER BY nome").bind(cli.fin_cliente_id || "").all();
+    let financeiro = null;
+    if (cli.fin_cliente_id) {
+      const desde = new Date(Date.now() - 730 * 86400000).toISOString().slice(0, 10);
+      const [rec, mov] = await Promise.all([
+        db.prepare("SELECT id, descricao, valor_c, periodicidade, inicio, fim, iva FROM fin_recorrentes WHERE cliente_id = ? AND tipo = 'entrada' ORDER BY inicio DESC").bind(cli.fin_cliente_id).all(),
+        db.prepare("SELECT id, data, descricao, valor_c, iva FROM fin_movimentos WHERE cliente_id = ? AND tipo = 'entrada' AND recorrente_id IS NULL AND data >= ? ORDER BY data DESC").bind(cli.fin_cliente_id, desde).all(),
+      ]);
+      financeiro = { cliente: finClientes.find((f) => f.id === cli.fin_cliente_id) || null, avencas: rec.results, pagamentos: mov.results };
+    }
+    return json({ ok: true, cliente: { ...publico, redes: JSON.parse(cli.redes || "[]"), tem_senha: Boolean(senha_hash) }, mes, checklist: await checklist(db, id, mes), campanhas: camp, seguidores: await seguidores(db, id), fin_clientes: finClientes, financeiro });
   }
   if (!resto && metodo === "PUT") {
     const c = limparCliente({ ...cli, redes: JSON.parse(cli.redes || "[]"), ...(await lerJson(request)) }, ErroPedido);
     if (c.slug !== cli.slug && await db.prepare("SELECT id FROM clientes WHERE slug = ?").bind(c.slug).first()) throw new ErroPedido(409, "Já existe um cliente com esse endereço.");
-    await db.prepare("UPDATE clientes SET slug = ?, nome = ?, marca = ?, email = ?, telefone = ?, idioma = ?, pacotes = ?, valor_mensal = ?, inicio = ?, metricool_id = ?, redes = ?, notas = ?, ativo = ?, atualizado_em = ? WHERE id = ?")
-      .bind(c.slug, c.nome, c.marca, c.email, c.telefone, c.idioma, c.pacotes, c.valor_mensal, c.inicio, c.metricool_id, c.redes, c.notas, c.ativo, agora, id).run();
+    await db.prepare("UPDATE clientes SET slug = ?, nome = ?, marca = ?, email = ?, telefone = ?, idioma = ?, pacotes = ?, valor_mensal = ?, inicio = ?, metricool_id = ?, redes = ?, notas = ?, ativo = ?, fin_cliente_id = ?, atualizado_em = ? WHERE id = ?")
+      .bind(c.slug, c.nome, c.marca, c.email, c.telefone, c.idioma, c.pacotes, c.valor_mensal, c.inicio, c.metricool_id, c.redes, c.notas, c.ativo, c.fin_cliente_id, agora, id).run();
     if (!c.ativo) await db.prepare("DELETE FROM cliente_sessoes WHERE cliente_id = ?").bind(id).run();
     return json({ ok: true });
   }

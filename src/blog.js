@@ -17,7 +17,7 @@ import { ESQUEMA_FINANCAS, apiFinancas, migrarFinancas } from "./financas.js";
 import { ESQUEMA_TAREFAS, apiTarefas } from "./tarefas.js";
 import { ESQUEMA_NEWSLETTER, apiNewsletter } from "./newsletter.js";
 import { ESQUEMA_LEADS, apiProspecao } from "./prospecao.js";
-import { ESQUEMA_CLIENTES, apiClientes, tratarPortal } from "./clientes.js";
+import { ESQUEMA_CLIENTES, apiClientes, tratarPortal, migrarClientes } from "./clientes.js";
 
 const DOMINIO = "heyimplement.com";
 const SESSAO_DIAS = 30;
@@ -53,6 +53,7 @@ async function esquema(db) {
   if (esquemaPronto) return;
   await db.exec(ESQUEMA);
   await migrarFinancas(db);
+  await migrarClientes(db);
   esquemaPronto = true;
 }
 

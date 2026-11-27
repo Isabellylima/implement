@@ -51,6 +51,7 @@ async function lista({ app, api, esc }) {
         </div>
         ${c.tarefas ? `<div class="pc-barra"><i data-pct="${pct}"></i></div>` : ""}
         ${c.campanhas_ativas ? `<span class="cl-campanha">📣 ${esc((c.plataformas_ativas || "").split(",").map((p) => PLAT_CURTA[p] || p).join(" + "))} · ${eur(c.investido_ativas)} investidos</span>` : ""}
+        ${c.recebido_ano_c ? `<span class="cl-cartao__recebido">Recebido em ${new Date().getFullYear()}: ${eur(c.recebido_ano_c / 100)}</span>` : ""}
         <span class="cl-cartao__acesso">${c.tem_senha ? (c.ultimo_acesso ? `Último acesso: ${dataCurta(c.ultimo_acesso)}` : "Acesso criado, ainda sem entradas") : "Sem palavra-passe"}</span>
       </a></li>`;
     }).join("")}</ul>` : `<div class="admin-vazio"><h2>Ainda não há clientes</h2><p>Crie o primeiro e gere a palavra-passe para lhe enviar.</p></div>`}`;
@@ -58,7 +59,7 @@ async function lista({ app, api, esc }) {
 }
 
 /* ---------- Criar / editar dados ---------- */
-function camposCliente(c, esc) {
+function camposCliente(c, esc, finClientes = []) {
   const redes = c.redes && c.redes.length ? c.redes : [{ rede: "instagram", conta: "", url: "" }];
   return `
     <div class="cl-campos">
@@ -72,6 +73,7 @@ function camposCliente(c, esc) {
       <label>Mensalidade (€)<input class="entrada" type="number" step="0.01" min="0" name="valor_mensal" value="${c.valor_mensal ?? ""}"></label>
       <label>Cliente desde<input class="entrada" type="date" name="inicio" value="${esc(c.inicio || "")}"></label>
       <label>ID da marca no Metricool <small>(opcional)</small><input class="entrada" name="metricool_id" maxlength="30" inputmode="numeric" value="${esc(c.metricool_id || "")}"></label>
+      ${finClientes.length ? `<label>Cliente no Financeiro <small>(nome fiscal, NIF, pagamentos)</small><select class="entrada" name="fin_cliente_id"><option value="">Sem ligação</option>${finClientes.map((f) => `<option value="${f.id}"${f.id === c.fin_cliente_id ? " selected" : ""}>${esc(f.nome)}</option>`).join("")}</select></label>` : ""}
       <label class="cl-check"><input type="checkbox" name="ativo"${c.ativo === 0 ? "" : " checked"}> Cliente ativo (desativar bloqueia o painel)</label>
       <fieldset class="cl-largo cl-redes"><legend>Redes que gerimos</legend>
         <div id="cl-redes-linhas">${redes.map((r, i) => linhaRede(r, i, esc)).join("")}</div>
@@ -241,10 +243,45 @@ async function detalhe({ app, api, aviso, esc }, id) {
     </section>`;
   }
 
+  function blocoFinanceiro() {
+    const f = d.financeiro;
+    if (!f) {
+      return `<section class="fin-cartao cl-bloco" aria-labelledby="cl-t-fin">
+        <h2 id="cl-t-fin">Financeiro</h2>
+        <p class="cl-nota">Ligue este cliente ao cliente do Financeiro para ver aqui as avenças e os pagamentos, e registar pagamentos que entram logo nas Finanças.</p>
+        <form id="cl-ligar" class="cl-check-nova">
+          <select class="entrada" name="fin_cliente_id" aria-label="Cliente no Financeiro"><option value="">Escolher…</option>${d.fin_clientes.map((x) => `<option value="${x.id}">${esc(x.nome)}</option>`).join("")}</select>
+          <button class="botao botao--pequeno" type="submit"><span>Ligar</span></button>
+        </form>
+        <button type="button" class="tar-link" data-criar-fin>Criar «${esc(d.cliente.marca)}» no Financeiro</button>
+      </section>`;
+    }
+    const ano = String(new Date().getFullYear());
+    const total = f.pagamentos.filter((x) => x.data.startsWith(ano)).reduce((t, x) => t + x.valor_c, 0);
+    const iva = f.cliente?.iva || 0;
+    return `<section class="fin-cartao cl-bloco" aria-labelledby="cl-t-fin">
+      <div class="cl-bloco__cabeca"><h2 id="cl-t-fin">Financeiro</h2><a class="tar-link" href="#/financas">Abrir Finanças →</a></div>
+      ${f.cliente ? `<p class="cl-nota">${esc(f.cliente.nome)}${f.cliente.nif ? ` · NIF ${esc(f.cliente.nif)}` : ""}${f.cliente.contacto ? ` · ${esc(f.cliente.contacto)}` : ""}</p>` : ""}
+      ${f.avencas.length ? `<div><p class="cl-sub">Avenças</p><ul class="cl-fin-lista">${f.avencas.map((a) => `<li><span>${esc(a.descricao)}<small>${a.periodicidade !== "mensal" ? a.periodicidade + " · " : ""}desde ${esc(a.inicio)}${a.fim ? " até " + esc(a.fim) : ""}${a.iva ? ` · + IVA ${a.iva}%` : ""}</small></span><strong>${eur(a.valor_c / 100)}/mês</strong></li>`).join("")}</ul></div>` : ""}
+      <div><p class="cl-sub">Pagamentos recebidos <small>· ${ano}: ${eur(total / 100)}</small></p>
+      ${f.pagamentos.length ? `<ul class="cl-fin-lista">${f.pagamentos.map((x) => `<li><span>${esc(x.descricao)}<small>${dataCurta(x.data)}${x.iva ? ` · + IVA ${x.iva}%` : ""}</small></span><strong>${eur(x.valor_c / 100)}</strong></li>`).join("")}</ul>` : '<p class="cl-nota">Ainda sem pagamentos registados.</p>'}</div>
+      <form id="cl-pagamento" class="cl-pag">
+        <p class="cl-sub">Registar pagamento <small>(entra nas Finanças)</small></p>
+        <div class="cl-campos">
+          <label class="cl-largo">Descrição<input class="entrada" name="descricao" required maxlength="160" placeholder="Ex.: Alojamento do site — 3 meses"></label>
+          <label>Valor sem IVA (€)<input class="entrada" name="valor" inputmode="decimal" required placeholder="0,00"></label>
+          <label>IVA<select class="entrada" name="iva">${[0, 6, 13, 23].map((t) => `<option value="${t}"${t === iva ? " selected" : ""}>${t ? t + "%" : "Sem IVA"}</option>`).join("")}</select></label>
+          <label>Data<input class="entrada" type="date" name="data" value="${hoje()}"></label>
+        </div>
+        <div class="cl-acoes"><button class="botao botao--pequeno" type="submit"><span>Registar</span></button></div>
+      </form>
+    </section>`;
+  }
+
   function blocoDados() {
     const c = d.cliente;
     if (editarDados) return `<section class="fin-cartao cl-bloco"><h2>Dados do cliente</h2>
-      <form class="cl-forma" id="cl-forma">${camposCliente(c, esc)}
+      <form class="cl-forma" id="cl-forma">${camposCliente(c, esc, d.fin_clientes)}
         <div class="cl-acoes"><button class="botao botao--pequeno" type="submit"><span>Guardar</span></button><button type="button" class="tar-link" data-cancelar-dados>Cancelar</button>
         <button type="button" class="tar-link tar-link--perigo" data-apagar-cliente>Apagar cliente</button></div></form></section>`;
     return `<section class="fin-cartao cl-bloco" aria-labelledby="cl-t-dados">
@@ -268,7 +305,7 @@ async function detalhe({ app, api, aviso, esc }, id) {
       ${c.pacotes ? `<p class="admin-cabeca__nota">${esc(c.pacotes.split("\n").join(" · "))}</p>` : ""}</div></div>
       <div class="cl-grelha">
         <div class="cl-coluna">${blocoChecklist()}${blocoCampanhas()}</div>
-        <div class="cl-coluna">${blocoAcesso()}${blocoSeguidores()}${blocoDados()}</div>
+        <div class="cl-coluna">${blocoAcesso()}${blocoFinanceiro()}${blocoSeguidores()}${blocoDados()}</div>
       </div>`;
     app.querySelectorAll("[data-pct]").forEach((i) => { i.style.width = i.dataset.pct + "%"; });
     const m = app.querySelector("#cl-mes");
@@ -301,6 +338,12 @@ async function detalhe({ app, api, aviso, esc }, id) {
         const r = await api(`clientes/${id}/checklist`, { method: "POST", body: JSON.stringify({ mes, copiar_de: mesAntes(mes) }) });
         aviso(r.copiadas ? `${r.copiadas} tarefa${r.copiadas > 1 ? "s" : ""} copiada${r.copiadas > 1 ? "s" : ""}.` : "Não havia nada novo para copiar.");
         await recarregar();
+      }
+      else if ("criarFin" in b.dataset) {
+        const c = d.cliente;
+        const r = await api("financas/clientes", { method: "POST", body: JSON.stringify({ nome: c.marca, contacto: c.email || c.telefone || "" }) });
+        await api(`clientes/${id}`, { method: "PUT", body: JSON.stringify({ fin_cliente_id: r.id }) });
+        aviso("Cliente criado no Financeiro e ligado."); await recarregar();
       }
       else if ("editarDados" in b.dataset) { editarDados = true; desenhar(); }
       else if ("cancelarDados" in b.dataset) { editarDados = false; desenhar(); }
@@ -335,6 +378,14 @@ async function detalhe({ app, api, aviso, esc }, id) {
         const valores = d.cliente.redes.map((r) => ({ rede: r.rede, seguidores: dados[r.rede] })).filter((v) => v.seguidores !== "" && v.seguidores !== undefined);
         await api(`clientes/${id}/seguidores`, { method: "POST", body: JSON.stringify({ data: dados.data, valores }) });
         aviso("Seguidores guardados."); await recarregar();
+      } else if (f.id === "cl-ligar") {
+        if (!f.fin_cliente_id.value) return aviso("Escolha o cliente.", "erro");
+        await api(`clientes/${id}`, { method: "PUT", body: JSON.stringify({ fin_cliente_id: f.fin_cliente_id.value }) });
+        aviso("Ligado ao Financeiro."); await recarregar();
+      } else if (f.id === "cl-pagamento") {
+        const dados = Object.fromEntries(new FormData(f));
+        await api("financas/movimentos", { method: "POST", body: JSON.stringify({ tipo: "entrada", ...dados, cliente_id: d.cliente.fin_cliente_id }) });
+        aviso("Pagamento registado nas Finanças."); await recarregar();
       } else if (f.id === "cl-forma") {
         await api(`clientes/${id}`, { method: "PUT", body: JSON.stringify(lerCliente(f)) });
         editarDados = false; aviso("Dados guardados."); await recarregar();
