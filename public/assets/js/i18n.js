@@ -30,7 +30,7 @@ window.IMPLEMENT_PT = {
   /* Home */
   "h.legenda": "Agência de marketing digital",
   "h.titulo": '<span class="linha">O negócio é consigo.</span> <span class="linha">O digital é <span class="destaque">connosco.</span></span>',
-  "h.intro": "A Implement planeia, cria e gere as suas redes sociais, o seu website e a sua presença no Google — de forma organizada, consistente e clara, para que se possa concentrar nos seus clientes.",
+  "h.intro": "A Implement planeia, cria e gere as suas redes sociais, o seu website e a sua presença no Google, nos motores de busca e nas respostas de IA — de forma organizada, consistente e clara, para que se possa concentrar nos seus clientes.",
   "h.vercomo": "Ver como trabalhamos",
   "h.marcas": "Marcas que trabalham connosco",
   "h.prova1": "Uma só equipa para toda a presença digital",

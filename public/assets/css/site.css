@@ -262,9 +262,6 @@ p { margin: 0; }
 .colagem:hover .peca--roxo { transform: rotate(7deg) translate(8px, -6px); }
 .colagem:hover .peca--mel { transform: rotate(0deg) translateY(8px); }
 
-.voo { position: absolute; inset: -6% -4%; z-index: 4; pointer-events: none; width: 108%; height: 112%; }
-.voo__abelha { filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 1px #fff); }
-.voo__rasto { fill: none; stroke: var(--roxo); stroke-width: 1.5; stroke-dasharray: 2 7; stroke-linecap: round; opacity: .55; }
 .asa-esq, .asa-dir { transform-box: fill-box; animation: bater .16s ease-in-out infinite alternate; }
 .asa-esq { transform-origin: 100% 70%; }
 .asa-dir { transform-origin: 0% 70%; animation-delay: -.08s; }
@@ -444,7 +441,6 @@ p { margin: 0; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   .faixa__pista, .fita__pista { animation: none; }
   .js .revelar, .js .heroi .entra, .js .peca { opacity: 1; transform: none; }
-  .voo__abelha { display: none; }
 }
 
 /* ==========================================================================

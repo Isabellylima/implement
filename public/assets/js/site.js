@@ -89,7 +89,6 @@
     }, { rootMargin: "0px 0px -8% 0px", threshold: .12 });
     alvos.forEach((el) => obs.observe(el));
   }
-  if (reduzir) document.querySelectorAll("svg.voo").forEach((s) => s.pauseAnimations && s.pauseAnimations());
 
   /* ---------- WhatsApp: botão flutuante e mensagem pré-preenchida ---------- */
   const SPRITE = new URL("../img/sprite.svg", (document.currentScript && document.currentScript.src) || location.href).href;
