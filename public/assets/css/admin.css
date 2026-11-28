@@ -1,6 +1,6 @@
 /* Implement — área da equipa (login e editor de artigos). Usa os tokens de site.css. */
 .admin { background: var(--nevoa); min-height: 100vh; }
-.marca--clara .marca__nome { color: var(--lilas); }
+.marca--clara { --logo-cor: var(--lilas); color: var(--branco); }
 .marca--clara .marca__sub { color: var(--branco); }
 
 /* Entrada */
@@ -8,7 +8,7 @@
 .entrada-equipa { min-height: 100vh; display: grid; place-items: center; padding: 32px var(--margem); background: radial-gradient(60vw 60vw at 85% -10%, rgba(139, 82, 232, .35), transparent 60%), var(--noite); }
 .entrada-equipa__cartao { width: min(100%, 460px); background: var(--branco); border-radius: var(--raio); padding: clamp(28px, 5vw, 48px); box-shadow: var(--sombra-forte); display: grid; gap: 14px; }
 .entrada-equipa__cartao .marca { margin-bottom: 18px; }
-.entrada-equipa__cartao .marca--clara .marca__nome { color: var(--roxo); }
+.entrada-equipa__cartao .marca--clara { --logo-cor: #8C52FF; color: var(--tinta); }
 .entrada-equipa__cartao .marca--clara .marca__sub { color: var(--tinta); }
 .entrada-equipa h1 { font-size: clamp(2rem, 5vw, 2.5rem); }
 .entrada-equipa__intro { color: #3b3448; margin-bottom: 10px; }
@@ -22,7 +22,8 @@
 
 /* Topo */
 .admin-topo { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 24px; padding: 14px var(--margem); background: var(--noite); color: var(--branco); }
-.admin-topo .marca .abelha { width: 40px; height: 22px; }
+.admin-topo .marca { gap: 12px; }
+.admin-topo .marca .logo { height: 26px; }
 .admin-topo .marca__nome { font-size: 1.35rem; }
 .admin-topo__nav { display: flex; align-items: center; gap: 6px; margin-left: 12px; }
 .admin-grupo { position: relative; }

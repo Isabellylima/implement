@@ -164,8 +164,9 @@ p { margin: 0; }
 .topo__interior { display: flex; align-items: center; gap: 24px; height: 76px; }
 
 .marca { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--roxo); }
-.marca .abelha { width: 46px; height: 26px; transition: transform .6s var(--mola); }
-.marca:hover .abelha { transform: rotate(-8deg) translateY(-2px); }
+.marca { color: var(--tinta); --logo-cor: #8C52FF; }
+.marca .logo { display: block; height: 46px; width: auto; aspect-ratio: 157.16 / 38; overflow: visible; }
+.marca .logo--nome { height: 30px; aspect-ratio: 133.34 / 38; }
 .marca__texto { display: grid; line-height: 1; }
 /* Provisório: o nome «implement» é um desenho à medida. Substituir pelo SVG oficial do logótipo. */
 .marca__nome { font: 700 1.6rem/1 var(--serifa); letter-spacing: -.01em; color: var(--roxo); }
@@ -400,7 +401,7 @@ p { margin: 0; }
 /* ---------- Rodapé ---------- */
 .rodape { background: var(--noite); color: rgba(255, 255, 255, .78); padding: clamp(56px, 8vw, 88px) 0 32px; }
 .rodape__grelha { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 40px; }
-.rodape .marca { color: var(--lilas); }
+.rodape .marca { color: var(--branco); --logo-cor: var(--lilas); }
 .rodape .marca__nome { color: var(--lilas); }
 .rodape .marca__sub { color: var(--branco); }
 .rodape__lema { margin-top: 22px; font: 700 .6875rem/1.8 var(--sans); letter-spacing: .28em; text-transform: uppercase; color: var(--lilas); }
