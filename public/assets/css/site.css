@@ -1360,3 +1360,56 @@ label.cb-sub .opcional { font-weight: 400; color: var(--cinza); font-size: .8125
   .pc-grelha { grid-template-columns: 1fr; }
   .pc-lado { position: static; }
 }
+
+/* ==========================================================================
+   Tema institucional (nov. 2026): mais sóbrio, minimalista e "IT".
+   Títulos em sans, cantos discretos, sem inclinações nem fitas a correr.
+   ========================================================================== */
+:root {
+  --noite: #14122B;
+  --raio: 10px;
+  --raio-pequeno: 8px;
+  --sombra: 0 1px 2px rgba(20, 18, 43, .05), 0 8px 24px -14px rgba(20, 18, 43, .16);
+  --sombra-forte: 0 1px 3px rgba(20, 18, 43, .08), 0 18px 40px -22px rgba(20, 18, 43, .3);
+}
+h1, h2, h3, .serifa { font-family: var(--sans); font-weight: 700; letter-spacing: -.025em; line-height: 1.1; }
+h1 { font-weight: 700; font-size: clamp(2.4rem, 5.4vw, 4.1rem); letter-spacing: -.035em; }
+.destaque { font-style: normal; color: var(--roxo); }
+.legenda { letter-spacing: .18em; }
+.botao { border-radius: 8px; font-weight: 600; }
+.botao .abelha { display: none; }
+.botao:hover { transform: none; box-shadow: none; }
+.botao:hover .seta { transform: translateX(3px); }
+
+/* faixas paradas */
+.faixa__pista, .fita__pista { animation: none !important; }
+.faixa__pista { padding-left: var(--margem); }
+.fita { background: var(--noite); }
+.fita__item { font: 600 clamp(1.1rem, 2vw, 1.5rem)/1 var(--sans); letter-spacing: -.01em; }
+.fita__item em { font-style: normal; font-weight: 600; color: var(--lilas); }
+.fita__pista { padding: 18px 0; }
+
+/* topo: fundo com grelha técnica subtil em vez da luz roxa */
+.heroi::before {
+  right: 0; top: 0; width: 55%; height: 100%; max-width: none; max-height: none; border-radius: 0;
+  background-image: linear-gradient(var(--linha) 1px, transparent 1px), linear-gradient(90deg, var(--linha) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 35%);
+  mask-image: linear-gradient(90deg, transparent, #000 35%);
+  opacity: .7;
+}
+
+/* cartas direitas, alinhadas como painéis */
+.colagem { aspect-ratio: 1 / 1; }
+.peca { border-radius: 12px; padding: 8%; box-shadow: var(--sombra-forte); transition: transform .5s var(--suave); }
+.peca h3 { font-weight: 600; letter-spacing: -.02em; }
+.peca .legenda { font-weight: 600; letter-spacing: .2em; opacity: 1; }
+.peca .abelha { width: 30%; }
+.peca--noite { transform: none; left: 0; top: 0; }
+.peca--roxo { transform: none; right: 0; top: 12%; }
+.peca--mel { transform: none; left: 22%; top: 46%; background: var(--branco); color: var(--tinta); box-shadow: inset 0 0 0 1px var(--linha), var(--sombra-forte); }
+.peca--mel .legenda { color: var(--roxo-profundo); }
+.peca--mel .abelha { --asa: var(--roxo); }
+.colagem:hover .peca--noite, .colagem:hover .peca--roxo, .colagem:hover .peca--mel { transform: none; }
+.mel-sublinhado { background: none; box-shadow: inset 0 -.12em 0 var(--roxo); }
+@media (max-width: 900px) { .heroi::before { display: none; } }
